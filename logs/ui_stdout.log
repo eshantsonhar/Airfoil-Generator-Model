@@ -1,0 +1,4 @@
+INFO:     127.0.0.1:50620 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50629 - "POST /api/job/start HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57017 - "GET /api/job/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57991 - "GET /api/health HTTP/1.1" 200 OK

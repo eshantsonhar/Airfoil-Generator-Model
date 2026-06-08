@@ -1,0 +1,11 @@
+{
+  "airfoil_name": "S1223",
+  "reynolds": 100000,
+  "aoa": [0.0, 2.0, 4.0, 6.0, 8.0],
+  "cl": [0.50, 0.80, 1.10, 1.35, 1.50],
+  "cd": [0.010, 0.012, 0.018, 0.028, 0.045],
+  "cl_cd": [50.0, 66.7, 61.1, 48.2, 33.3],
+  "transition_location": [0.55, 0.50, 0.45, 0.40, 0.35],
+  "source": "Selig and McGranahan, AIAA Journal, 2004",
+  "notes": "High-lift low-Reynolds-number airfoil"
+}

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airfoil Discovery | Real-Time Optimization Dashboard</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="header-panel">
+            <div class="logo">
+                <span class="logo-highlight">Airfoil</span> Discovery
+            </div>
+            <div class="status-indicator">
+                <span class="status-dot" id="status-dot"></span> <span id="status-text">Idle</span>
+            </div>
+        </header>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <div class="control-group">
+                <label for="input-iterations">Iterations:</label>
+                <input type="number" id="input-iterations" value="2" min="1" max="100">
+            </div>
+            <div class="control-group">
+                <label for="input-batch">Batch Size:</label>
+                <input type="number" id="input-batch" value="1" min="1" max="64">
+            </div>
+            <div class="control-group" style="margin-left: auto;">
+                <button id="btn-start" class="btn btn-primary">Start Optimization</button>
+                <button id="btn-stop" class="btn btn-danger" disabled>Stop</button>
+                <a href="/debug" class="btn btn-primary" style="text-decoration: none;">Open Debug Screen</a>
+            </div>
+        </div>
+        <div class="control-panel">
+            <details style="width: 100%;">
+                <summary style="cursor: pointer; font-weight: 600;">Advanced Compute Settings</summary>
+                <div id="runtime-hint" style="margin-top: 10px; color: #94A3B8;">Loading safe runtime defaults...</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px;">
+                    <div class="control-group">
+                        <label for="input-n-cores">CPU Cores:</label>
+                        <input type="number" id="input-n-cores" value="4" min="1" max="256">
+                    </div>
+                    <div class="control-group">
+                        <label for="input-use-mpi">Use MPI:</label>
+                        <select id="input-use-mpi">
+                            <option value="false" selected>false</option>
+                            <option value="true">true</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="input-mpi-ranks">MPI Ranks/Case:</label>
+                        <input type="number" id="input-mpi-ranks" value="1" min="1" max="128">
+                    </div>
+                    <div class="control-group">
+                        <label for="input-omp-threads">OMP Threads/Rank:</label>
+                        <input type="number" id="input-omp-threads" value="1" min="1" max="128">
+                    </div>
+                    <div class="control-group">
+                        <label for="input-prefer-gpu">Prefer GPU:</label>
+                        <select id="input-prefer-gpu">
+                            <option value="false" selected>false</option>
+                            <option value="true">true</option>
+                        </select>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <!-- Top Overview Stats -->
+        <div class="stats-grid">
+            <div class="stat-card solid-card">
+                <div class="stat-title">Total CFD Cases</div>
+                <div class="stat-value" id="val-total-cases">0</div>
+            </div>
+            <div class="stat-card solid-card">
+                <div class="stat-title">Best Overall Score</div>
+                <div class="stat-value logo-highlight" id="val-best-score">0.000</div>
+            </div>
+            <div class="stat-card solid-card">
+                <div class="stat-title">Max Cl/Cd (Efficiency)</div>
+                <div class="stat-value" id="val-best-eff">0.00</div>
+            </div>
+        </div>
+
+        <!-- ASO Monitoring Panel -->
+        <div class="monitoring-panel solid-card">
+            <h3 class="card-title">Production ASO Lifecycle Monitor</h3>
+            <div class="monitoring-grid">
+                <div class="mon-item">
+                    <div class="mon-label">KKT Stationarity (||∇L||)</div>
+                    <div class="mon-value" id="mon-stationarity">0.00000</div>
+                    <div class="mon-bar-container"><div class="mon-bar" id="bar-stationarity" style="width: 0%;"></div></div>
+                </div>
+                <div class="mon-item">
+                    <div class="mon-label">Complementarity (μ·g)</div>
+                    <div class="mon-value" id="mon-complementarity">0.00000</div>
+                    <div class="mon-bar-container"><div class="mon-bar" id="bar-complementarity" style="width: 0%;"></div></div>
+                </div>
+                <div class="mon-item">
+                    <div class="mon-label">Current Mesh Level</div>
+                    <div class="mon-value" id="mon-mesh" style="color: #60A5FA;">L0 (Coarse)</div>
+                </div>
+                <div class="mon-item">
+                    <div class="mon-label">Trust Region Status</div>
+                    <div class="mon-value" id="mon-trust" style="color: #34D399;">ACCEPTED</div>
+                    <div class="mon-subtext" id="mon-rho">rho: 0.000</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Area -->
+        <div class="charts-grid">
+            <!-- Progress Chart -->
+            <div class="chart-card solid-card">
+                <h3 class="card-title">Optimization Progress</h3>
+                <div class="chart-wrapper">
+                    <canvas id="progressChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Best Airfoil Shape -->
+            <div class="chart-card solid-card">
+                <h3 class="card-title">Best Current Airfoil</h3>
+                <div class="chart-wrapper">
+                    <canvas id="airfoilChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Best Airfoil Raw Data Panel -->
+        <div id="raw-data-panel" class="raw-panel solid-card" style="display:none;">
+            <div class="raw-panel-header">
+                <span class="new-best-badge" id="new-best-badge">NEW BEST</span>
+                <h3 class="card-title" style="margin:0;">Best Airfoil — Full Raw Data</h3>
+                <div style="margin-left:auto;display:flex;gap:0.75rem;">
+                    <button class="btn btn-primary" id="btn-download-dat">Download .dat</button>
+                    <button class="btn btn-primary" id="btn-copy-sig">Copy Signature</button>
+                </div>
+            </div>
+
+            <div class="raw-grid">
+                <!-- Left: identity + CST + geometry + score -->
+                <div class="raw-col">
+                    <div class="raw-section">
+                        <div class="raw-section-title">Identity</div>
+                        <table class="raw-table" id="tbl-identity"></table>
+                    </div>
+                    <div class="raw-section">
+                        <div class="raw-section-title">CST Parameters</div>
+                        <table class="raw-table" id="tbl-cst"></table>
+                    </div>
+                    <div class="raw-section">
+                        <div class="raw-section-title">Geometry Metrics</div>
+                        <table class="raw-table" id="tbl-geometry"></table>
+                    </div>
+                    <div class="raw-section">
+                        <div class="raw-section-title">Score Breakdown</div>
+                        <table class="raw-table" id="tbl-score"></table>
+                    </div>
+                </div>
+
+                <!-- Right: polar table + dat preview -->
+                <div class="raw-col">
+                    <div class="raw-section">
+                        <div class="raw-section-title">Polar Data (AoA sweep)</div>
+                        <div class="polar-scroll">
+                            <table class="raw-table polar-table" id="tbl-polar">
+                                <thead>
+                                    <tr><th>AoA (°)</th><th>Cl</th><th>Cd</th><th>Cl/Cd</th></tr>
+                                </thead>
+                                <tbody id="polar-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="raw-section">
+                        <div class="raw-section-title">.dat File Preview</div>
+                        <pre class="dat-preview" id="dat-preview"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="/static/app.js"></script>
+</body>
+</html>

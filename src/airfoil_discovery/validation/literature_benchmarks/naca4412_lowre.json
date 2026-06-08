@@ -1,0 +1,11 @@
+{
+  "airfoil_name": "NACA 4412",
+  "reynolds": 50000,
+  "aoa": [0.0, 2.0, 4.0, 6.0, 8.0],
+  "cl": [0.40, 0.70, 1.00, 1.25, 1.40],
+  "cd": [0.012, 0.015, 0.022, 0.035, 0.055],
+  "cl_cd": [33.3, 46.7, 45.5, 35.7, 25.5],
+  "transition_location": [0.40, 0.35, 0.30, 0.25, 0.20],
+  "source": "Ol et al., AIAA Journal, 2005",
+  "notes": "Classic cambered airfoil at low Reynolds number"
+}

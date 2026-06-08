@@ -1,0 +1,13 @@
+{
+  "event": "case_failed",
+  "case_id": "iter_001_aoa_+02p0",
+  "status": "DIVERGED",
+  "reason": "CFD evaluation failed at iteration 1, AoA=2.0: DIVERGED",
+  "failure_stage": "CONVERGENCE",
+  "failure_reason": "No residual history available",
+  "failure_detail": null,
+  "offending_file": null,
+  "iteration": 1,
+  "aoa": 2.0,
+  "reynolds": 100000.0
+}

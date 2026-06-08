@@ -1,0 +1,141 @@
+project:
+  name: low_re_airfoil_discovery
+  random_seed: 42
+
+paths:
+  work_root: data/cache
+  database_path: data/database/airfoil_runs.sqlite
+  plots_dir: data/plots
+  remote_manifest_dir: data/remote_manifest
+
+geometry:
+  samples_per_surface: 200
+  upper_bounds: [0.05, 0.4]
+  lower_bounds: [-0.3, 0.1]
+  te_thickness_bounds: [0.001, 0.008]
+  thickness_bounds: [0.06, 0.13]
+  camber_bounds: [0.02, 0.07]
+  max_curvature_spike: 180.0
+  min_le_radius: 0.005
+  smoothness_penalty_scale: 0.03
+  prior_threshold: 0.25
+
+flow:
+  reynolds_min: 100000
+  reynolds_max: 500000
+  mach: 0.10
+  aoa_start: -4.0
+  aoa_end: 14.0
+  aoa_step: 1.0
+  reference_area: 1.0
+  reference_length: 1.0
+
+solver:
+  su2_cfd_bin: bin/SU2_CFD.exe
+  gmsh_bin: bin/gmsh.exe
+  n_cores: 0
+  use_mpi: false
+  mpiexec_bin: mpiexec
+  mpi_ranks_per_case: 1
+  omp_threads_per_rank: 0
+  case_timeout_seconds: 0
+  prefer_gpu: false
+  gpu_backend: auto
+  gpu_device_id: 0
+  transition_model: true
+  keep_local_if_upload_fails: true
+
+  # These are kept for config compatibility but the new two-phase runner
+  # uses the constants defined in su2_config.py (Phase1: 800 iter, Phase2: 3000 iter).
+  startup_iterations: 800
+  startup_cfl: 5.0
+  startup_use_transition: false
+  startup_muscl: false
+  startup_cfl_adapt: true
+
+  mesh:
+    # Methodology domain: 50c farfield and 60c downstream wake extent.
+    farfield_radius: 50.0
+    wake_length: 60.0
+    surface_points: 401
+
+    # BOUNDARY LAYER — physics-based values
+    # First cell height: mesh.py computes y+-correct value from Re using
+    # Blasius laminar BL at x=0.1c.  This config value is the MAXIMUM
+    # (coarsest) allowed — mesh.py uses min(computed, this value).
+    # At Re=10k: computed h1 ≈ 7.8e-4.  At Re=50k: ≈ 2.3e-4.
+    # Setting this to 5e-4 means Re=10k uses 5e-4, Re=30k+ uses computed.
+    boundary_layer_first_height: 0.000001
+
+    # Growth rate ≤ 1.15 for smooth BL transition (mesh.py caps at 1.15)
+    boundary_layer_growth: 1.12
+
+    # Number of layers: mesh.py computes and clamps to [30, 50]
+    boundary_layer_layers: 45
+    y_plus_target: 0.5
+    min_boundary_layer_layers: 45
+    max_boundary_layer_layers: 65
+    coarse_layer_min: 20
+    coarse_layer_max: 60
+
+  stage1_iter: 500
+  stage2_iter: 1500
+  stage3_iter: 3000
+  stage1_cfl: 5.0
+  stage2_cfl: 3.0
+  stage3_cfl: 2.0
+  convergence_window: 100
+  convergence_cl_cd_tol: 0.005
+  convergence_residual_drop: 6.0
+  stage1_coarse_factor: 2.0
+  stage2_coarse_factor: 1.4
+  stage3_coarse_factor: 1.0
+  stage3_turbulence_intensity: 0.001
+  stage3_turb_viscosity_ratio: 5.0
+
+optimization:
+  iterations: 10
+  batch_size: 4
+  candidate_pool: 300
+  exploitation_fraction: 0.7
+  random_injection_fraction: 0.1
+  exploration_fraction: 0.3
+  initial_random_samples: 12
+  duplicate_rounding: 5
+
+scoring:
+  # Weights calibrated for PHYSICALLY CORRECT low-Re results:
+  #   max Cl/Cd ~ 15–40  (normalised by 30 in scorer)
+  #   cd_at_cruise ~ 0.01–0.04
+  #   stall_angle ~ 8–14°
+  #
+  # w1: efficiency reward (normalised Cl/Cd)
+  # w2: stall angle reward (per degree)
+  # w3: drag penalty (per unit Cd — calibrated for Cd~0.01–0.04)
+  # w4: separation penalty
+  # w5: instability penalty
+  w1: 1.0
+  w2: 0.04
+  w3: 8.0
+  w4: 0.8
+  w5: 0.6
+  cruise_aoa: 4.0
+  w_bubble: 1.0
+  w_peak: 1.0
+  w_physics_violation: 1.0
+
+storage:
+  provider: local_manifest
+  local_manifest_base_url: file://remote-manifest
+  supabase_url: ""
+  supabase_api_key: ""
+  supabase_bucket: ""
+  firebase_bucket: ""
+  firebase_bearer_token: ""
+
+ml:
+  model_type: random_forest
+  n_estimators: 400
+  min_samples_leaf: 2
+  xgboost_max_depth: 6
+  xgboost_learning_rate: 0.05

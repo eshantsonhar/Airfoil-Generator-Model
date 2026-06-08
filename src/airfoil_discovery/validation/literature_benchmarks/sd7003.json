@@ -1,0 +1,11 @@
+{
+  "airfoil_name": "SD7003",
+  "reynolds": 60000,
+  "aoa": [0.0, 4.0, 8.0, 11.0, 13.0],
+  "cl": [0.35, 0.75, 1.10, 1.35, 1.40],
+  "cd": [0.015, 0.020, 0.030, 0.050, 0.070],
+  "cl_cd": [23.3, 37.5, 36.7, 27.0, 20.0],
+  "transition_location": [0.50, 0.45, 0.40, 0.35, 0.30],
+  "source": "Selig et al., Experiments in Fluids, 1995",
+  "notes": "Standard low-Reynolds-number airfoil for LSB research"
+}

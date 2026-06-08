@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airfoil Discovery | Debug Monitor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="header-panel">
+            <div class="logo"><span class="logo-highlight">Airfoil</span> Debug Monitor</div>
+            <div class="control-group">
+                <a href="/" class="btn btn-primary" style="text-decoration:none;">Back to Dashboard</a>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card solid-card">
+                <div class="stat-title">Cases Completed</div>
+                <div class="stat-value" id="cases-completed">0</div>
+            </div>
+            <div class="stat-card solid-card">
+                <div class="stat-title">Cases Running Now</div>
+                <div class="stat-value" id="cases-running">0</div>
+            </div>
+            <div class="stat-card solid-card">
+                <div class="stat-title">ETA Full Optimization (s)</div>
+                <div class="stat-value" id="eta-total">-</div>
+            </div>
+        </div>
+
+        <div class="chart-card solid-card" style="height:auto; margin-bottom: 1.5rem;">
+            <h3 class="card-title">Current Physics Plan</h3>
+            <div id="physics-plan" class="physics-plan">No active case yet.</div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card solid-card" style="height: 360px;">
+                <h3 class="card-title">Running Cases</h3>
+                <div style="overflow:auto;">
+                    <table id="running-cases-table" style="width:100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th style="text-align:left; padding:8px;">Case ID</th>
+                                <th style="text-align:left; padding:8px;">Re</th>
+                                <th style="text-align:left; padding:8px;">Elapsed (s)</th>
+                                <th style="text-align:left; padding:8px;">ETA (s)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="chart-card solid-card" style="height: 360px;">
+                <h3 class="card-title">Detailed Debug Log</h3>
+                <pre id="debug-log" style="margin:0; white-space: pre-wrap; overflow:auto; height:100%; font-size:12px;"></pre>
+            </div>
+        </div>
+    </div>
+    <script src="/static/debug.js"></script>
+</body>
+</html>
