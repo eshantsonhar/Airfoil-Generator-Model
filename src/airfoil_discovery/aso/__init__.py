@@ -36,6 +36,16 @@ from .config_primal import generate_primal_config, write_primal_config
 from .config_adjoint import generate_adjoint_config, write_adjoint_config
 from .adjoint import extract_adjoint_gradient, verify_adjoint_gradient, parse_surface_sensitivity_file
 from .mesh_deform import deform_mesh, write_airfoil_dat, compute_mesh_displacement, generate_su2_def_config
+from .diagnostics import (
+    SurfaceFlowData,
+    LSBResult,
+    AerodynamicMetrics,
+    parse_surface_flow,
+    extract_lsb_from_cf,
+    extract_lsb_from_cp,
+    compute_aerodynamic_metrics,
+    compare_baseline_optimized,
+)
 from .optimizer import PDEOptimizer, ConvergenceHistory, IterationRecord, CFDResult, ASOObjectiveFunction
 
 __all__ = [
@@ -72,4 +82,13 @@ __all__ = [
     "IterationRecord",
     "CFDResult",
     "ASOObjectiveFunction",
+    # Diagnostics
+    "SurfaceFlowData",
+    "LSBResult",
+    "AerodynamicMetrics",
+    "parse_surface_flow",
+    "extract_lsb_from_cf",
+    "extract_lsb_from_cp",
+    "compute_aerodynamic_metrics",
+    "compare_baseline_optimized",
 ]
