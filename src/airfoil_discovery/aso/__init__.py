@@ -36,6 +36,21 @@ from .config_primal import generate_primal_config, write_primal_config
 from .config_adjoint import generate_adjoint_config, write_adjoint_config
 from .adjoint import extract_adjoint_gradient, verify_adjoint_gradient, parse_surface_sensitivity_file
 from .mesh_deform import deform_mesh, write_airfoil_dat, compute_mesh_displacement, generate_su2_def_config
+from .preflight import (
+    PreflightReport,
+    run_preflight_checks,
+    check_su2_binary,
+    check_su2_mesh,
+    check_output_directory,
+    check_baseline_design,
+)
+from .smoke_test import (
+    SmokeTestOverrides,
+    get_smoke_overrides,
+    is_smoke_mode,
+    apply_smoke_overrides,
+    smoke_test_message,
+)
 from .diagnostics import (
     SurfaceFlowData,
     LSBResult,
@@ -46,7 +61,11 @@ from .diagnostics import (
     compute_aerodynamic_metrics,
     compare_baseline_optimized,
 )
-from .optimizer import PDEOptimizer, ConvergenceHistory, IterationRecord, CFDResult, ASOObjectiveFunction
+from .optimizer import (
+    PDEOptimizer, ConvergenceHistory, IterationRecord, CFDResult,
+    ASOObjectiveFunction, setup_signal_handlers, shutdown_requested,
+    update_emergency_state,
+)
 
 __all__ = [
     # CST

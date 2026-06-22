@@ -35,6 +35,13 @@ from airfoil_discovery.aso import (
     ConvergenceHistory,
     N_DESIGN_VARS,
 )
+from airfoil_discovery.aso.smoke_test import (
+    smoke_test_message,
+    apply_smoke_overrides,
+    SmokeTestOverrides,
+)
+from airfoil_discovery.aso.preflight import run_preflight_checks
+from airfoil_discovery.aso.optimizer import setup_signal_handlers
 
 
 def setup_logging(log_path: Path, verbose: bool = False) -> None:
@@ -124,6 +131,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--turb-intensity", type=float, default=0.001, help="Freestream turbulence intensity")
     parser.add_argument("--turb-viscosity-ratio", type=float, default=5.0, help="Freestream μ_t/μ")
 
+    # Smoke test and preflight
+    parser.add_argument("--smoke-test", action="store_true",
+                        help="Run fast low-fidelity smoke test to verify pipeline")
+    parser.add_argument("--no-preflight", action="store_true",
+                        help="Skip pre-flight verification checks")
+    parser.add_argument("--no-mesh-deform", action="store_true",
+                        help="Disable mesh deformation")
+
     # Verbose
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output (DEBUG level)")
 
@@ -171,6 +186,34 @@ def main() -> None:
             sys.exit(1)
         logger.info(f"Loaded initial design from {args.init_dv}")
 
+    # Install signal handlers for graceful shutdown
+    setup_signal_handlers()
+
+    # Run pre-flight checks (unless skipped)
+    if not args.no_preflight:
+        preflight_report = run_preflight_checks(
+            su2_cfd_bin=su2_cfd_bin,
+            mesh_path=mesh_path,
+            output_dir=output_dir,
+            dv=dv_initial,
+            bounds=CSTBounds.default(),
+            su2_def_bin=su2_def_bin,
+            verbose=True,
+        )
+        if not preflight_report.all_checks_passed:
+            logger.error("Pre-flight checks failed. Aborting.")
+            sys.exit(1)
+
+    # Apply smoke test mode overrides if requested
+    if args.smoke_test:
+        print(smoke_test_message())
+        logger.info("SMOKE TEST MODE: Reducing iterations for fast pipeline validation")
+        args.n_iter_primal = 20
+        args.n_iter_adjoint = 10
+        args.max_iter = 2
+        args.tol = 1e-3
+        args.mesh_deform = False  # skip mesh deformation in smoke test
+
     # Create optimizer
     bounds = CSTBounds.default()
 
@@ -193,7 +236,7 @@ def main() -> None:
         move_limit=0.05,
         use_slsqp_fallback=(args.method == "slsqp"),
         su2_def_bin=su2_def_bin,
-        use_mesh_deformation=args.mesh_deform,
+        use_mesh_deformation=args.mesh_deform and not args.no_mesh_deform,
         max_iterations=args.max_iter,
         convergence_tolerance=args.tol,
     )

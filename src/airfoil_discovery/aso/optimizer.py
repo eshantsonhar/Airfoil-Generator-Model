@@ -19,9 +19,11 @@ from __future__ import annotations
 import datetime
 import json
 import logging
+import signal
 import subprocess
 import os
 import time
+import traceback
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Callable, Dict, List, Optional, Tuple, Any
@@ -44,6 +46,102 @@ from .adjoint import extract_adjoint_gradient, verify_adjoint_gradient
 from .mesh_deform import deform_mesh, compute_mesh_displacement
 
 logger = logging.getLogger(__name__)
+
+
+# ── Emergency State for Signal Handlers ────────────────────────────────────────
+
+_emergency_state: Dict[str, Any] = {
+    "current_dv": None,
+    "best_dv": None,
+    "best_cd": float("inf"),
+    "optimizer": None,
+    "output_dir": None,
+    "history": None,
+    "iteration": 0,
+    "shutdown_requested": False,
+}
+
+
+def _emergency_signal_handler(signum: int, frame: Any) -> None:
+    """Signal handler for SIGINT/SIGTERM — dumps emergency state."""
+    logger = logging.getLogger(__name__)
+    sig_name = signal.Signals(signum).name if signum in signal.Signals._value2member_map_ else f"signal {signum}"
+    logger.warning(f"=== EMERGENCY: {sig_name} received, dumping state ===")
+    _emergency_state["shutdown_requested"] = True
+    _dump_emergency_state()
+    logger.warning("=== Emergency dump complete. Exiting. ===")
+    sys.exit(1)
+
+
+def _dump_emergency_state() -> None:
+    """Serialize current optimization state to disk."""
+    state = _emergency_state
+    if state["output_dir"] is None:
+        return
+    output_dir = Path(state["output_dir"])
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    emergency_dir = output_dir / "emergency_dump"
+    emergency_dir.mkdir(parents=True, exist_ok=True)
+
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    # Save current design
+    if state["current_dv"] is not None:
+        np.save(emergency_dir / f"emergency_dv_{timestamp}.npy", state["current_dv"])
+
+    # Save best design
+    if state["best_dv"] is not None:
+        np.save(emergency_dir / f"emergency_best_dv_{timestamp}.npy", state["best_dv"])
+        from .cst import compute_airfoil_coordinates
+        try:
+            coords = compute_airfoil_coordinates(state["best_dv"])
+            dat_path = emergency_dir / f"emergency_best_airfoil_{timestamp}.dat"
+            lines = ["emergency_best_airfoil"]
+            for x, y in coords:
+                lines.append(f"  {x:.10f}  {y:.10f}")
+            dat_path.write_text("\n".join(lines), encoding="utf-8")
+        except Exception as e:
+            logger.error(f"Emergency: could not write best airfoil: {e}")
+
+    # Save history
+    if state["history"] is not None:
+        try:
+            hist_path = emergency_dir / f"emergency_history_{timestamp}.json"
+            state["history"].save(hist_path)
+        except Exception as e:
+            logger.error(f"Emergency: could not save history: {e}")
+
+    # Save summary
+    summary = {
+        "timestamp": timestamp,
+        "iteration": state["iteration"],
+        "best_cd": state["best_cd"],
+        "shutdown_requested": state["shutdown_requested"],
+        "message": "Emergency shutdown — state preserved",
+    }
+    summary_path = emergency_dir / f"emergency_summary_{timestamp}.json"
+    summary_path.write_text(json.dumps(summary, indent=2, default=str), encoding="utf-8")
+
+    logger.info(f"Emergency state dumped to {emergency_dir}")
+
+
+def setup_signal_handlers() -> None:
+    """Install emergency signal handlers for graceful shutdown."""
+    signal.signal(signal.SIGINT, _emergency_signal_handler)
+    signal.signal(signal.SIGTERM, _emergency_signal_handler)
+
+
+def update_emergency_state(**kwargs: Any) -> None:
+    """Update the emergency state dictionary."""
+    for key, value in kwargs.items():
+        if key in _emergency_state:
+            _emergency_state[key] = value
+
+
+def shutdown_requested() -> bool:
+    """Check if a shutdown signal has been received."""
+    return _emergency_state["shutdown_requested"]
 
 
 # ── Convergence history ────────────────────────────────────────────────────────
@@ -824,12 +922,79 @@ class PDEOptimizer:
 
         dv = self.dv_initial.copy()
 
+        # Fault-tolerant state
+        consecutive_cfd_failures = 0
+        max_consecutive_failures = 3
+        backtrack_factor = 0.5
+        dv_safe = dv.copy()
+        mesh_safe = self.mesh_path
+        best_cd = float("inf")
+        best_dv = dv.copy()
+
+        # Update emergency state
+        update_emergency_state(
+            current_dv=dv,
+            best_dv=best_dv,
+            best_cd=best_cd,
+            optimizer=self,
+            output_dir=str(self.work_dir),
+            history=self.history,
+        )
+
         for iteration in range(1, self.max_iterations + 1):
+            # Check for shutdown signal
+            if shutdown_requested():
+                logger.warning("Shutdown requested, stopping optimization")
+                self.history.finalize(converged=False)
+                return self.history
+
             logger.info(f"=== MMA Iteration {iteration}/{self.max_iterations} ===")
 
-            # Evaluate objective and gradient
-            cd = self.obj_function(dv)
-            grad = self.obj_function.gradient(dv)
+            # Evaluate objective and gradient with fault tolerance
+            try:
+                cd = self.obj_function(dv)
+            except Exception as e:
+                logger.error(f"CFD evaluation failed at iteration {iteration}: {e}")
+                consecutive_cfd_failures += 1
+                if consecutive_cfd_failures >= max_consecutive_failures:
+                    logger.error(f"Too many consecutive CFD failures ({consecutive_cfd_failures}). Stopping.")
+                    self.history.finalize(converged=False)
+                    return self.history
+                # Backtrack: restore safe design and reduce step
+                logger.warning(f"Backtracking: restoring previous safe design (attempt {consecutive_cfd_failures}/{max_consecutive_failures})")
+                dv = dv_safe.copy()
+                self.obj_function.current_mesh_path = mesh_safe
+                self.obj_function._previous_dv_stored = dv_safe.copy()
+                # Reduce move limit
+                self.move_limit *= backtrack_factor
+                logger.info(f"Move limit reduced to {self.move_limit:.6f}")
+                continue
+
+            # Reset failure counter on success
+            consecutive_cfd_failures = 0
+
+            # Check for NaN/Inf in Cd
+            if np.isnan(cd) or np.isinf(cd) or cd > 1e6:
+                logger.warning(f"CFD produced invalid Cd={cd:.4e}. Rejecting step.")
+                consecutive_cfd_failures += 1
+                dv = dv_safe.copy()
+                self.obj_function.current_mesh_path = mesh_safe
+                self.move_limit *= backtrack_factor
+                continue
+
+            # Track best design
+            if cd < best_cd:
+                best_cd = cd
+                best_dv = dv.copy()
+                update_emergency_state(best_dv=best_dv, best_cd=best_cd)
+
+            # Get gradient
+            try:
+                grad = self.obj_function.gradient(dv)
+            except Exception as e:
+                logger.error(f"Gradient extraction failed: {e}")
+                grad = np.zeros(N_DESIGN_VARS)
+
             grad_norm = float(np.linalg.norm(grad))
 
             # Compute thickness constraint
