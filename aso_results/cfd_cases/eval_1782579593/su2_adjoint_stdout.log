@@ -1,0 +1,35 @@
+
+
+Error in "void CConfig::SetConfig_Parsing(std::istream&)": 
+-------------------------------------------------------------------------
+OBJECTIVE_FUNCTION: invalid option value DRAG_COEFFICIENT.
+Did you mean, AVG_TEMPERATURE, BUFFET, CUSTOM_OBJFUNC, DRAG, EFFICIENCY, EQUIVALENT_AREA, FIGURE_OF_MERIT, FORCE_X, FORCE_Y, FORCE_Z, INVERSE_DESIGN_HEATFLUX, INVERSE_DESIGN_PRESSURE, LIFT, MAXIMUM_HEATFLUX, MOMENT_X, MOMENT_Y, MOMENT_Z, NEARFIELD_PRESSURE, REFERENCE_GEOMETRY, REFERENCE_NODE, SIDEFORCE, STRESS_PENALTY, SURFACE_MACH, SURFACE_MASSFLOW, SURFACE_MOM_DISTORTION, SURFACE_PRESSURE_DROP, SURFACE_SECONDARY, SURFACE_SECOND_OVER_UNIFORM, SURFACE_SPECIES_0, SURFACE_SPECIES_VARIANCE, SURFACE_STATIC_PRESSURE, SURFACE_STATIC_TEMPERATURE, SURFACE_TOTAL_PRESSURE, SURFACE_UNIFORMITY, THRUST, TOPOL_COMPLIANCE, TOPOL_DISCRETENESS, TORQUE, TOTAL_HEATFLUX, VOLUME_FRACTION?
+DV_KIND: invalid option value SURFACE.
+Did you mean, AIRFOIL, ANGLE_OF_ATTACK, CST, DEAD_WEIGHT, ELECTRIC_FIELD, FFD_ANGLE_OF_ATTACK, FFD_CAMBER, FFD_CAMBER_2D, FFD_CONTROL_POINT, FFD_CONTROL_POINT_2D, FFD_CONTROL_SURFACE, FFD_GULL, FFD_NACELLE, FFD_ROTATION, FFD_SETTING, FFD_THICKNESS, FFD_THICKNESS_2D, FFD_TWIST, HICKS_HENNE, HICKS_HENNE_CAMBER, NACA_4DIGITS, NO_DEFORMATION, PARABOLIC, POISSON_RATIO, ROTATE_GRID, ROTATION, SCALE, SCALE_GRID, STRUCTURAL_DENSITY, SURFACE_BUMP, SURFACE_FILE, TRANSLATE_GRID, TRANSLATION, YOUNG_MODULUS?
+DV_PARAM: undefined design variable type found in configuration file. 
+Line 47 CFL_NUMBER_ADJFLOW: invalid option name. Check current SU2 options in config_template.cfg.
+Did you mean CFL_REDUCTION_ADJFLOW?
+Line 48 CFL_NUMBER_ADJTURB: invalid option name. Check current SU2 options in config_template.cfg.
+Did you mean CFL_REDUCTION_ADJTURB?
+Line 61 ADJ_MACH_NUMBER: invalid option name. Check current SU2 options in config_template.cfg.
+Did you mean MULTIPOINT_MACH_NUMBER?
+Line 62 ADJ_AOA: invalid option name. Check current SU2 options in config_template.cfg.
+Did you mean ADJ_JST_SENSOR_COEFF?
+Line 63 ADJ_SIDESLIP_ANGLE: invalid option name. Check current SU2 options in config_template.cfg.
+Did you mean MULTIPOINT_SIDESLIP_ANGLE?
+Line 64 ADJ_REYNOLDS_NUMBER: invalid option name. Check current SU2 options in config_template.cfg.
+Did you mean MULTIPOINT_REYNOLDS_NUMBER?
+Line 65 ADJ_FREESTREAM_TEMPERATURE: invalid option name. Check current SU2 options in config_template.cfg.
+Did you mean MULTIPOINT_FREESTREAM_TEMPERATURE?
+Line 66 ADJ_FREESTREAM_PRESSURE: invalid option name. Check current SU2 options in config_template.cfg.
+Did you mean MULTIPOINT_FREESTREAM_PRESSURE?
+
+------------------------------ Error Exit -------------------------------
+
+
+
+job aborted:
+[ranks] message
+
+[0] application aborted
+aborting MPI_COMM_WORLD (comm=0x44000000), error 1, comm rank 0

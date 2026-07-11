@@ -1,0 +1,53 @@
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\eshan\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py", line 1113, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Users\eshan\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2207' in position 74: character maps to <undefined>
+Call stack:
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\scripts\run_aso_pde_optimization.py", line 276, in <module>
+    main()
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\scripts\run_aso_pde_optimization.py", line 247, in main
+    history = optimizer.run(method=args.method)
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\src\airfoil_discovery\aso\optimizer.py", line 1149, in run
+    return self.run_mma()
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\src\airfoil_discovery\aso\optimizer.py", line 1095, in run_mma
+    logger.info(
+Message: 'Cd=0.947035, |\u2207Cd|=0.000000, t/c=0.0848, accepted=True, \u03c1=0.2000'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\eshan\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py", line 1113, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Users\eshan\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2207' in position 87: character maps to <undefined>
+Call stack:
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\scripts\run_aso_pde_optimization.py", line 276, in <module>
+    main()
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\scripts\run_aso_pde_optimization.py", line 247, in main
+    history = optimizer.run(method=args.method)
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\src\airfoil_discovery\aso\optimizer.py", line 1149, in run
+    return self.run_mma()
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\src\airfoil_discovery\aso\optimizer.py", line 1118, in run_mma
+    logger.info(f"Converged at iteration {iteration}: |\u2207Cd|={grad_norm:.6e}")
+Message: 'Converged at iteration 1: |\u2207Cd|=0.000000e+00'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\eshan\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py", line 1113, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Users\eshan\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2207' in position 55: character maps to <undefined>
+Call stack:
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\scripts\run_aso_pde_optimization.py", line 276, in <module>
+    main()
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\scripts\run_aso_pde_optimization.py", line 269, in main
+    logger.info(f"Initial |\u2207Cd|: {first.grad_norm:.6f}, Final |\u2207Cd|: {last.grad_norm:.6f}")
+Message: 'Initial |\u2207Cd|: 0.000000, Final |\u2207Cd|: 0.000000'
+Arguments: ()

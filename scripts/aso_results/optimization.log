@@ -1,0 +1,10 @@
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: ============================================================
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: Method: mma
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: Max iterations: 2000
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: ============================================================
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: SU2_CFD: SU2_CFD
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: SU2_DEF: SU2_DEF
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\aso_smoke_validation\cfd_cases\eval_1782302229\mesh.su2
+2026-06-27 14:24:36 [ERROR] aso_pde_optimizer: Pre-flight checks failed. Aborting.

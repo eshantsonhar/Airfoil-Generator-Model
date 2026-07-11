@@ -26,7 +26,7 @@ def build_stage_config(
         iter_count = solver.stage1_iter
         cfl = solver.stage1_cfl
         trans_model = "NONE"
-        muscl = "YES"
+        muscl = "NO"
         restart_sol = "NO"
         output_files = "(RESTART)"
     elif stage == 2:
@@ -83,7 +83,7 @@ def build_stage_config(
         "MARKER_FAR= ( farfield )",
         "MARKER_MONITORING= ( airfoil )",
         "MARKER_PLOTTING= ( airfoil )",
-        "NUM_METHOD_GRAD= GREEN_GAUSS",
+        "NUM_METHOD_GRAD= WEIGHTED_LEAST_SQUARES",
         "NUM_METHOD_GRAD_RECON= LEAST_SQUARES",
         "CONV_NUM_METHOD_FLOW= FDS",
         f"TIME_DISCRE_FLOW= {time_discre_flow}",
@@ -91,8 +91,8 @@ def build_stage_config(
         f"KIND_TRANS_MODEL= {trans_model}",
         f"MUSCL_FLOW= {muscl}",
         f"MUSCL_TURB= {muscl}",
-        "SLOPE_LIMITER_FLOW= VENKATAKRISHNAN" if muscl == "YES" else "SLOPE_LIMITER_FLOW= NONE",
-        "SLOPE_LIMITER_TURB= VENKATAKRISHNAN" if muscl == "YES" else "SLOPE_LIMITER_TURB= NONE",
+        "SLOPE_LIMITER_FLOW= VAN_ALBADA_EDGE" if muscl == "YES" else "SLOPE_LIMITER_FLOW= NONE",
+        "SLOPE_LIMITER_TURB= VAN_ALBADA_EDGE" if muscl == "YES" else "SLOPE_LIMITER_TURB= NONE",
         f"ITER= {iter_count}",
         f"CFL_NUMBER= {cfl}",
         "CFL_ADAPT= YES",

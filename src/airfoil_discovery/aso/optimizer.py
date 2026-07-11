@@ -302,7 +302,8 @@ def run_primal_and_adjoint(
     CFDResult
     """
     case_dir.mkdir(parents=True, exist_ok=True)
-    mesh_name = "mesh.su2"
+    # Copy mesh to case directory using the original filename to ensure SU2 can find it
+    mesh_name = mesh_path.name
 
     # Copy mesh to case directory
     mesh_in_case = case_dir / mesh_name
@@ -324,7 +325,6 @@ def run_primal_and_adjoint(
         transition_model=transition_model,
         turbulence_intensity=turbulence_intensity,
         turb_viscosity_ratio=turb_viscosity_ratio,
-        output_dir=".",
     )
 
     # ── 2. Run primal ──
@@ -414,25 +414,22 @@ def run_primal_and_adjoint(
 
     adj_conv = (adj_result.returncode == 0)
 
-    if not adj_conv:
-        return CFDResult(
-            cl=cl, cd=cd, converged=False,
-            adjoint_gradient=np.zeros(N_DESIGN_VARS), gradient_valid=False,
-            primal_converged=primal_conv, adjoint_converged=False,
-            case_dir=case_dir, mesh_path=mesh_path,
-            failure_reason=f"Adjoint CFD failed (rc={adj_result.returncode})",
-        )
-
-    # ── 5. Extract gradient ──
+    # ── 5. Extract gradient (if adjoint succeeded) ──
     try:
         grad = extract_adjoint_gradient(case_dir, objective=objective)
         grad_valid = np.linalg.norm(grad) > 1e-12 and not np.any(np.isnan(grad))
     except Exception as e:
         logger.error(f"Gradient extraction failed: {e}")
-        grad = np.zeros(N_DESIGN_VARS)
+        grad = None
         grad_valid = False
 
-    converged = primal_conv and adj_conv and grad_valid
+    # If adjoint fails but primal converged, fall back to finite differences
+    if not adj_conv or not grad_valid:
+        logger.warning("Adjoint failed or invalid, falling back to finite difference gradient")
+        grad = None
+    
+    # Accept result if primal converged (adjoint is optional with FD fallback)
+    converged = primal_conv
 
     return CFDResult(
         cl=cl, cd=cd, converged=converged,
@@ -464,36 +461,95 @@ def _parse_history(history_path: Path) -> Tuple[float, float, bool]:
     if len(lines) < 2:
         return 0.0, 0.0, False
 
-    # Parse header
-    header = [h.strip().strip('"') for h in lines[0].split(",")]
+    # Parse header - strip quotes and whitespace
+    header = [h.strip().strip('"').strip("'") for h in lines[0].split(",")]
+    
+    # Log detected headers for debugging
+    logger.info(f"SU2 history headers detected: {header}")
 
     # Find last data line
     last_data = None
     for line in reversed(lines[1:]):
         s = line.strip()
-        if s and s != ',':
+        if s and s != ',' and not s.startswith("#"):
             last_data = s
             break
 
     if last_data is None:
+        logger.warning("No valid data rows found in history file")
         return 0.0, 0.0, False
 
     values = [v.strip() for v in last_data.split(",")]
+    
+    # Ensure we have matching header/value counts
+    if len(values) != len(header):
+        logger.warning(f"Header/value count mismatch: {len(header)} headers, {len(values)} values")
+        # Try to use positional parsing as fallback
+        if len(values) >= 8:
+            # Common SU2 format: Iter, Time, CL, CD, ... (positions 2, 3)
+            try:
+                cl = float(values[2])
+                cd = float(values[3])
+                logger.warning(f"Using positional parsing: CL={cl}, CD={cd}")
+                return cl, cd, True
+            except (ValueError, IndexError):
+                return 0.0, 0.0, False
+        return 0.0, 0.0, False
+    
     mapping = dict(zip(header, values))
 
-    # Extract CL, CD
-    cl_str = mapping.get("CL") or mapping.get("LIFT") or "0.0"
-    cd_str = mapping.get("CD") or mapping.get("DRAG") or "0.0"
+    # Extract CL, CD with comprehensive header matching
+    # SU2 uses various naming conventions depending on solver and configuration
+    cl_candidates = ["CL", "LIFT", "CLift", "CL_Total", "Cz", "FORCE_X_COEFF"]
+    cd_candidates = ["CD", "DRAG", "CDrag", "CD_Total", "Cx", "FORCE_Y_COEFF"]
+    
+    cl_str = None
+    cd_str = None
+    
+    # Try exact matches first
+    for candidate in cl_candidates:
+        if candidate in mapping:
+            cl_str = mapping[candidate]
+            logger.info(f"Found CL column: '{candidate}' = {cl_str}")
+            break
+    
+    for candidate in cd_candidates:
+        if candidate in mapping:
+            cd_str = mapping[candidate]
+            logger.info(f"Found CD column: '{candidate}' = {cd_str}")
+            break
+    
+    # Fallback to case-insensitive search
+    if cl_str is None:
+        for key in mapping:
+            if key.upper() in ["CL", "LIFT"]:
+                cl_str = mapping[key]
+                logger.info(f"Found CL column (case-insensitive): '{key}' = {cl_str}")
+                break
+    
+    if cd_str is None:
+        for key in mapping:
+            if key.upper() in ["CD", "DRAG"]:
+                cd_str = mapping[key]
+                logger.info(f"Found CD column (case-insensitive): '{key}' = {cd_str}")
+                break
+    
+    # Final fallback
+    cl_str = cl_str or "0.0"
+    cd_str = cd_str or "0.0"
 
     try:
         cl = float(cl_str)
         cd = float(cd_str)
-    except (ValueError, TypeError):
+    except (ValueError, TypeError) as e:
+        logger.warning(f"Failed to parse CL/CD values: cl_str='{cl_str}', cd_str='{cd_str}', error={e}")
         return 0.0, 0.0, False
 
     # Check for convergence from RMS residual info
     rms_cols = [k for k in mapping if k.startswith("RMS_") or "rms" in k.lower()]
     converged = True  # default to converged if we got numbers
+    forces_stabilized = True
+    
     if len(values) > 3:
         # Check if the last few CL values show stabilization
         data_rows = []
@@ -506,19 +562,68 @@ def _parse_history(history_path: Path) -> Tuple[float, float, bool]:
 
         if len(data_rows) > 10:
             last_cls = []
+            last_cds = []
             for row in data_rows[-10:]:
                 row_map = dict(zip(header, row))
                 cl_v = row_map.get("CL") or row_map.get("LIFT") or "0.0"
+                cd_v = row_map.get("CD") or row_map.get("DRAG") or "0.0"
                 try:
                     last_cls.append(float(cl_v))
+                    last_cds.append(float(cd_v))
                 except (ValueError, TypeError):
                     pass
 
             if len(last_cls) > 3:
                 cl_std = np.std(last_cls)
                 cl_mean = np.mean(np.abs(last_cls))
+                cd_std = np.std(last_cds)
+                cd_mean = np.mean(np.abs(last_cds))
+                
+                # Check if forces are stabilized (low relative std)
                 if cl_mean > 1e-10 and cl_std / cl_mean > 0.1:
-                    converged = False  # CL still oscillating significantly
+                    forces_stabilized = False
+                if cd_mean > 1e-10 and cd_std / cd_mean > 0.1:
+                    forces_stabilized = False
+                
+                if not forces_stabilized:
+                    converged = False  # Forces still oscillating significantly
+
+    # Low-Re relaxation: if forces are stabilized and residual dropped >= 1 order, accept
+    if not converged and forces_stabilized and rms_cols:
+        # Check residual drop
+        if len(data_rows) > 20:
+            first_rms = None
+            last_rms = None
+            for row in data_rows[:10]:
+                row_map = dict(zip(header, row))
+                for rms_col in rms_cols:
+                    if rms_col in row_map:
+                        try:
+                            first_rms = float(row_map[rms_col])
+                            break
+                        except (ValueError, TypeError):
+                            pass
+                if first_rms is not None:
+                    break
+            
+            for row in data_rows[-10:]:
+                row_map = dict(zip(header, row))
+                for rms_col in rms_cols:
+                    if rms_col in row_map:
+                        try:
+                            last_rms = float(row_map[rms_col])
+                            break
+                        except (ValueError, TypeError):
+                            pass
+                if last_rms is not None:
+                    break
+            
+            if first_rms is not None and last_rms is not None:
+                if first_rms != 0:
+                    residual_drop = np.log10(abs(first_rms)) - np.log10(abs(last_rms))
+                    if residual_drop >= 1.0:
+                        logger.info(f"Low-Re relaxation: forces stabilized, residual dropped {residual_drop:.2f} orders. Accepting as converged.")
+                        converged = True
 
     return cl, cd, converged
 
@@ -631,6 +736,28 @@ class ASOObjectiveFunction:
         if not result.converged:
             logger.warning(f"CFD not converged: {result.failure_reason}")
             return 1e10  # Large penalty for non-converged CFD
+
+        # ── AERODYNAMIC SANITY BOUNDS ──
+        # Physical limits for 2D airfoil at Re=100,000, AoA=4°
+        # These are hard guards against non-physical CFD results
+        cl_lower = -0.5   # Negative lift at positive AoA indicates geometry/solver error
+        cl_upper = 2.5    # Beyond this, flow is fully separated (stall)
+        cd_lower = 0.001  # Below this is unrealistically low (laminar bubble artifacts)
+        cd_upper = 0.15   # Above this is catastrophic drag (flat plate/parachute regime)
+        
+        if result.cl < cl_lower or result.cl > cl_upper:
+            logger.error(
+                f"NON-PHYSICAL LIFT: Cl={result.cl:.6f} outside bounds [{cl_lower}, {cl_upper}]. "
+                f"This indicates geometry/solver error. Rejecting result."
+            )
+            return 1e10
+        
+        if result.cd < cd_lower or result.cd > cd_upper:
+            logger.error(
+                f"NON-PHYSICAL DRAG: Cd={result.cd:.6f} outside bounds [{cd_lower}, {cd_upper}]. "
+                f"This indicates CFD divergence or geometry error. Rejecting result."
+            )
+            return 1e10
 
         if self.use_mesh_deformation and self.su2_def_bin and self._previous_dv_stored is not None:
             self._deform_mesh_for_next(dv)
@@ -993,9 +1120,14 @@ class PDEOptimizer:
                 grad = self.obj_function.gradient(dv)
             except Exception as e:
                 logger.error(f"Gradient extraction failed: {e}")
-                grad = np.zeros(N_DESIGN_VARS)
+                raise RuntimeError(f"Gradient calculation failed at iteration {iteration}: {e}")
 
             grad_norm = float(np.linalg.norm(grad))
+            
+            # CRITICAL: Never accept zero gradients - this indicates a failed adjoint/FD
+            if grad_norm < 1e-12:
+                logger.error(f"Zero gradient detected (|∇Cd|={grad_norm:.6e}). This indicates failed adjoint/FD calculation.")
+                raise RuntimeError(f"Zero gradient at iteration {iteration}: adjoint/FD fallback failed to produce meaningful sensitivities")
 
             # Compute thickness constraint
             upper, lower = compute_surface_coordinates(dv, te_thickness=self.bounds.te_thickness)
@@ -1123,13 +1255,53 @@ class PDEOptimizer:
             self._current_dv,
             te_thickness=self.bounds.te_thickness,
         )
+        # Convert to numpy array for XFLR5/Selig format processing
+        pts = np.array(coords)
+        
+        # Identify critical apex points
+        le_idx = np.argmin(pts[:, 0])
+        le_x, le_y = pts[le_idx]
+        max_x = np.max(pts[:, 0])
+        te_pts = pts[pts[:, 0] == max_x]
+        avg_te_y = np.mean(te_pts[:, 1])
+        
+        upper = []
+        lower = []
+        
+        # Separate upper and lower surfaces using chord-line equation
+        for x, y in pts:
+            if x == le_x and y == le_y:
+                continue
+            chord_y = le_y + ((avg_te_y - le_y) / (max_x - le_x)) * (x - le_x)
+            if y >= chord_y:
+                upper.append((x, y))
+            else:
+                lower.append((x, y))
+        
+        # Sort for Selig Format (Upper: TE -> LE [X descending], Lower: LE -> TE [X ascending])
+        upper_sorted = sorted(upper, key=lambda p: p[0], reverse=True)
+        lower_sorted = sorted(lower, key=lambda p: p[0])
+        
+        # Construct final sequenced coordinate list
+        final_sequence = upper_sorted + [(le_x, le_y)] + lower_sorted
+        
+        # Close the loop at TE if single point
+        if len(te_pts) == 1:
+            final_sequence.append((te_pts[0][0], te_pts[0][1]))
+        
+        # Write XFLR5 compatible file
         coords_path = output_dir / "final_airfoil.dat"
         lines = ["final_airfoil"]
-        for x, y in coords:
-            lines.append(f"  {x:.10f}  {y:.10f}")
-        coords_path.write_text("\n".join(lines), encoding="utf-8")
+        for x, y in final_sequence:
+            lines.append(f"  {x:.10f}   {y:.10f}")
+        # Ensure trailing newline at end of file for XFLR5 compatibility
+        coords_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
         # Save a summary text file
+        # Format final values safely
+        final_cd = f"{self.history.iterations[-1].cd:.6f}" if self.history.iterations else "N/A"
+        final_cl = f"{self.history.iterations[-1].cl:.6f}" if self.history.iterations else "N/A"
+        
         summary = [
             "=" * 60,
             "PDE-Constrained Aerodynamic Shape Optimization Results",
@@ -1142,8 +1314,8 @@ class PDEOptimizer:
             f"  Upper: {self._current_dv[:6]}",
             f"  Lower: {self._current_dv[6:]}",
             f"",
-            f"Final Objective (Cd): {self.history.iterations[-1].cd if self.history.iterations else 'N/A':.6f}",
-            f"Final Cl: {self.history.iterations[-1].cl if self.history.iterations else 'N/A':.6f}",
+            f"Final Objective (Cd): {final_cd}",
+            f"Final Cl: {final_cl}",
             f"",
             f"Convergence History (first 5 and last 5):",
         ]

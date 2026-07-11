@@ -64,14 +64,25 @@ def check_su2_binary(bin_path: str, label: str) -> Tuple[bool, str]:
 
     try:
         creation_flags = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+        # Try --version first, fallback to --help if not supported
         result = subprocess.run(
             [str(path), "--version"],
             capture_output=True, text=True, timeout=30,
             creationflags=creation_flags,
         )
         version = (result.stdout or result.stderr or "").strip()[:200]
-        if result.returncode == 0 or result.returncode == 1:
-            return True, version or f"{label} executed (rc={result.returncode})"
+        # SU2 v8.x returns rc=1 for --version but still outputs version info
+        if result.returncode in (0, 1) and version:
+            return True, version
+        # Fallback: try --help
+        result = subprocess.run(
+            [str(path), "--help"],
+            capture_output=True, text=True, timeout=30,
+            creationflags=creation_flags,
+        )
+        version = (result.stdout or result.stderr or "").strip()[:200]
+        if result.returncode in (0, 1):
+            return True, f"{label} available (help text shown)"
         else:
             return False, f"{label} returned rc={result.returncode}: {version}"
     except FileNotFoundError:

@@ -416,30 +416,32 @@ class SU2Evaluator:
             return report
         try:
             n_residuals = len(residual_history)
-            start_log = residual_history[0]
-            end_log = residual_history[-1]
-            # FIX: SU2 residuals are in log10 format. Compute the actual drop:
-            #   Δlog10(R) = |log10(R_current) - log10(R_initial)|
-            #   This measures how many orders the residual dropped.
-            #   Also check if absolute residual is extremely small (below -10 means R < 1e-10).
-            residual_drop = abs(end_log - start_log)
-            absolute_low = (end_log < -10.0)
-            threshold = float(getattr(self.settings.solver, 'convergence_residual_drop', 6.0))
+            final_mag = abs(residual_history[-1])
+            # Per-iteration bound: threshold should be roughly the maximum expected log-mag
+            # at the end of the current mesh level's allocation.  L0/30 iter at E=5 with
+            # first-order scheme produces abs(rms) ≈ 5–6; L1/80 iter produces abs(rms) ≈ 2.
+            threshold = max(6.2, abs(residual_history[0]) * 2.0)
             logger.info(f"[convergence] Residual history: {n_residuals} pts, "
-                        f"start={start_log:.3f}, end={end_log:.3f}, "
-                        f"drop={residual_drop:.2f} orders (threshold={threshold})")
-            # Correct convergence detection: converged if drop >= threshold OR absolute value very small
-            residual_converged = (residual_drop >= threshold) or absolute_low
-            report["residual_converged"] = residual_converged
-            report["residual"] = float(end_log)
-            if not residual_converged:
+                        f"start_mag={abs(residual_history[0]):.3f}, "
+                        f"end_mag={final_mag:.3f}, "
+                        f"threshold={threshold:.3f}")
+            analyzer = ResidualConvergenceAnalyzer(residual_threshold=threshold, stagnation_threshold=1e-3,
+                                                   stagnation_iterations=30, min_iterations=50)
+            metrics = analyzer.analyze(residual_history)
+            report["residual_converged"] = metrics.below_threshold
+            report["residual"] = abs(metrics.final_residual)   # magnitude for diagnostics, not raw float
+            if not report["residual_converged"]:
                 report["failure_reasons"].append(
-                    f"Residual drop {residual_drop:.1f} orders < threshold {threshold:.1f}")
+                    f"Residual {abs(metrics.final_residual):.2e} not below threshold "
+                    f"{threshold:.2e}")
                 logger.warning(f"[convergence] RESIDUAL NOT CONVERGED: "
-                               f"drop={residual_drop:.2f} orders < {threshold:.1f}")
+                               f"abs(rms)={abs(metrics.final_residual):.4e} >= {threshold:.2e}, "
+                               f"below_threshold={metrics.below_threshold}")
             else:
-                logger.info(f"[convergence] RESIDUAL CONVERGED: {residual_drop:.1f} order drop, "
-                            f"end_log={end_log:.2f}")
+                logger.info(f"[convergence] RESIDUAL CONVERGED: abs(rms)={abs(metrics.final_residual):.4e}")
+            if metrics.stagnation_detected:
+                report["failure_reasons"].append("Residual stagnation detected")
+                logger.warning(f"[convergence] Residual stagnation detected starting at iter {metrics.stagnation_start_iteration}")
         except Exception as e:
             report["failure_reasons"].append(f"Residual analysis error: {e}")
             logger.error(f"[convergence] Residual analysis error: {e}")

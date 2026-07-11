@@ -1,0 +1,72 @@
+2026-06-28 20:24:21 [INFO] aso_pde_optimizer: ============================================================
+2026-06-28 20:24:21 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-06-28 20:24:21 [INFO] aso_pde_optimizer: Method: mma
+2026-06-28 20:24:21 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-06-28 20:24:21 [INFO] aso_pde_optimizer: Max iterations: 20
+2026-06-28 20:24:21 [INFO] aso_pde_optimizer: ============================================================
+2026-06-28 20:24:21 [INFO] aso_pde_optimizer: SU2_CFD: bin\SU2_CFD.exe
+2026-06-28 20:24:21 [INFO] aso_pde_optimizer: SU2_DEF: SU2_DEF
+2026-06-28 20:24:21 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil.su2
+2026-06-28 20:24:22 [ERROR] aso_pde_optimizer: Pre-flight checks failed. Aborting.
+2026-06-28 20:56:33 [INFO] aso_pde_optimizer: ============================================================
+2026-06-28 20:56:33 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-06-28 20:56:33 [INFO] aso_pde_optimizer: Method: mma
+2026-06-28 20:56:33 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-06-28 20:56:33 [INFO] aso_pde_optimizer: Max iterations: 20
+2026-06-28 20:56:33 [INFO] aso_pde_optimizer: ============================================================
+2026-06-28 20:56:33 [INFO] aso_pde_optimizer: SU2_CFD: bin\SU2_CFD.exe
+2026-06-28 20:56:33 [INFO] aso_pde_optimizer: SU2_DEF: bin\SU2_DEF.exe
+2026-06-28 20:56:33 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil.su2
+2026-06-28 20:56:33 [INFO] aso_pde_optimizer: Loaded initial design from init_dv_baseline.npy
+2026-06-28 20:56:33 [ERROR] aso_pde_optimizer: Pre-flight checks failed. Aborting.
+2026-06-28 20:56:46 [INFO] aso_pde_optimizer: ============================================================
+2026-06-28 20:56:46 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-06-28 20:56:46 [INFO] aso_pde_optimizer: Method: mma
+2026-06-28 20:56:46 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-06-28 20:56:46 [INFO] aso_pde_optimizer: Max iterations: 20
+2026-06-28 20:56:46 [INFO] aso_pde_optimizer: ============================================================
+2026-06-28 20:56:46 [INFO] aso_pde_optimizer: SU2_CFD: bin\SU2_CFD.exe
+2026-06-28 20:56:46 [INFO] aso_pde_optimizer: SU2_DEF: bin\SU2_DEF.exe
+2026-06-28 20:56:46 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil.su2
+2026-06-28 20:56:46 [INFO] aso_pde_optimizer: Loaded initial design from init_dv_baseline.npy
+2026-06-28 20:56:46 [ERROR] aso_pde_optimizer: Pre-flight checks failed. Aborting.
+2026-06-28 21:20:42 [INFO] aso_pde_optimizer: ============================================================
+2026-06-28 21:20:42 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-06-28 21:20:42 [INFO] aso_pde_optimizer: Method: mma
+2026-06-28 21:20:42 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-06-28 21:20:42 [INFO] aso_pde_optimizer: Max iterations: 2
+2026-06-28 21:20:42 [INFO] aso_pde_optimizer: ============================================================
+2026-06-28 21:20:42 [INFO] aso_pde_optimizer: SU2_CFD: bin\SU2_CFD.exe
+2026-06-28 21:20:42 [INFO] aso_pde_optimizer: SU2_DEF: bin\SU2_DEF.exe
+2026-06-28 21:20:42 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil.su2
+2026-06-28 21:20:42 [INFO] aso_pde_optimizer: Loaded initial design from init_dv_baseline.npy
+2026-06-28 21:20:52 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/2 ===
+2026-06-28 21:20:52 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 21:20:55 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-06-28 21:20:55 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 6.368547978
+2026-06-28 21:20:55 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.9470349412
+2026-06-28 21:20:55 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 21:20:55 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 21:20:57 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\production_stress_test\cfd_cases\eval_1782661852. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 21:20:57 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 21:20:57 [ERROR] airfoil_discovery.aso.optimizer: NON-PHYSICAL LIFT: Cl=6.368548 outside bounds [-0.5, 2.5]. This indicates geometry/solver error. Rejecting result.
+2026-06-28 21:20:57 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-06-28 21:20:57 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 2/2 ===
+2026-06-28 21:20:57 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 21:21:00 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-06-28 21:21:00 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 6.368547978
+2026-06-28 21:21:00 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.9470349412
+2026-06-28 21:21:00 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 21:21:00 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 21:21:01 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\production_stress_test\cfd_cases\eval_1782661857. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 21:21:01 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 21:21:01 [ERROR] airfoil_discovery.aso.optimizer: NON-PHYSICAL LIFT: Cl=6.368548 outside bounds [-0.5, 2.5]. This indicates geometry/solver error. Rejecting result.
+2026-06-28 21:21:01 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-06-28 21:21:01 [INFO] airfoil_discovery.aso.optimizer: Results saved to data\production_stress_test
+2026-06-28 21:21:01 [INFO] aso_pde_optimizer: ============================================================
+2026-06-28 21:21:01 [INFO] aso_pde_optimizer: Optimization Complete
+2026-06-28 21:21:01 [INFO] aso_pde_optimizer: Time elapsed: 16.6 seconds (0.3 minutes)
+2026-06-28 21:21:01 [INFO] aso_pde_optimizer: Total iterations: 0
+2026-06-28 21:21:01 [INFO] aso_pde_optimizer: Converged: False
+2026-06-28 21:21:01 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\production_stress_test
+2026-06-28 21:21:01 [INFO] aso_pde_optimizer: ============================================================

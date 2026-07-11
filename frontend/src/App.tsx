@@ -3,7 +3,6 @@ import Dashboard from "./pages/Dashboard";
 import GeometryViewer from "./pages/GeometryViewer";
 import OptimizationMonitor from "./pages/OptimizationMonitor";
 import CfdDiagnostics from "./pages/CfdDiagnostics";
-import CfdTest from "./pages/CfdTest";
 import PhysicsAnalysis from "./pages/PhysicsAnalysis";
 import FailureAnalysis from "./pages/FailureAnalysis";
 import RunConfiguration from "./pages/RunConfiguration";
@@ -14,7 +13,6 @@ const links = [
   ["/optimization", "Optimization"],
   ["/cfd", "CFD Diagnostics"],
   ["/physics", "Physics"],
-  ["/cfd/run", "CFD Run Test"],
   ["/failures", "Failures"],
   ["/config", "Run Config"],
 ] as const;
@@ -38,7 +36,6 @@ export default function App() {
           <Route path="/geometry" element={<GeometryViewer />} />
           <Route path="/optimization" element={<OptimizationMonitor />} />
           <Route path="/cfd" element={<CfdDiagnostics />} />
-          <Route path="/cfd/run" element={<CfdTest />} />
           <Route path="/physics" element={<PhysicsAnalysis />} />
           <Route path="/failures" element={<FailureAnalysis />} />
           <Route path="/config" element={<RunConfiguration />} />

@@ -1,0 +1,38 @@
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: ============================================================
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: Method: mma
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: Max iterations: 2000
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: ============================================================
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: SU2_CFD: SU2_CFD
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: SU2_DEF: SU2_DEF
+2026-06-27 14:24:36 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\aso_smoke_validation\cfd_cases\eval_1782302229\mesh.su2
+
+============================================================
+PRE-FLIGHT VERIFICATION
+============================================================
+
+[1/5] Verifying SU2 binaries...
+  [FAIL] SU2_CFD: Binary not found: SU2_CFD
+  [FAIL] SU2_DEF: Binary not found: SU2_DEF
+
+[2/5] Validating mesh...
+  [PASS] Mesh: 222 nodes, 235 elements, 1 markers, 13.0 KB
+
+[3/5] Checking output directory...
+  [PASS] Output dir: 136.5 GB free
+
+[4/5] Checking baseline geometry...
+  [FAIL] No design vector provided
+
+[5/5] Testing config generation...
+  [PASS] Config generation verified
+
+============================================================
+PRE-FLIGHT: 3 FAILURES DETECTED
+  - SU2_CFD: Binary not found: SU2_CFD
+  - SU2_DEF: Binary not found: SU2_DEF
+  - Geometry: No design vector provided
+============================================================
+
+2026-06-27 14:24:36 [ERROR] aso_pde_optimizer: Pre-flight checks failed. Aborting.

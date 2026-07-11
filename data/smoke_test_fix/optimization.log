@@ -1,0 +1,30 @@
+2026-06-27 22:56:31 [INFO] aso_pde_optimizer: ============================================================
+2026-06-27 22:56:31 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-06-27 22:56:31 [INFO] aso_pde_optimizer: Method: mma
+2026-06-27 22:56:31 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-06-27 22:56:31 [INFO] aso_pde_optimizer: Max iterations: 2
+2026-06-27 22:56:31 [INFO] aso_pde_optimizer: ============================================================
+2026-06-27 22:56:31 [INFO] aso_pde_optimizer: SU2_CFD: airfoil generator model\bin\SU2_CFD.exe
+2026-06-27 22:56:31 [INFO] aso_pde_optimizer: SU2_DEF: airfoil generator model\bin\bin\SU2_DEF.exe
+2026-06-27 22:56:31 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil.su2
+2026-06-27 22:56:31 [INFO] aso_pde_optimizer: Loaded initial design from airfoil generator model\init_dv_baseline.npy
+2026-06-27 22:56:34 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/2 ===
+2026-06-27 22:56:34 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: airfoil generator model\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-27 22:56:37 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-27 22:56:37 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: airfoil generator model\bin\SU2_CFD.exe
+2026-06-27 22:56:38 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Adjoint CFD failed (rc=1)
+2026-06-27 22:56:38 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-06-27 22:56:38 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 2/2 ===
+2026-06-27 22:56:38 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: airfoil generator model\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-27 22:56:41 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-27 22:56:41 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: airfoil generator model\bin\SU2_CFD.exe
+2026-06-27 22:56:42 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Adjoint CFD failed (rc=1)
+2026-06-27 22:56:42 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-06-27 22:56:42 [INFO] airfoil_discovery.aso.optimizer: Results saved to airfoil generator model\data\smoke_test_fix
+2026-06-27 22:56:42 [INFO] aso_pde_optimizer: ============================================================
+2026-06-27 22:56:42 [INFO] aso_pde_optimizer: Optimization Complete
+2026-06-27 22:56:42 [INFO] aso_pde_optimizer: Time elapsed: 9.9 seconds (0.2 minutes)
+2026-06-27 22:56:42 [INFO] aso_pde_optimizer: Total iterations: 0
+2026-06-27 22:56:42 [INFO] aso_pde_optimizer: Converged: False
+2026-06-27 22:56:42 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\smoke_test_fix
+2026-06-27 22:56:42 [INFO] aso_pde_optimizer: ============================================================

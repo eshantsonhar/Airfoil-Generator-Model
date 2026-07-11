@@ -98,27 +98,22 @@ def _run_cfd(run_id: str, design_vector: np.ndarray, req: CfdRunRequest) -> None
         with _cfd_lock:
             _cfd_runs[run_id]["status"] = result.status.value.lower()
             _cfd_runs[run_id]["end_ts"] = time.time()
-            rh = result.residual_history
-            if rh and len(rh) > 10:
-                rh_sample = [float(v) for v in rh[:5]] + [float(v) for v in rh[-5:]]
-            elif rh:
-                rh_sample = [float(v) for v in rh]
-            else:
-                rh_sample = []
             _cfd_runs[run_id]["result"] = {
                 "cl": float(result.cl),
                 "cd": float(result.cd),
                 "thickness": float(result.thickness),
                 "status": result.status.value,
                 "elapsed_s": round(elapsed, 1),
-                "converged": bool((result.convergence_report or {}).get("is_valid", False)),
-                "residual_converged": bool((result.convergence_report or {}).get("residual_converged", False)),
-                "forces_stabilized": bool((result.convergence_report or {}).get("forces_stabilized", False)),
-                "failure_stage": str(result.failure_stage) if result.failure_stage else None,
-                "failure_reason": str(result.failure_reason) if result.failure_reason else None,
+                "converged": (result.convergence_report or {}).get("is_valid", False),
+                "residual_converged": (result.convergence_report or {}).get("residual_converged", False),
+                "forces_stabilized": (result.convergence_report or {}).get("forces_stabilized", False),
+                "failure_stage": result.failure_stage,
+                "failure_reason": result.failure_reason,
                 "files": files,
-                "residual_history_sample": rh_sample,
-                "n_residual_pts": len(rh or []),
+                "residual_history": result.residual_history[:10] if result.residual_history else [],
+                "cl_history": result.cl_history[:10] if result.cl_history else [],
+                "cd_history": result.cd_history[:10] if result.cd_history else [],
+                "n_residual_pts": len(result.residual_history or []),
             }
             
     except Exception as e:

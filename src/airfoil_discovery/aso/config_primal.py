@@ -99,6 +99,8 @@ def generate_primal_config(
         f"",
         f"% ------------ Compressibility ------------",
         f"INC_DENSITY_MODEL= {density_model}",
+        f"VISCOSITY_MODEL= CONSTANT_VISCOSITY",
+        f"MU_CONSTANT= 1.78e-5",
         f"INC_VELOCITY_INIT= ( {velocity_init}, 0.0, 0.0 )",
         f"",
         f"% ------------ Freestream ------------",
@@ -145,7 +147,7 @@ def generate_primal_config(
         "",
         f"% ------------ Numerical Method ------------",
         "CONV_NUM_METHOD_FLOW= FDS",         # Roe upwind
-        "CONV_NUM_METHOD_TURB= ROE_TURB",    # Roe for turbulence
+        # "CONV_NUM_METHOD_TURB= ROE_TURB",  # Removed: not supported in this SU2 version
         "NUM_METHOD_GRAD= WEIGHTED_LEAST_SQUARES",
         "NUM_METHOD_GRAD_RECON= LEAST_SQUARES",
         "",
@@ -154,18 +156,18 @@ def generate_primal_config(
         "MUSCL_TURB= YES",
         "SLOPE_LIMITER_FLOW= VENKATAKRISHNAN_WANG",
         "SLOPE_LIMITER_TURB= VENKATAKRISHNAN_WANG",
-        "VENKATKRISHNAN_WANG_LIMITER_COEFF= 0.05",
+        "VENKAT_LIMITER_COEFF= 0.05",  # Fixed: corrected parameter name for SU2 compatibility
         "",
         f"% ------------ Time Integration ------------",
         f"TIME_DISCRE_FLOW= EULER_IMPLICIT",
         f"TIME_DISCRE_TURB= EULER_IMPLICIT",
         f"CFL_NUMBER= {cfl_initial}",
         f"CFL_ADAPT= YES",
-        f"CFL_ADAPT_PARAM= ( {cfl_initial}, {cfl_final}, 1.5, 100.0 )",
+        f"CFL_ADAPT_PARAM= ( 0.5, 1.5, {cfl_initial}, {cfl_final} )",  # Fixed: correct CFL adapt format
         f"",
         f"% ------------ Iterations ------------",
         f"ITER= {n_iter}",
-        "INNER_ITER= 0",
+        # "INNER_ITER= 0",  # Removed: not needed for steady-state RANS
         "",
         f"% ------------ Linear Solver ------------",
         "LINEAR_SOLVER= FGMRES",
@@ -186,7 +188,7 @@ def generate_primal_config(
         f"CONV_STARTITER= 10",
         f"CONV_CAUCHY_ELEMS= 100",
         f"CONV_CAUCHY_EPS= 1e-6",
-        f"OUTPUT_DIR= {output_dir}",
+        # Removed OUTPUT_DIR: not supported in this SU2 version
     ])
 
     if restart_filename:

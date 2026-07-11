@@ -1,0 +1,159 @@
+2026-06-28 18:39:48 [INFO] aso_pde_optimizer: ============================================================
+2026-06-28 18:39:48 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-06-28 18:39:48 [INFO] aso_pde_optimizer: Method: mma
+2026-06-28 18:39:48 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-06-28 18:39:48 [INFO] aso_pde_optimizer: Max iterations: 30
+2026-06-28 18:39:48 [INFO] aso_pde_optimizer: ============================================================
+2026-06-28 18:39:48 [INFO] aso_pde_optimizer: SU2_CFD: bin\SU2_CFD.exe
+2026-06-28 18:39:48 [INFO] aso_pde_optimizer: SU2_DEF: bin\bin\SU2_DEF.exe
+2026-06-28 18:39:48 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil.su2
+2026-06-28 18:39:48 [INFO] aso_pde_optimizer: Loaded initial design from init_dv_baseline.npy
+
+============================================================
+PRE-FLIGHT VERIFICATION
+============================================================
+
+[1/5] Verifying SU2 binaries...
+  [PASS] SU2_CFD: SU2_CFD available (help text shown)
+  [PASS] SU2_DEF: Error in "void CConfig::SetConfig_Parsing(char*)": 
+----------------------------
+
+[2/5] Validating mesh...
+  [PASS] Mesh: 222 nodes, 235 elements, 1 markers, 13.0 KB
+
+[3/5] Checking output directory...
+  [PASS] Output dir: 140.4 GB free
+
+[4/5] Checking baseline geometry...
+  [PASS] Geometry valid
+
+[5/5] Testing config generation...
+  [PASS] Config generation verified
+
+============================================================
+PRE-FLIGHT: ALL CHECKS PASSED
+============================================================
+
+2026-06-28 18:39:55 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/30 ===
+2026-06-28 18:39:55 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 18:40:00 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 18:40:00 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 18:40:01 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\xflr5_test_run\cfd_cases\eval_1782652195. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 18:40:01 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 18:40:01 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: bin\bin\SU2_DEF.exe config_deform.cfg in data\xflr5_test_run\cfd_cases\def_1782652201
+2026-06-28 18:40:02 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF failed (rc=1): (no stderr)
+2026-06-28 18:40:02 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-06-28 18:40:02 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 18:40:04 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 18:40:04 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 18:40:06 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\xflr5_test_run\cfd_cases\eval_1782652202. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 18:40:06 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 18:40:06 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: bin\bin\SU2_DEF.exe config_deform.cfg in data\xflr5_test_run\cfd_cases\def_1782652206
+2026-06-28 18:40:07 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF failed (rc=1): (no stderr)
+2026-06-28 18:40:07 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-06-28 18:40:07 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 18:40:10 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 18:40:10 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 18:40:11 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\xflr5_test_run\cfd_cases\eval_1782652207. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 18:40:11 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 18:40:11 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: bin\bin\SU2_DEF.exe config_deform.cfg in data\xflr5_test_run\cfd_cases\def_1782652211
+2026-06-28 18:40:12 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF failed (rc=1): (no stderr)
+2026-06-28 18:40:12 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-06-28 18:40:12 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 18:40:14 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 18:40:14 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 18:40:16 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\xflr5_test_run\cfd_cases\eval_1782652212. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 18:40:16 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 18:40:16 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: bin\bin\SU2_DEF.exe config_deform.cfg in data\xflr5_test_run\cfd_cases\def_1782652216
+2026-06-28 18:40:17 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF failed (rc=1): (no stderr)
+2026-06-28 18:40:17 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-06-28 18:40:17 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 18:40:19 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 18:40:19 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 18:40:21 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\xflr5_test_run\cfd_cases\eval_1782652217. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 18:40:21 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 18:40:21 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: bin\bin\SU2_DEF.exe config_deform.cfg in data\xflr5_test_run\cfd_cases\def_1782652221
+2026-06-28 18:40:22 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF failed (rc=1): (no stderr)
+2026-06-28 18:40:22 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-06-28 18:40:22 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 18:40:24 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 18:40:24 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 18:40:26 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\xflr5_test_run\cfd_cases\eval_1782652222. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 18:40:26 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 18:40:26 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: bin\bin\SU2_DEF.exe config_deform.cfg in data\xflr5_test_run\cfd_cases\def_1782652226
+2026-06-28 18:40:27 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF failed (rc=1): (no stderr)
+2026-06-28 18:40:27 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-06-28 18:40:27 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 18:40:30 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 18:40:30 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 18:40:31 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\xflr5_test_run\cfd_cases\eval_1782652227. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 18:40:31 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 18:40:31 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: bin\bin\SU2_DEF.exe config_deform.cfg in data\xflr5_test_run\cfd_cases\def_1782652231
+2026-06-28 18:40:32 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF failed (rc=1): (no stderr)
+2026-06-28 18:40:32 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-06-28 18:40:32 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 18:40:35 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 18:40:35 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 18:40:36 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\xflr5_test_run\cfd_cases\eval_1782652232. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 18:40:36 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 18:40:36 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: bin\bin\SU2_DEF.exe config_deform.cfg in data\xflr5_test_run\cfd_cases\def_1782652236
+2026-06-28 18:40:37 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF failed (rc=1): (no stderr)
+2026-06-28 18:40:37 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-06-28 18:40:37 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 18:40:40 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 18:40:40 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 18:40:41 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\xflr5_test_run\cfd_cases\eval_1782652237. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 18:40:41 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 18:40:41 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: bin\bin\SU2_DEF.exe config_deform.cfg in data\xflr5_test_run\cfd_cases\def_1782652241
+2026-06-28 18:40:42 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF failed (rc=1): (no stderr)
+2026-06-28 18:40:42 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-06-28 18:40:42 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 18:40:45 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 18:40:45 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 18:40:46 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\xflr5_test_run\cfd_cases\eval_1782652242. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 18:40:46 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 18:40:46 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: bin\bin\SU2_DEF.exe config_deform.cfg in data\xflr5_test_run\cfd_cases\def_1782652246
+2026-06-28 18:40:47 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF failed (rc=1): (no stderr)
+2026-06-28 18:40:47 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-06-28 18:40:47 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 18:40:50 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 18:40:50 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 18:40:51 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\xflr5_test_run\cfd_cases\eval_1782652247. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 18:40:51 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 18:40:51 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: bin\bin\SU2_DEF.exe config_deform.cfg in data\xflr5_test_run\cfd_cases\def_1782652251
+2026-06-28 18:40:52 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF failed (rc=1): (no stderr)
+2026-06-28 18:40:52 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-06-28 18:40:52 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 18:40:55 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 18:40:55 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 18:40:56 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\xflr5_test_run\cfd_cases\eval_1782652252. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 18:40:56 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 18:40:56 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: bin\bin\SU2_DEF.exe config_deform.cfg in data\xflr5_test_run\cfd_cases\def_1782652256
+2026-06-28 18:40:57 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF failed (rc=1): (no stderr)
+2026-06-28 18:40:57 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-06-28 18:40:57 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 18:41:00 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 18:41:00 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 18:41:01 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\xflr5_test_run\cfd_cases\eval_1782652257. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 18:41:01 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 18:41:01 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: bin\bin\SU2_DEF.exe config_deform.cfg in data\xflr5_test_run\cfd_cases\def_1782652261
+2026-06-28 18:41:02 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF failed (rc=1): (no stderr)
+2026-06-28 18:41:02 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-06-28 18:41:02 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-06-28 18:41:05 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=6.368548, CD=0.947035, converged=True
+2026-06-28 18:41:05 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin\SU2_CFD.exe
+2026-06-28 18:41:06 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in data\xflr5_test_run\cfd_cases\eval_1782652262. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-06-28 18:41:06 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-06-28 18:41:06 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: bin\bin\SU2_DEF.exe config_deform.cfg in data\xflr5_test_run\cfd_cases\def_1782652266
+2026-06-28 18:41:07 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF failed (rc=1): (no stderr)
+2026-06-28 18:41:07 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-06-28 18:41:07 [INFO] airfoil_discovery.aso.optimizer: Results saved to data\xflr5_test_run
+2026-06-28 18:41:07 [INFO] aso_pde_optimizer: ============================================================
+2026-06-28 18:41:07 [INFO] aso_pde_optimizer: Optimization Complete
+2026-06-28 18:41:07 [INFO] aso_pde_optimizer: Time elapsed: 77.3 seconds (1.3 minutes)
+2026-06-28 18:41:07 [INFO] aso_pde_optimizer: Total iterations: 1
+2026-06-28 18:41:07 [INFO] aso_pde_optimizer: Converged: True
+2026-06-28 18:41:07 [INFO] aso_pde_optimizer: Initial Cd: 0.947035, Final Cd: 0.947035 (delta: +0.000000)
+2026-06-28 18:41:07 [INFO] aso_pde_optimizer: Initial Cl: 6.368548, Final Cl: 6.368548 (delta: +0.000000)
+2026-06-28 18:41:07 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\xflr5_test_run
+2026-06-28 18:41:07 [INFO] aso_pde_optimizer: ============================================================
