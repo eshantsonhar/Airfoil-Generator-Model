@@ -159,29 +159,17 @@ def generate_structured_mesh():
             vol_elems.append((9, base + i, base + i_next, next_base + i_next, next_base + i))
     
     # Transition elements: connect last BL layer to farfield
-    # Map each BL layer node to nearest farfield node
+    # Map BL layer nodes (359) to farfield nodes (120) continuously around the circle
     last_layer_base = (n_layers - 1) * n_per_layer
     for i in range(n_per_layer):
-        # Find nearest farfield node
-        x_bl = nodes[last_layer_base + i][0]
-        y_bl = nodes[last_layer_base + i][1]
-        min_dist = float('inf')
-        nearest_ff = 0
-        for j in range(n_ff):
-            dx = nodes[ff_start + j][0] - x_bl
-            dy = nodes[ff_start + j][1] - y_bl
-            dist = dx*dx + dy*dy
-            if dist < min_dist:
-                min_dist = dist
-                nearest_ff = j
-        
         i_next = (i + 1) % n_per_layer
-        j_next = (nearest_ff + 1) % n_ff
+        j1 = int(i * n_ff / n_per_layer)
+        j2 = int((i + 1) * n_ff / n_per_layer)
         
-        # Triangle: (last_layer_base+i, last_layer_base+i_next, ff_start+nearest_ff)
-        vol_elems.append((5, last_layer_base + i, last_layer_base + i_next, ff_start + nearest_ff))
-        # Triangle: (last_layer_base+i_next, ff_start+j_next, ff_start+nearest_ff)
-        vol_elems.append((5, last_layer_base + i_next, ff_start + j_next, ff_start + nearest_ff))
+        vol_elems.append((5, last_layer_base + i, last_layer_base + i_next, ff_start + (j1 % n_ff)))
+        if j2 > j1:
+            for j in range(j1, j2):
+                vol_elems.append((5, last_layer_base + i_next, ff_start + ((j + 1) % n_ff), ff_start + (j % n_ff)))
     
     n_vol = len(vol_elems)
     n_total = len(af_elems) + len(ff_elems) + n_vol
@@ -191,30 +179,23 @@ def generate_structured_mesh():
     print(f"   Volume elements: {n_vol}")
     print(f"   Total elements: {n_total}")
     
-    # 6. Write SU2 format
+# 6. Write SU2 format (standard SU2 format)
     print(f"\n6. Writing SU2 mesh file...")
     MESH_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    
+
     with open(MESH_OUTPUT, 'w') as f:
-        f.write(f"{n_nodes} {n_total} 2\n")
-        f.write("NDIME= 2\n")
-        
-        # Volume elements
-        for elem in vol_elems:
-            f.write(f"{' '.join(str(x) for x in elem)}\n")
-        
-        # Nodes
-        for x, y in nodes:
-            f.write(f"{x:.10f} {y:.10f}\n")
-        
-        # Markers
-        f.write("NMARK= 2\n")
-        
+        f.write(f"NDIME= 2\n")
+        f.write(f"NELEM= {len(vol_elems)}\n")
+        for i, elem in enumerate(vol_elems):
+            f.write(f"{' '.join(str(x) for x in elem)} {i}\n")
+        f.write(f"NPOIN= {n_nodes}\n")
+        for i, (x, y) in enumerate(nodes):
+            f.write(f"{x:.10f} {y:.10f} {i}\n")
+        f.write(f"NMARK= 2\n")
         f.write("MARKER_TAG= airfoil\n")
         f.write(f"MARKER_ELEMS= {len(af_elems)}\n")
         for elem in af_elems:
             f.write(f"{elem[0]} {elem[1]} {elem[2]}\n")
-        
         f.write("MARKER_TAG= farfield\n")
         f.write(f"MARKER_ELEMS= {len(ff_elems)}\n")
         for elem in ff_elems:
@@ -222,45 +203,16 @@ def generate_structured_mesh():
     
     print(f"   Written: {MESH_OUTPUT}")
     print(f"   Size: {MESH_OUTPUT.stat().st_size / 1024:.1f} KB")
-    
+
     # 7. Validate
     print(f"\n7. Validating mesh...")
-    lines = MESH_OUTPUT.read_text().splitlines()
-    h = lines[0].strip().split()
-    npoin, nelem, nmarker = int(h[0]), int(h[1]), int(h[2])
-    
-    pts = np.array([lines[i].strip().split()[:2] for i in range(1, npoin + 1)], dtype=float)
-    
-    elem_end = npoin + 1
-    mi = {}
-    idx = elem_end
-    for m in range(nmarker):
-        name = lines[idx].strip()
-        n_e = int(lines[idx + 1].strip())
-        mi[name] = n_e
-        idx += 2 + n_e
+    from phase3_validate_and_run import parse_su2_mesh
+    npoin, nelem, nmarker, pts, mi = parse_su2_mesh(MESH_OUTPUT)
     
     x_min, x_max = pts[:, 0].min(), pts[:, 0].max()
     y_min, y_max = pts[:, 1].min(), pts[:, 1].max()
     chord = x_max - x_min
     
-    print(f"\n{'=' * 60}")
-    print("MESH VALIDATION")
-    print(f"{'=' * 60}")
-    print(f"  Nodes: {npoin}")
-    print(f"  Elements: {nelem}")
-    print(f"  Markers: {nmarker}")
-    for name, count in mi.items():
-        print(f"    '{name}': {count} elements")
-    print(f"  Chord: {chord:.6f} m")
-    print(f"  X: [{x_min:.2f}, {x_max:.2f}]")
-    print(f"  Y: [{y_min:.2f}, {y_max:.2f}]")
-    print(f"{'=' * 60}")
-    
-    # 8. Summary for Phase 3
-    print(f"\n{'=' * 80}")
-    print("PHASE 3 SUMMARY - CORRECTED MESH METRICS")
-    print("=" * 80)
     print(f"\n1. CORRECTED MESH STATISTICS:")
     print(f"   Total nodes: {npoin}")
     print(f"   Total elements: {nelem}")

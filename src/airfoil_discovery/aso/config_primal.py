@@ -12,8 +12,14 @@ Generates SU2 .cfg files for:
 
 from __future__ import annotations
 
+import math
 from pathlib import Path
 from typing import Optional
+
+from airfoil_discovery.cfd.physics import (
+    RHO_AIR,
+    dynamic_viscosity_for_unit_velocity,
+)
 
 
 def generate_primal_config(
@@ -34,53 +40,19 @@ def generate_primal_config(
 ) -> str:
     """
     Generate the full text of an SU2 primal configuration file.
-
-    Parameters
-    ----------
-    mesh_filename : str
-        Path to mesh file (relative to working directory).
-    aoa_deg : float
-        Angle of attack in degrees.
-    reynolds : float
-        Chord Reynolds number.
-    mach : float
-        Freestream Mach number (use <= 0.3 for incompressible).
-    ref_length, ref_area : float
-        Reference length (chord) and area.
-    n_iter : int
-        Number of iterations.
-    cfl_initial, cfl_final : float
-        CFL number ramp range.
-    transition_model : bool
-        If True, activate γ-Re_θ transition model (LM).
-    turbulence_intensity : float
-        Freestream turbulence intensity (fraction, e.g. 0.001 = 0.1%).
-    turb_viscosity_ratio : float
-        Freestream turbulent viscosity ratio (μ_t/μ).
-    output_dir : str
-        Directory for output files.
-    restart_filename : str, optional
-        Path to restart solution file (if restarting).
-
-    Returns
-    -------
-    config_text : str
-        Complete SU2 configuration file text.
     """
-    # Solver type: Incompressible RANS for low Mach, compressible otherwise
     if mach < 0.3:
         solver = "INC_RANS"
         density_model = "CONSTANT"
-        velocity_init = "1.0"
     else:
         solver = "RANS"
         density_model = "IDEAL_GAS"
-        velocity_init = "1.0"
 
-    # Turbulence model
+    mu = dynamic_viscosity_for_unit_velocity(reynolds, ref_length)
+    aoa_rad = math.radians(aoa_deg)
+    vx = math.cos(aoa_rad)
+    vy = math.sin(aoa_rad)
     turb_model = "SST"
-
-    # Transition model
     trans_model = "LM" if transition_model else "NONE"
 
     lines = [
@@ -99,9 +71,10 @@ def generate_primal_config(
         f"",
         f"% ------------ Compressibility ------------",
         f"INC_DENSITY_MODEL= {density_model}",
+        f"INC_DENSITY_INIT= {RHO_AIR}",
         f"VISCOSITY_MODEL= CONSTANT_VISCOSITY",
-        f"MU_CONSTANT= 1.78e-5",
-        f"INC_VELOCITY_INIT= ( {velocity_init}, 0.0, 0.0 )",
+        f"MU_CONSTANT= {mu:.8e}",
+        f"INC_VELOCITY_INIT= ( {vx:.8f}, {vy:.8f}, 0.0 )",
         f"",
         f"% ------------ Freestream ------------",
         f"MACH_NUMBER= {mach}",
@@ -109,8 +82,10 @@ def generate_primal_config(
         f"SIDESLIP_ANGLE= 0.0",
         f"REYNOLDS_NUMBER= {reynolds:.1f}",
         f"REYNOLDS_LENGTH= {ref_length}",
-        f"FREESTREAM_TEMPERATURE= 288.15",
+        f"FREESTREAM_VELOCITY= 1.0",
+        f"FREESTREAM_DENSITY= {RHO_AIR}",
         f"FREESTREAM_PRESSURE= 101325.0",
+        f"FREESTREAM_TEMPERATURE= 288.15",
         f"REF_ORIGIN_MOMENT_X= 0.25",
         f"REF_ORIGIN_MOMENT_Y= 0.00",
         f"REF_ORIGIN_MOMENT_Z= 0.00",
@@ -143,11 +118,9 @@ def generate_primal_config(
         "MARKER_FAR= ( farfield )",
         "MARKER_MONITORING= ( airfoil )",
         "MARKER_PLOTTING= ( airfoil )",
-        "MARKER_EULER= ( symmetry )",
         "",
         f"% ------------ Numerical Method ------------",
-        "CONV_NUM_METHOD_FLOW= FDS",         # Roe upwind
-        # "CONV_NUM_METHOD_TURB= ROE_TURB",  # Removed: not supported in this SU2 version
+        "CONV_NUM_METHOD_FLOW= FDS",
         "NUM_METHOD_GRAD= WEIGHTED_LEAST_SQUARES",
         "NUM_METHOD_GRAD_RECON= LEAST_SQUARES",
         "",
@@ -156,18 +129,17 @@ def generate_primal_config(
         "MUSCL_TURB= YES",
         "SLOPE_LIMITER_FLOW= VENKATAKRISHNAN_WANG",
         "SLOPE_LIMITER_TURB= VENKATAKRISHNAN_WANG",
-        "VENKAT_LIMITER_COEFF= 0.05",  # Fixed: corrected parameter name for SU2 compatibility
+        "VENKAT_LIMITER_COEFF= 0.05",
         "",
         f"% ------------ Time Integration ------------",
         f"TIME_DISCRE_FLOW= EULER_IMPLICIT",
         f"TIME_DISCRE_TURB= EULER_IMPLICIT",
         f"CFL_NUMBER= {cfl_initial}",
         f"CFL_ADAPT= YES",
-        f"CFL_ADAPT_PARAM= ( 0.5, 1.5, {cfl_initial}, {cfl_final} )",  # Fixed: correct CFL adapt format
+        f"CFL_ADAPT_PARAM= ( 0.5, 1.5, {cfl_initial}, {cfl_final} )",
         f"",
         f"% ------------ Iterations ------------",
         f"ITER= {n_iter}",
-        # "INNER_ITER= 0",  # Removed: not needed for steady-state RANS
         "",
         f"% ------------ Linear Solver ------------",
         "LINEAR_SOLVER= FGMRES",
@@ -188,7 +160,6 @@ def generate_primal_config(
         f"CONV_STARTITER= 10",
         f"CONV_CAUCHY_ELEMS= 100",
         f"CONV_CAUCHY_EPS= 1e-6",
-        # Removed OUTPUT_DIR: not supported in this SU2 version
     ])
 
     if restart_filename:
@@ -211,14 +182,6 @@ def write_primal_config(
     turb_viscosity_ratio: float = 5.0,
     restart_filename: Optional[str] = None,
 ) -> Path:
-    """
-    Generate and write the SU2 primal configuration file.
-
-    Returns
-    -------
-    Path
-        The path to the written config file.
-    """
     text = generate_primal_config(
         mesh_filename=mesh_filename,
         aoa_deg=aoa_deg,
