@@ -1,0 +1,105 @@
+2026-07-27 21:37:14,440 [INFO] ======================================================================
+2026-07-27 21:37:14,440 [INFO]   PHASE 5: FULL AUTOMATED AERODYNAMIC SHAPE OPTIMIZATION
+2026-07-27 21:37:14,441 [INFO]   Hicks-Henne Parametric Optimization + Physics Data Extraction
+2026-07-27 21:37:14,441 [INFO] ======================================================================
+2026-07-27 21:37:14,446 [ERROR] Could not extract nodes from mesh!
+2026-07-27 21:37:14,447 [INFO] Baseline geometry: 399 points loaded
+2026-07-27 21:37:14,448 [INFO] ======================================================================
+2026-07-27 21:37:14,448 [INFO] PART 1: Baseline Verification with Corrected Nondimensionalization
+2026-07-27 21:37:14,448 [INFO] ======================================================================
+2026-07-27 21:37:14,451 [INFO] Running SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.exe config_primal.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\baseline_verification
+2026-07-27 21:37:25,882 [INFO] Baseline Results:
+2026-07-27 21:37:25,882 [INFO]   CL = 0.154094
+2026-07-27 21:37:25,883 [INFO]   CD = 0.570690
+2026-07-27 21:37:25,883 [INFO]   L/D = 0.27
+2026-07-27 21:37:25,883 [INFO]   Converged: True
+2026-07-27 21:37:25,883 [INFO]   CL in [0.30, 0.70]: FAIL (0.154094)
+2026-07-27 21:37:25,883 [INFO]   CD in [0.008, 0.025]: FAIL (0.570690)
+2026-07-27 21:37:25,885 [WARNING] Baseline verification: CL=OUT, CD=OUT
+2026-07-27 21:37:25,885 [WARNING] Proceeding with optimization despite verification flags.
+2026-07-27 21:37:25,886 [INFO] ======================================================================
+2026-07-27 21:37:25,886 [INFO] PART 2: Mesh Deformation Engine Test
+2026-07-27 21:37:25,886 [INFO] ======================================================================
+2026-07-27 21:37:25,903 [INFO] Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_DEF.exe config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\deformation_test
+2026-07-27 21:37:26,953 [WARNING] SU2_DEF rc=1: 
+2026-07-27 21:37:26,954 [ERROR] SU2_DEF test failed!
+2026-07-27 21:37:26,954 [WARNING] Mesh deformation test FAILED. Continuing with baseline mesh only.
+2026-07-27 21:37:26,954 [WARNING] Optimization will use baseline mesh without deformation.
+2026-07-27 21:37:26,954 [INFO] ======================================================================
+2026-07-27 21:37:26,954 [INFO] PART 3: Parametric Shape Optimization Loop
+2026-07-27 21:37:26,954 [INFO]   Design Variables: 8 Hicks-Henne bumps
+2026-07-27 21:37:26,955 [INFO]   Objective: Minimize Cd subject to Cl >= 0.95 * baseline_Cl
+2026-07-27 21:37:26,955 [INFO]   Max Iterations: 4
+2026-07-27 21:37:26,955 [INFO] ======================================================================
+2026-07-27 21:37:31,150 [INFO] Evaluating initial (zero-bump) design...
+2026-07-27 21:37:31,163 [INFO] Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_DEF.exe config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\initial_zero_bump
+2026-07-27 21:37:32,199 [WARNING] SU2_DEF rc=1: 
+2026-07-27 21:37:32,199 [WARNING] Deformation failed for initial_zero_bump, using original mesh
+2026-07-27 21:37:32,213 [INFO] Running SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.exe config_primal.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\initial_zero_bump
+2026-07-27 21:37:43,531 [INFO] Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_DEF.exe config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0002_1785168463
+2026-07-27 21:37:44,570 [WARNING] SU2_DEF rc=1: 
+2026-07-27 21:37:44,570 [WARNING] Deformation failed for eval_0002_1785168463, using original mesh
+2026-07-27 21:37:44,583 [INFO] Running SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.exe config_primal.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0002_1785168463
+2026-07-27 21:37:55,789 [WARNING] Non-physical CL=0.154094, penalizing
+2026-07-27 21:37:55,803 [INFO] Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_DEF.exe config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0003_1785168475
+2026-07-27 21:37:56,848 [WARNING] SU2_DEF rc=1: 
+2026-07-27 21:37:56,848 [WARNING] Deformation failed for eval_0003_1785168475, using original mesh
+2026-07-27 21:37:56,863 [INFO] Running SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.exe config_primal.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0003_1785168475
+2026-07-27 21:38:07,948 [WARNING] Non-physical CL=0.154094, penalizing
+2026-07-27 21:38:07,962 [INFO] Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_DEF.exe config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0004_1785168487
+2026-07-27 21:38:09,002 [WARNING] SU2_DEF rc=1: 
+2026-07-27 21:38:09,003 [WARNING] Deformation failed for eval_0004_1785168487, using original mesh
+2026-07-27 21:38:09,017 [INFO] Running SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.exe config_primal.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0004_1785168487
+2026-07-27 21:38:20,919 [WARNING] Non-physical CL=0.154094, penalizing
+2026-07-27 21:38:20,936 [INFO] Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_DEF.exe config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0005_1785168500
+2026-07-27 21:38:21,994 [WARNING] SU2_DEF rc=1: 
+2026-07-27 21:38:21,994 [WARNING] Deformation failed for eval_0005_1785168500, using original mesh
+2026-07-27 21:38:22,008 [INFO] Running SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.exe config_primal.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0005_1785168500
+2026-07-27 21:38:33,515 [WARNING] Non-physical CL=0.154094, penalizing
+2026-07-27 21:38:33,528 [INFO] Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_DEF.exe config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0006_1785168513
+2026-07-27 21:38:34,586 [WARNING] SU2_DEF rc=1: 
+2026-07-27 21:38:34,587 [WARNING] Deformation failed for eval_0006_1785168513, using original mesh
+2026-07-27 21:38:34,601 [INFO] Running SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.exe config_primal.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0006_1785168513
+2026-07-27 21:38:46,002 [WARNING] Non-physical CL=0.154094, penalizing
+2026-07-27 21:38:46,025 [INFO] Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_DEF.exe config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0007_1785168526
+2026-07-27 21:38:47,096 [WARNING] SU2_DEF rc=1: 
+2026-07-27 21:38:47,097 [WARNING] Deformation failed for eval_0007_1785168526, using original mesh
+2026-07-27 21:38:47,110 [INFO] Running SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.exe config_primal.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0007_1785168526
+2026-07-27 21:38:59,548 [WARNING] Non-physical CL=0.154094, penalizing
+2026-07-27 21:38:59,562 [INFO] Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_DEF.exe config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0008_1785168539
+2026-07-27 21:39:00,613 [WARNING] SU2_DEF rc=1: 
+2026-07-27 21:39:00,613 [WARNING] Deformation failed for eval_0008_1785168539, using original mesh
+2026-07-27 21:39:00,625 [INFO] Running SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.exe config_primal.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0008_1785168539
+2026-07-27 21:39:13,292 [WARNING] Non-physical CL=0.154094, penalizing
+2026-07-27 21:39:13,308 [INFO] Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_DEF.exe config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0009_1785168553
+2026-07-27 21:39:14,383 [WARNING] SU2_DEF rc=1: 
+2026-07-27 21:39:14,383 [WARNING] Deformation failed for eval_0009_1785168553, using original mesh
+2026-07-27 21:39:14,396 [INFO] Running SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.exe config_primal.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0009_1785168553
+2026-07-27 21:39:30,391 [WARNING] Non-physical CL=0.154094, penalizing
+2026-07-27 21:39:30,406 [INFO] Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_DEF.exe config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0010_1785168570
+2026-07-27 21:39:31,471 [WARNING] SU2_DEF rc=1: 
+2026-07-27 21:39:31,472 [WARNING] Deformation failed for eval_0010_1785168570, using original mesh
+2026-07-27 21:39:31,487 [INFO] Running SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.exe config_primal.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization\eval_0010_1785168570
+2026-07-27 21:39:48,284 [WARNING] Non-physical CL=0.154094, penalizing
+2026-07-27 21:39:48,290 [INFO] Iteration 10: Cd progress = inf
+2026-07-27 21:39:48,291 [INFO] Optimization complete: success=True, status=0
+2026-07-27 21:39:48,291 [INFO]   Initial Cd = 0.570690
+2026-07-27 21:39:48,291 [INFO]   Final Cd   = inf
+2026-07-27 21:39:48,291 [INFO]   Best DV:   = None
+2026-07-27 21:39:48,292 [INFO] ======================================================================
+2026-07-27 21:39:48,292 [INFO] Running final high-resolution evaluation on best design...
+2026-07-27 21:39:48,292 [INFO] ======================================================================
+2026-07-27 21:39:48,292 [WARNING] No best design found, using baseline
+2026-07-27 21:39:48,292 [INFO] ======================================================================
+2026-07-27 21:39:48,292 [INFO] PART 4: Generating Final Optimization Report
+2026-07-27 21:39:48,293 [INFO] ======================================================================
+2026-07-27 21:39:48,294 [INFO] Report generated: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\final_optimization_report.md
+2026-07-27 21:39:48,295 [INFO] Optimization result saved: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\phase5_output\optimization_result.json
+2026-07-27 21:39:48,295 [INFO] ======================================================================
+2026-07-27 21:39:48,295 [INFO]   PHASE 5 COMPLETE
+2026-07-27 21:39:48,296 [INFO] ======================================================================
+2026-07-27 21:39:48,298 [INFO]   Baseline:  CL = 0.154094, CD = 0.570690, L/D = 0.27
+2026-07-27 21:39:48,299 [INFO]   Optimized: CL = 0.154094, CD = 0.570690, L/D = 0.27
+2026-07-27 21:39:48,300 [INFO]   Drag reduction: 0.00%
+2026-07-27 21:39:48,301 [INFO]   Report: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\final_optimization_report.md
+2026-07-27 21:39:48,303 [INFO] ======================================================================

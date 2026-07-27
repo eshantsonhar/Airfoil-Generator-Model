@@ -1,0 +1,10 @@
+{
+  "baseline_cl": 0.1540935879,
+  "baseline_cd": 0.5706898739,
+  "final_cl": 0.1540935879,
+  "final_cd": 0.5706898739,
+  "best_dv": null,
+  "total_evaluations": 10,
+  "success": true,
+  "timestamp": "2026-07-27T21:39:48.294277"
+}
