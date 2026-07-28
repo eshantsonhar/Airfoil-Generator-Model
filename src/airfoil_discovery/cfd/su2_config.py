@@ -128,10 +128,14 @@ def write_stage_config(
     restart_path: Path | None = None,
     **kwargs: object,
 ) -> None:
-    config_path.write_text(
-        build_stage_config(stage, candidate, mesh_path, aoa, settings, restart_path, **kwargs),
-        encoding="utf-8",
-    )
+    try:
+        config_path.write_text(
+            build_stage_config(stage, candidate, mesh_path, aoa, settings, restart_path, **kwargs),
+            encoding="utf-8",
+        )
+    except OSError as e:
+        from airfoil_discovery.cfd.su2 import SU2ConfigurationError
+        raise SU2ConfigurationError(f"Cannot write config file {config_path}: {e}")
 
 
 def build_stage1_config(candidate: CandidateDesign, mesh_path: Path, aoa: float, settings: Settings) -> str:

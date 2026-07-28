@@ -250,23 +250,40 @@ print("TASK 4: MESH DEFORMATION ENGINE TEST (SU2_DEF)")
 print("=" * 80)
 
 # Create deformation config
-deform_config = """% ------- SU2 Mesh Deformation Configuration -------
+deform_config = """% ------- SU2_DEF Mesh Deformation Config -------
 % Phase 4 Audit: Mesh Deformation Test
+
+% ------------ Solver ------------
+SOLVER= EULER
+MATH_PROBLEM= ELASTICITY
 
 % ------------ Mesh ------------
 MESH_FILENAME= airfoil.su2
+MESH_OUT_FILENAME= airfoil_deformed.su2
+MESH_FORMAT= SU2
 
-% ------------ Deformation Method ------------
-DEFORM_MESH= YES
-DEFORM_METHOD= SPRING
+% ------------ Boundary Conditions ------------
+MARKER_HEATFLUX= ( airfoil, 0.0 )
+MARKER_FAR= ( farfield )
 
-% ------------ Design Variables ------------
-DV_KIND= HICKS_HENNE
-DV_PARAM= ( 8, 0.02, 0.5 )
-DV_MARKER= ( airfoil )
+% ------------ Deformation Parameters ------------
+DEFORM_STIFFNESS_TYPE= INVERSE_VOLUME
+DEFORM_LINEAR_SOLVER= FGMRES
+DEFORM_LINEAR_SOLVER_PREC= ILU
+DEFORM_LINEAR_SOLVER_ITER= 100
+DEFORM_LINEAR_SOLVER_ERROR= 1e-10
+DEFORM_NONLINEAR_ITER= 500
+DEFORM_CONSOLE_OUTPUT= YES
+
+% ------------ Elasticity Parameters ------------
+DEFORM_ELASTICITY_MODULUS= 1000000.0
+DEFORM_POISSONS_RATIO= 0.3
 
 % ------------ Output ------------
-MESH_OUT_FILENAME= airfoil_deformed.su2
+TABULAR_FORMAT= CSV
+CONV_FILENAME= history_def
+OUTPUT_FILES= (RESTART)
+OUTPUT_WRT_FREQ= 100
 """
 
 deform_config_path = case_dir / "config_deform.cfg"
@@ -288,7 +305,7 @@ try:
         # Check for inverted elements in output
         deformed_mesh_path = case_dir / "airfoil_deformed.su2"
         if deformed_mesh_path.exists():
-            print=f"Deformed mesh created: {deformed_mesh_path.stat().st_size} bytes"
+            print(f"Deformed mesh created: {deformed_mesh_path.stat().st_size} bytes")
             
             # Parse mesh to check for quality issues
             with open(deformed_mesh_path) as f:

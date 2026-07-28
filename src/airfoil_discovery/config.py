@@ -69,6 +69,7 @@ class MeshConfig(BaseModel):
 
 class SolverConfig(BaseModel):
     su2_cfd_bin: str
+    su2_def_bin: str = "bin/SU2_DEF.exe"
     gmsh_bin: str
     n_cores: int = 0
     use_mpi: bool = False
@@ -308,6 +309,8 @@ def _load_dotenv(dotenv_path: Path) -> None:
 def _apply_env_overrides(settings: Settings) -> None:
     if value := os.getenv("SU2_CFD_BIN"):
         settings.solver.su2_cfd_bin = value
+    if value := os.getenv("SU2_DEF_BIN"):
+        settings.solver.su2_def_bin = value
     if value := os.getenv("GMSH_BIN"):
         settings.solver.gmsh_bin = value
     if value := os.getenv("MPIEXEC_BIN"):

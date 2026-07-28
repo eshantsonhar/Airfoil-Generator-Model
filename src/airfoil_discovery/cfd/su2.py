@@ -95,6 +95,9 @@ class SU2Runner:
         gmsh_bin = self.settings.solver.gmsh_bin
         if not gmsh_bin or not Path(gmsh_bin).exists():
             missing.append(f"GMSH: {gmsh_bin}")
+        su2_def_bin = getattr(self.settings.solver, 'su2_def_bin', None)
+        if su2_def_bin and not Path(su2_def_bin).exists():
+            missing.append(f"SU2_DEF: {su2_def_bin}")
         if missing:
             raise SU2ExecutionError("PREFLIGHT_CHECK", f"Missing binaries: {'; '.join(missing)}")
         logger.info(f"[binaries] SU2={Path(su2_bin).resolve()}, GMSH={Path(gmsh_bin).resolve()}")

@@ -346,9 +346,9 @@ def generate_corrected_primal_config(
       - INC_RANS solver with SST turbulence (NOT RANS)
       - Reynolds-based viscosity with actual air properties
     """
-    # Calculate viscosity using actual air properties at Re=100k, Mach=0.1
-    # rho_inf = 1.225 kg/m^3, U_inf = Mach * sqrt(gamma*R*T) = 0.1 * 340.3 ≈ 34.03 m/s
-    # mu = rho * U * L / Re = 1.225 * 34.03 * 1.0 / 100000 = 1.78e-5 (matches working template)
+    # CRITICAL: INC_RANS uses DIMENSIONAL viscosity with DIMENSIONAL velocity
+    # Working template: MU_CONSTANT=1.78e-5, INC_VELOCITY_INIT=(34.03, 0, 0)
+    # This gives correct force coefficients with REF_LENGTH=1.0, REF_AREA=1.0
     rho_air = 1.225  # kg/m^3
     gamma = 1.4
     R = 287.058  # J/(kg·K)
@@ -360,7 +360,7 @@ def generate_corrected_primal_config(
     cfg = f"""% ------- SU2 Primal Configuration (VALIDATED TEMPLATE) -------
 % Phase 5: Using known-working config structure from eval_1782652262
 % Re = {reynolds:.1f}, Mach = {mach}, AoA = {aoa_deg} deg, chord = {ref_length} m
-% mu = {mu:.6e} (from rho*U*L/Re with rho=1.225, U={u_inf:.2f}, L={ref_length})
+% mu = {mu:.6e} (non-dimensional viscosity = 1/Re for INC_RANS)
 
 % ------------ Solver ------------
 SOLVER= INC_RANS

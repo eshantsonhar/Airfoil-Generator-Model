@@ -61,7 +61,7 @@ def generate_su2_def_config(
         f"",
         f"% ------------ Solver ------------",
         "SOLVER= EULER",  # SU2_DEF uses EULER solver type for mesh deformation
-        "MATH_PROBLEM= LINEAR_ELASTICITY",
+        "MATH_PROBLEM= ELASTICITY",
         "",
         f"% ------------ Mesh ------------",
         f"MESH_FILENAME= {mesh_input}",
@@ -69,7 +69,7 @@ def generate_su2_def_config(
         "MESH_FORMAT= SU2",
         "",
         f"% ------------ Boundary Conditions ------------",
-        f"MARKER_EULER= ( {marker} )",
+        f"MARKER_HEATFLUX= ( {marker}, 0.0 )",
         "MARKER_FAR= ( farfield )",
         "",
         f"% ------------ Deformation Parameters ------------",
@@ -83,7 +83,7 @@ def generate_su2_def_config(
         "",
         f"% ------------ Elasticity Parameters ------------",
         f"DEFORM_ELASTICITY_MODULUS= {young_modulus}",
-        f"DEFORM_POISSON_RATIO= {poisson_ratio}",
+        f"DEFORM_POISSONS_RATIO= {poisson_ratio}",
         "",
         f"% ------------ Output ------------",
         "TABULAR_FORMAT= CSV",
@@ -236,6 +236,17 @@ def deform_mesh(
     deformed_mesh_path : Path or None
         Path to the deformed mesh if successful, None otherwise.
     """
+    if dv_old.shape != dv_new.shape or dv_old.shape[0] != 12:
+        logger.error(f"Invalid design vector shapes: old={dv_old.shape}, new={dv_new.shape}")
+        return None
+    if np.any(np.isnan(dv_old)) or np.any(np.isnan(dv_new)):
+        logger.error("Design vectors contain NaN values")
+        return None
+
+    if not original_mesh_path.exists():
+        logger.error(f"Original mesh not found: {original_mesh_path}")
+        return None
+
     work_dir.mkdir(parents=True, exist_ok=True)
 
     # Write old and new airfoil coordinates
