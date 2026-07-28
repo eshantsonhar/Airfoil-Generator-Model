@@ -23,7 +23,7 @@ function renderRuntime(runtime) {
     const runningCases = runtime.running_cases || [];
     if (runningCases.length === 0) {
         const row = document.createElement("tr");
-        row.innerHTML = `<td colspan="4" style="padding:8px; color:#94A3B8;">No running cases right now.</td>`;
+        row.innerHTML = `<td colspan="5" style="padding:8px; color:#94A3B8;">No running cases right now.</td>`;
         tbody.appendChild(row);
         return;
     }
@@ -33,12 +33,19 @@ function renderRuntime(runtime) {
         const elapsed = liveElapsed ?? item.elapsed_s ?? null;
         const avgCaseRuntime = runtime.avg_case_runtime_s;
         const eta = item.eta_s ?? ((avgCaseRuntime && avgCaseRuntime > 0 && elapsed !== null) ? Math.max(0, avgCaseRuntime - elapsed) : null);
+        const caseId = item.case_id ?? "-";
+        const monitorUrl = caseId !== "-" ? `/monitor/${encodeURIComponent(caseId)}` : null;
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td style="padding:8px;">${item.case_id ?? "-"}</td>
+            <td style="padding:8px; font-family:monospace; font-size:0.82rem;">${caseId}</td>
             <td style="padding:8px;">${fmt(item.reynolds)}</td>
             <td style="padding:8px;">${fmt(elapsed)}</td>
             <td style="padding:8px;">${fmt(eta)}</td>
+            <td style="padding:8px;">
+              ${monitorUrl
+                ? `<a href="${monitorUrl}" target="_blank" class="btn-monitor">Run Monitor</a>`
+                : '<span style="color:#475569">—</span>'}
+            </td>
         `;
         tbody.appendChild(row);
     }

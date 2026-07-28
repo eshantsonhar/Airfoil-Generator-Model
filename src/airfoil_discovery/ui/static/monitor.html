@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Run Monitor — Airfoil Discovery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="stylesheet" href="/static/monitor.css" />
+</head>
+<body>
+  <div class="dashboard-container">
+
+    <!-- Header -->
+    <header class="header-panel">
+      <div class="logo">
+        <span class="logo-highlight">Run</span> Monitor
+        <span id="mon-case-id" class="mon-case-badge"></span>
+      </div>
+      <div class="mon-header-right">
+        <span class="mon-flag" id="conv-flag-badge">—</span>
+        <a href="/debug" class="btn btn-primary" style="text-decoration:none; margin-left:1rem;">← Debug</a>
+      </div>
+    </header>
+
+    <!-- Tabs -->
+    <div class="mon-tabs">
+      <button class="mon-tab active" data-tab="live">Live Run</button>
+      <button class="mon-tab" data-tab="summary">Convergence Summary</button>
+      <button class="mon-tab" data-tab="surface">Surface Distributions</button>
+    </div>
+
+    <!-- ═══════════════════ LIVE TAB ═══════════════════ -->
+    <div class="mon-tab-content" id="tab-live">
+
+      <!-- Scalar strip -->
+      <div class="mon-scalar-strip">
+        <div class="mon-scalar-card">
+          <div class="mon-scalar-label">Iteration</div>
+          <div class="mon-scalar-value" id="s-iter">—</div>
+        </div>
+        <div class="mon-scalar-card">
+          <div class="mon-scalar-label">Cl</div>
+          <div class="mon-scalar-value" id="s-cl">—</div>
+        </div>
+        <div class="mon-scalar-card">
+          <div class="mon-scalar-label">Cd</div>
+          <div class="mon-scalar-value" id="s-cd">—</div>
+        </div>
+        <div class="mon-scalar-card">
+          <div class="mon-scalar-label">Cl/Cd</div>
+          <div class="mon-scalar-value" id="s-eff">—</div>
+        </div>
+        <div class="mon-scalar-card">
+          <div class="mon-scalar-label">ΔCl (last 50)</div>
+          <div class="mon-scalar-value" id="s-dcl">—</div>
+        </div>
+        <div class="mon-scalar-card">
+          <div class="mon-scalar-label">ΔCd (last 50)</div>
+          <div class="mon-scalar-value" id="s-dcd">—</div>
+        </div>
+        <div class="mon-scalar-card">
+          <div class="mon-scalar-label">CFL</div>
+          <div class="mon-scalar-value" id="s-cfl">—</div>
+        </div>
+        <div class="mon-scalar-card">
+          <div class="mon-scalar-label">Convergence</div>
+          <div class="mon-scalar-value" id="s-conv">—</div>
+        </div>
+      </div>
+
+      <!-- Main chart grid -->
+      <div class="mon-chart-grid">
+
+        <!-- Cl vs Iter -->
+        <div class="mon-chart-card solid-card">
+          <div class="mon-chart-title">Cl vs Iteration
+            <span class="mon-chart-hint">lift coefficient</span>
+          </div>
+          <div class="mon-chart-wrap"><canvas id="chart-cl"></canvas></div>
+        </div>
+
+        <!-- Cd vs Iter -->
+        <div class="mon-chart-card solid-card">
+          <div class="mon-chart-title">Cd vs Iteration
+            <span class="mon-chart-hint">drag coefficient</span>
+          </div>
+          <div class="mon-chart-wrap"><canvas id="chart-cd"></canvas></div>
+        </div>
+
+        <!-- Cl/Cd vs Iter -->
+        <div class="mon-chart-card solid-card">
+          <div class="mon-chart-title">Cl/Cd vs Iteration
+            <span class="mon-chart-hint">aerodynamic efficiency</span>
+          </div>
+          <div class="mon-chart-wrap"><canvas id="chart-eff"></canvas></div>
+        </div>
+
+        <!-- Residuals -->
+        <div class="mon-chart-card solid-card">
+          <div class="mon-chart-title">Residuals (log scale)
+            <span class="mon-chart-hint">all channels</span>
+          </div>
+          <div class="mon-chart-wrap"><canvas id="chart-res"></canvas></div>
+        </div>
+
+        <!-- ΔCl -->
+        <div class="mon-chart-card solid-card">
+          <div class="mon-chart-title">ΔCl over 50-iter window
+            <span class="mon-chart-hint">force stability indicator</span>
+          </div>
+          <div class="mon-chart-wrap"><canvas id="chart-dcl"></canvas></div>
+        </div>
+
+        <!-- ΔCd -->
+        <div class="mon-chart-card solid-card">
+          <div class="mon-chart-title">ΔCd over 50-iter window
+            <span class="mon-chart-hint">force stability indicator</span>
+          </div>
+          <div class="mon-chart-wrap"><canvas id="chart-dcd"></canvas></div>
+        </div>
+
+      </div><!-- /mon-chart-grid -->
+    </div><!-- /tab-live -->
+
+    <!-- ═══════════════════ SUMMARY TAB ═══════════════════ -->
+    <div class="mon-tab-content hidden" id="tab-summary">
+      <div class="mon-summary-grid">
+
+        <div class="mon-summary-card solid-card">
+          <div class="mon-summary-title">Convergence Quality</div>
+          <div class="mon-flag-big" id="sum-flag">—</div>
+          <div class="mon-summary-score" id="sum-score">Score: —</div>
+        </div>
+
+        <div class="mon-summary-card solid-card">
+          <div class="mon-summary-title">Aerodynamic Scalars</div>
+          <table class="raw-table" id="sum-aerotable"></table>
+        </div>
+
+        <div class="mon-summary-card solid-card">
+          <div class="mon-summary-title">Convergence Metrics</div>
+          <table class="raw-table" id="sum-convtable"></table>
+        </div>
+
+        <div class="mon-summary-card solid-card">
+          <div class="mon-summary-title">LSB Physical Diagnostics</div>
+          <table class="raw-table" id="sum-lsbtable"></table>
+        </div>
+
+      </div>
+
+      <!-- Polar charts (visible after sweep) -->
+      <div class="mon-polar-grid" id="polar-section" style="display:none;">
+        <div class="mon-chart-card solid-card" style="height:320px;">
+          <div class="mon-chart-title">Cl vs AoA</div>
+          <div class="mon-chart-wrap"><canvas id="chart-polar-cl"></canvas></div>
+        </div>
+        <div class="mon-chart-card solid-card" style="height:320px;">
+          <div class="mon-chart-title">Cd vs AoA</div>
+          <div class="mon-chart-wrap"><canvas id="chart-polar-cd"></canvas></div>
+        </div>
+        <div class="mon-chart-card solid-card" style="height:320px;">
+          <div class="mon-chart-title">Cl/Cd vs AoA</div>
+          <div class="mon-chart-wrap"><canvas id="chart-polar-eff"></canvas></div>
+        </div>
+      </div>
+    </div><!-- /tab-summary -->
+
+    <!-- ═══════════════════ SURFACE TAB ═══════════════════ -->
+    <div class="mon-tab-content hidden" id="tab-surface">
+
+      <div class="mon-surface-scalars">
+        <div class="mon-scalar-card">
+          <div class="mon-scalar-label">Separation x/c</div>
+          <div class="mon-scalar-value" id="sf-sep">—</div>
+        </div>
+        <div class="mon-scalar-card">
+          <div class="mon-scalar-label">Reattachment x/c</div>
+          <div class="mon-scalar-value" id="sf-reat">—</div>
+        </div>
+        <div class="mon-scalar-card">
+          <div class="mon-scalar-label">Bubble Length x/c</div>
+          <div class="mon-scalar-value" id="sf-bub">—</div>
+        </div>
+        <div class="mon-scalar-card">
+          <div class="mon-scalar-label">Transition x/c</div>
+          <div class="mon-scalar-value" id="sf-tr">—</div>
+        </div>
+      </div>
+
+      <div class="mon-chart-grid">
+        <!-- Cp distribution -->
+        <div class="mon-chart-card solid-card" style="height:360px;">
+          <div class="mon-chart-title">Cp vs x/c
+            <span class="mon-chart-hint">pressure coefficient distribution</span>
+          </div>
+          <div class="mon-chart-wrap"><canvas id="chart-cp"></canvas></div>
+        </div>
+
+        <!-- Cf distribution -->
+        <div class="mon-chart-card solid-card" style="height:360px;">
+          <div class="mon-chart-title">Cf vs x/c
+            <span class="mon-chart-hint">skin friction coefficient (Cf=0 marks separation/reattachment)</span>
+          </div>
+          <div class="mon-chart-wrap"><canvas id="chart-cf"></canvas></div>
+        </div>
+      </div>
+
+      <div id="surface-not-ready" class="mon-not-ready">
+        Surface data not yet available — SU2 writes surface_flow.csv only when a stage with
+        SURFACE_CSV output completes. Check back once the run finishes at least Stage 3.
+      </div>
+    </div><!-- /tab-surface -->
+
+  </div><!-- /dashboard-container -->
+
+  <script src="/static/monitor.js"></script>
+</body>
+</html>

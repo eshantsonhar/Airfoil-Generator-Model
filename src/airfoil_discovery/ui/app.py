@@ -23,6 +23,7 @@ from airfoil_discovery.schemas import CSTParameters
 from airfoil_discovery.storage import ExperimentDatabase
 from airfoil_discovery.ui.platform_routes import router as platform_router
 from airfoil_discovery.ui.cfd_routes import router as cfd_router
+from airfoil_discovery.ui.monitor_routes import router as monitor_router
 from airfoil_discovery.ui.telemetry_hub import DEFAULT_EVENT_PATH, get_telemetry_hub
 
 
@@ -85,6 +86,7 @@ app = FastAPI(
 )
 app.include_router(platform_router)
 app.include_router(cfd_router)
+app.include_router(monitor_router)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 if REACT_DIST.exists():
     app.mount(
@@ -293,6 +295,11 @@ def platform_spa(spa_path: str) -> FileResponse:
 @app.get("/debug", response_model=None)
 def debug() -> FileResponse:
     return FileResponse(STATIC_DIR / "debug.html")
+
+
+@app.get("/monitor/{case_id}", response_model=None)
+def monitor(case_id: str) -> FileResponse:
+    return FileResponse(STATIC_DIR / "monitor.html")
 
 
 @app.get("/api/limits")

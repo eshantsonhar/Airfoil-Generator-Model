@@ -1,0 +1,215 @@
+/* ── Monitor page styles ───────────────────────────────────────────────── */
+
+/* Header extras */
+.mon-case-badge {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-left: 0.75rem;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.02em;
+}
+
+.mon-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Convergence flag badge (header) */
+.mon-flag {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: #334155;
+  color: #94A3B8;
+}
+.mon-flag.pass   { background: rgba(52,211,153,0.18); color: #34D399; border: 1px solid #34D399; }
+.mon-flag.marginal { background: rgba(251,191,36,0.15); color: #FBBF24; border: 1px solid #FBBF24; }
+.mon-flag.fail   { background: rgba(239,68,68,0.15); color: #EF4444; border: 1px solid #EF4444; }
+
+/* Tabs */
+.mon-tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0;
+}
+.mon-tab {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.6rem 1.25rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  margin-bottom: -1px;
+}
+.mon-tab:hover { color: var(--text-main); }
+.mon-tab.active {
+  color: var(--accent-blue);
+  border-bottom-color: var(--accent-blue);
+}
+
+/* Tab content */
+.mon-tab-content { display: block; }
+.mon-tab-content.hidden { display: none; }
+
+/* Scalar strip */
+.mon-scalar-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.mon-scalar-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  min-width: 110px;
+  flex: 1;
+}
+.mon-scalar-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+.mon-scalar-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: var(--text-main);
+}
+
+/* Chart grid — 2 columns, wrapping */
+.mon-chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.mon-chart-card {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+}
+.mon-chart-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.mon-chart-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.mon-chart-wrap {
+  flex: 1;
+  position: relative;
+}
+
+/* Summary tab */
+.mon-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.mon-summary-card {
+  padding: 1.25rem 1.5rem;
+}
+.mon-summary-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.4rem;
+}
+.mon-flag-big {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+.mon-flag-big.pass    { color: #34D399; }
+.mon-flag-big.marginal { color: #FBBF24; }
+.mon-flag-big.fail    { color: #EF4444; }
+.mon-summary-score {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* Polar chart grid */
+.mon-polar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Surface scalars */
+.mon-surface-scalars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+/* Not-ready message */
+.mon-not-ready {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 1.25rem 1.5rem;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+/* Run Monitor button in debug table */
+.btn-monitor {
+  background: transparent;
+  border: 1px solid var(--accent-blue);
+  color: var(--accent-blue);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.btn-monitor:hover {
+  background: var(--accent-blue);
+  color: #fff;
+}
+
+/* Separator for zero line on Cf chart */
+canvas { display: block; }
+
+@media (max-width: 700px) {
+  .mon-chart-grid { grid-template-columns: 1fr; }
+  .mon-scalar-strip { gap: 0.5rem; }
+  .mon-scalar-card { min-width: 90px; }
+}
