@@ -29,6 +29,11 @@ def build_stage_config(
         muscl = "NO"
         restart_sol = "NO"
         output_files = "(RESTART)"
+        # Stage 1: cold-start, 1st-order upwind.  CFL ceiling = 5.0 — previous
+        # runs showed that ramping to 50.0 caused blow-up (~iter 50) on the
+        # 40c-farfield mesh.  A ceiling of 5.0 keeps the solver stable during
+        # the initial transient; Stage 2 raises it once the solution is settled.
+        cfl_adapt_param = f"( 0.5, 1.2, {cfl:.2f}, 5.0 )"
     elif stage == 2:
         iter_count = solver.stage2_iter
         cfl = solver.stage2_cfl
@@ -36,13 +41,22 @@ def build_stage_config(
         muscl = "YES"
         restart_sol = "YES"
         output_files = "(RESTART)"
+        # Stage 2: MUSCL warm-restart from Stage 1.  CFL ceiling = 20.0 is
+        # safe once the solution is well-initialised.
+        cfl_adapt_param = f"( 0.5, 1.2, {cfl:.2f}, 20.0 )"
     elif stage == 3:
         iter_count = solver.stage3_iter
         cfl = solver.stage3_cfl
         trans_model = "LM"
         muscl = "YES"
         restart_sol = "YES"
-        output_files = "(RESTART, SURFACE_PARAVIEW)"
+        # Stage 3 needs SURFACE_CSV for Cp/Cf extraction (monitor + LSB detection)
+        output_files = "(RESTART, SURFACE_CSV)"
+        # Stage 3 (LM transition): conservative 1.1x growth and ceiling 20.0.
+        # The γ–Reθ transport equations are initialised from a Stage 2 RANS restart
+        # so the solution is already well-developed but the transition front is
+        # forming — keep CFL ceiling moderate to avoid overshooting γ/Reθ.
+        cfl_adapt_param = f"( 0.5, 1.1, {cfl:.2f}, 20.0 )"
     else:
         raise ValueError(f"Unsupported stage: {stage}")
 
@@ -91,12 +105,24 @@ def build_stage_config(
         f"KIND_TRANS_MODEL= {trans_model}",
         f"MUSCL_FLOW= {muscl}",
         f"MUSCL_TURB= {muscl}",
-        "SLOPE_LIMITER_FLOW= VAN_ALBADA_EDGE" if muscl == "YES" else "SLOPE_LIMITER_FLOW= NONE",
-        "SLOPE_LIMITER_TURB= VAN_ALBADA_EDGE" if muscl == "YES" else "SLOPE_LIMITER_TURB= NONE",
+        # FIX: VAN_ALBADA_EDGE is not a valid standalone limiter in SU2 v8.4.0.
+        # VENKATAKRISHNAN_WANG gives similar accuracy (bounded, smooth) and is
+        # fully supported for both flow and turb equations.
+        "SLOPE_LIMITER_FLOW= VENKATAKRISHNAN_WANG" if muscl == "YES" else "SLOPE_LIMITER_FLOW= NONE",
+        # FIX: VAN_ALBADA_EDGE is not recognised by SU2 v8.4.0 computeLimiters()
+        # for turbulence transport equations → crashes with "Unknown limiter type".
+        # Use VENKATAKRISHNAN for turb (robust, widely supported) and
+        # VENKATAKRISHNAN_WANG for flow (best accuracy with VanAlbada-style behaviour).
+        "SLOPE_LIMITER_TURB= VENKATAKRISHNAN" if muscl == "YES" else "SLOPE_LIMITER_TURB= NONE",
+        "VENKAT_LIMITER_COEFF= 0.05",
         f"ITER= {iter_count}",
         f"CFL_NUMBER= {cfl}",
         "CFL_ADAPT= YES",
-        "CFL_ADAPT_PARAM= ( 0.5, 1.2, 0.5, 50.0 )",
+        f"CFL_ADAPT_PARAM= {cfl_adapt_param}",
+        "LINEAR_SOLVER= FGMRES",
+        "LINEAR_SOLVER_PREC= ILU",
+        "LINEAR_SOLVER_ERROR= 1E-6",
+        "LINEAR_SOLVER_ITER= 10",
         f"RESTART_SOL= {restart_sol}",
         f"OUTPUT_FILES= {output_files}",
         "CONV_FILENAME= history",

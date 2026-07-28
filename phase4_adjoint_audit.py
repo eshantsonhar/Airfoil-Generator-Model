@@ -36,23 +36,38 @@ if history_path.exists():
         hdr = [h.strip().strip('"') for h in lines[0].split(',')]
         rows = [l.split(',') for l in lines[1:] if l.strip() and l.strip() != ',']
         if rows:
-            rms_c = next((c for c in ["rms[P]", "RMS_PRESSURE"] if c in hdr), None)
+            # Find pressure residual column (rms[P] in INC_RANS)
+            rms_c = next((c for c in ["rms[P]", "RMS_PRESSURE", "rms_Pressure"] if c in hdr), None)
             cl_idx = hdr.index("CL") if "CL" in hdr else -1
             cd_idx = hdr.index("CD") if "CD" in hdr else -1
             
             if rms_c and cl_idx >= 0 and cd_idx >= 0:
                 ri = hdr.index(rms_c)
-                start_r = float(rows[0][ri]) if rows[0][ri] else 0
-                end_r = float(rows[-1][ri]) if rows[-1][ri] else 0
-                drop = abs(end_r - start_r)
-                cl_val = float(rows[-1][cl_idx])
-                cd_val = float(rows[-1][cd_idx])
-                
-                print(f"\n=== PHASE 3 BASELINE VERIFICATION ===")
-                print(f"Primal CL: {cl_val:.6f}")
-                print(f"Primal CD: {cd_val:.6f}")
-                print(f"Residual Reduction: {drop:.1f} orders of magnitude")
-                print(f"Convergence Status: {'CONVERGED' if drop >= 4.0 else 'SUBOPTIMAL'}")
+                try:
+                    start_r = float(rows[0][ri].strip())
+                    end_r   = float(rows[-1][ri].strip())
+                    # Residual drop = orders of magnitude reduction (negative = converging)
+                    # rms[P] is already log10 in SU2 INC_RANS output
+                    drop = start_r - end_r  # positive = converging
+                    converged = (drop >= 4.0) and (end_r < -4.0)
+                    
+                    cl_val = float(rows[-1][cl_idx].strip())
+                    cd_val = float(rows[-1][cd_idx].strip())
+                    
+                    # Sanity check: flag if aerodynamic coefficients are physically unreasonable
+                    cl_plausible = abs(cl_val) < 10.0
+                    cd_plausible = 0.0 < cd_val < 1.0
+                    
+                    print(f"\n=== PHASE 3 BASELINE VERIFICATION ===")
+                    print(f"Primal CL: {cl_val:.6f} {'✅' if cl_plausible else '⚠️ UNPHYSICAL'}")
+                    print(f"Primal CD: {cd_val:.6f} {'✅' if cd_plausible else '⚠️ UNPHYSICAL'}")
+                    print(f"RMS[P] start: {start_r:.4f}  end: {end_r:.4f}")
+                    print(f"Residual Drop: {drop:.1f} orders of magnitude")
+                    print(f"Convergence Status: {'CONVERGED' if converged else 'DIVERGED/SUBOPTIMAL'}")
+                    if not converged:
+                        print("  ⚠️  Phase 3 primal did not converge — adjoint results will be unreliable")
+                except (ValueError, IndexError) as e:
+                    print(f"⚠️ Could not parse convergence history: {e}")
 
 # ============================================================================
 # TASK 1: Run Adjoint Solver
@@ -68,19 +83,39 @@ adjoint_config_path = case_dir / "config_adjoint_audit.cfg"
 if primal_config_path.exists():
     primal_config = primal_config_path.read_text()
     
-    # Modify for adjoint
+    # ── SU2 v8.4 Adjoint Capability Check ──────────────────────────────────
+    # v8.4 "Harrier" removed the continuous adjoint solvers (CONT_ADJ_RANS etc).
+    # Discrete adjoint requires SU2_CFD_AD (separate AD-enabled binary).
+    # Check if SU2_CFD_AD is available; if not, flag and skip.
+    import re
+    su2_cfd_ad = PROJECT_ROOT / "bin" / "SU2_CFD_AD.exe"
+    has_ad_binary = su2_cfd_ad.exists()
+    
+    if not has_ad_binary:
+        print("⚠️  SU2_CFD_AD.exe not found in bin/ — discrete adjoint unavailable.")
+        print("   SU2 v8.4 removed CONT_ADJ_* solvers; adjoint sensitivity requires")
+        print("   the AD-enabled binary (SU2_CFD_AD.exe) compiled with CODI support.")
+        print("   To enable: rebuild SU2 with -Denable-autodiff=true")
+        print("\n   Adjoint config will still be written for reference and manual execution.")
+    
+    # Build adjoint config using discrete adjoint API (v8.x)
+    # Uses same INC_RANS solver but needs SU2_CFD_AD binary + MATH_PROBLEM not set
     adjoint_config = primal_config
-    adjoint_config = adjoint_config.replace("MATH_PROBLEM= DIRECT", "MATH_PROBLEM= ADJOINT")
+    
+    # Remove MATH_PROBLEM if present (not needed in v8.x)
+    adjoint_config = re.sub(r"^MATH_PROBLEM= .*\n", "", adjoint_config, flags=re.MULTILINE)
+    
+    # Restart from primal solution
     adjoint_config = adjoint_config.replace("RESTART_SOL= NO", "RESTART_SOL= YES")
     
-    # Add objective function
+    # Add discrete adjoint objective
     if "OBJECTIVE_FUNCTION" not in adjoint_config:
         adjoint_config += "\nOBJECTIVE_FUNCTION= DRAG\n"
     
-    # Add design variables for sensitivity
+    # Add design variables for sensitivity output
     if "DV_KIND" not in adjoint_config:
         adjoint_config += "DV_KIND= HICKS_HENNE\n"
-        adjoint_config += "DV_PARAM= ( 8, 0.1, 0.5 )\n"
+        adjoint_config += "DV_PARAM= ( 1, 0.5 )\n"
         adjoint_config += "DV_MARKER= ( airfoil )\n"
     
     # Modify output for adjoint
@@ -89,42 +124,34 @@ if primal_config_path.exists():
     adjoint_config = adjoint_config.replace("SURFACE_FILENAME= surface_flow", "SURFACE_FILENAME= surface_adj")
     adjoint_config = adjoint_config.replace("VOLUME_FILENAME= flow", "VOLUME_FILENAME= adjoint")
     
-    # Reduce iterations for adjoint (faster convergence)
-    adjoint_config = adjoint_config.replace("ITER= 5000", "ITER= 500")
-    
-    # Ensure sensitivity output
-    if "SENSITIVITY" not in adjoint_config:
-        adjoint_config = adjoint_config.replace("SCREEN_OUTPUT= (INNER_ITER, RMS_RES, AERO_COEFF)", 
-                                                 "SCREEN_OUTPUT= (INNER_ITER, RMS_RES, SENSITIVITY)")
+    # Reduce iterations
+    adjoint_config = re.sub(r"^ITER= \d+", "ITER= 300", adjoint_config, flags=re.MULTILINE)
     
     adjoint_config_path.write_text(adjoint_config)
-    print(f"Adjoint config created: {adjoint_config_path}")
+    print(f"Adjoint config written: {adjoint_config_path}")
     
-    # Run adjoint solver
-    print("\nRunning SU2 adjoint solver...")
-    t0 = time.time()
-    
-    try:
-        r = subprocess.run([str(settings.solver.su2_cfd_bin), "config_adjoint_audit.cfg"],
-                          cwd=case_dir, capture_output=True, text=True, timeout=1800)
-        elapsed = time.time() - t0
-        
-        print(f"Adjoint solver completed in {elapsed:.0f}s")
-        print(f"Return code: {r.returncode}")
-        
-        if r.returncode == 0:
-            print("✅ ADJOINT SOLVER: SUCCESS")
-        else:
-            print("⚠️ ADJOINT SOLVER: ISSUES DETECTED")
-            if "diverged" in r.stderr.lower() or "nan" in r.stderr.lower():
-                print("  Error: Solver divergence detected")
-            print(f"  Stderr: {r.stderr[:500]}")
-            
-    except subprocess.TimeoutExpired:
-        print("⚠️ ADJOINT SOLVER: TIMEOUT (1800s)")
-        elapsed = time.time() - t0
-    except Exception as e:
-        print(f"⚠️ ADJOINT SOLVER: ERROR - {e}")
+    if has_ad_binary:
+        # Run discrete adjoint solver
+        print("\nRunning SU2_CFD_AD discrete adjoint solver...")
+        t0 = time.time()
+        try:
+            r = subprocess.run([str(su2_cfd_ad), "config_adjoint_audit.cfg"],
+                              cwd=case_dir, capture_output=True, text=True, timeout=1800)
+            elapsed = time.time() - t0
+            print(f"Adjoint solver completed in {elapsed:.0f}s")
+            print(f"Return code: {r.returncode}")
+            if r.returncode == 0:
+                print("✅ ADJOINT SOLVER: SUCCESS")
+            else:
+                print("⚠️ ADJOINT SOLVER: ISSUES DETECTED")
+                print(f"  Output: {(r.stdout + r.stderr)[:500]}")
+        except subprocess.TimeoutExpired:
+            print("⚠️ ADJOINT SOLVER: TIMEOUT (1800s)")
+        except Exception as e:
+            print(f"⚠️ ADJOINT SOLVER: ERROR - {e}")
+    else:
+        print("\n⚠️ ADJOINT EXECUTION SKIPPED — SU2_CFD_AD.exe not present.")
+        print("   Adjoint config is written and ready for manual execution.")
 else:
     print("❌ Primal config not found - cannot create adjoint config")
 
@@ -251,39 +278,36 @@ print("=" * 80)
 
 # Create deformation config
 deform_config = """% ------- SU2_DEF Mesh Deformation Config -------
-% Phase 4 Audit: Mesh Deformation Test
-
-% ------------ Solver ------------
-SOLVER= EULER
-MATH_PROBLEM= ELASTICITY
+% Phase 4 Audit: Mesh Deformation Test (SU2 v8.x compatible)
 
 % ------------ Mesh ------------
-MESH_FILENAME= airfoil.su2
+MESH_FILENAME= airfoil_perfect.su2
 MESH_OUT_FILENAME= airfoil_deformed.su2
 MESH_FORMAT= SU2
 
 % ------------ Boundary Conditions ------------
 MARKER_HEATFLUX= ( airfoil, 0.0 )
 MARKER_FAR= ( farfield )
+MARKER_DEFORM_MESH= ( airfoil )
 
 % ------------ Deformation Parameters ------------
 DEFORM_STIFFNESS_TYPE= INVERSE_VOLUME
 DEFORM_LINEAR_SOLVER= FGMRES
 DEFORM_LINEAR_SOLVER_PREC= ILU
 DEFORM_LINEAR_SOLVER_ITER= 100
-DEFORM_LINEAR_SOLVER_ERROR= 1e-10
-DEFORM_NONLINEAR_ITER= 500
+DEFORM_LINEAR_SOLVER_ERROR= 1E-10
+DEFORM_NONLINEAR_ITER= 1
 DEFORM_CONSOLE_OUTPUT= YES
 
-% ------------ Elasticity Parameters ------------
-DEFORM_ELASTICITY_MODULUS= 1000000.0
-DEFORM_POISSONS_RATIO= 0.3
+% ------------ Design Variables (Hicks-Henne bump, unit perturbation) ------------
+DV_KIND= HICKS_HENNE
+DV_MARKER= ( airfoil )
+DV_PARAM= ( 1, 0.5 )
+DV_VALUE= 0.001
 
 % ------------ Output ------------
 TABULAR_FORMAT= CSV
-CONV_FILENAME= history_def
-OUTPUT_FILES= (RESTART)
-OUTPUT_WRT_FREQ= 100
+OUTPUT_FILES= (MESH)
 """
 
 deform_config_path = case_dir / "config_deform.cfg"

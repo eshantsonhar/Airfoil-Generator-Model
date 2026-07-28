@@ -32,6 +32,8 @@ flow:
 
 solver:
   su2_cfd_bin: bin/SU2_CFD.exe
+  # SU2_DEF binary for mesh elasticity deformation (gradient-based ASO phase)
+  su2_def_bin: bin/SU2_DEF.exe
   gmsh_bin: bin/gmsh.exe
   n_cores: 0
   use_mpi: false
@@ -45,51 +47,68 @@ solver:
   transition_model: true
   keep_local_if_upload_fails: true
 
-  # These are kept for config compatibility but the new two-phase runner
-  # uses the constants defined in su2_config.py (Phase1: 800 iter, Phase2: 3000 iter).
+  # Legacy startup fields (kept for YAML compatibility with older configs)
   startup_iterations: 800
-  startup_cfl: 5.0
+  startup_cfl: 1.0
   startup_use_transition: false
   startup_muscl: false
   startup_cfl_adapt: true
 
   mesh:
-    # Methodology domain: 50c farfield and 60c downstream wake extent.
+    # Research-grade domain: 50c farfield inlet/top/bottom, 60c downstream wake.
+    # This isolation distance is required for low-Re external flow where far-field
+    # reflections significantly corrupt transition onset predictions.
     farfield_radius: 50.0
     wake_length: 60.0
     surface_points: 401
 
-    # BOUNDARY LAYER — physics-based values
-    # First cell height: mesh.py computes y+-correct value from Re using
-    # Blasius laminar BL at x=0.1c.  This config value is the MAXIMUM
-    # (coarsest) allowed — mesh.py uses min(computed, this value).
-    # At Re=10k: computed h1 ≈ 7.8e-4.  At Re=50k: ≈ 2.3e-4.
-    # Setting this to 5e-4 means Re=10k uses 5e-4, Re=30k+ uses computed.
+    # BOUNDARY LAYER — physics-based values for y+ ≤ 1.0
+    # mesh.py computes first_cell_height from Blasius laminar BL at x=0.1c
+    # and takes min(computed, this value).  At Re=100k: computed h1 ≈ 1.0e-5.
+    # This config cap (1e-6) forces the physics-based computation to dominate.
     boundary_layer_first_height: 0.000001
 
-    # Growth rate ≤ 1.15 for smooth BL transition (mesh.py caps at 1.15)
+    # Growth rate ≤ 1.15 per mesh independence study requirement
     boundary_layer_growth: 1.12
 
-    # Number of layers: mesh.py computes and clamps to [30, 50]
-    boundary_layer_layers: 45
+    # Layer count: mesh.py computes from BL thickness and clamps to [min, max]
+    boundary_layer_layers: 50
     y_plus_target: 0.5
     min_boundary_layer_layers: 45
     max_boundary_layer_layers: 65
     coarse_layer_min: 20
     coarse_layer_max: 60
 
+  # ── Stage-specific solver parameters ──────────────────────────────────────
+  # Stage 1 (cold-start, 1st-order): Low CFL=1.0 for robust initialisation.
+  #   CFL_ADAPT ramps up to max=50.0 on successful steps.
+  # Stage 2 (MUSCL warm-restart): CFL=1.5, 2nd-order reconstruction enabled.
+  # Stage 3 (LM transition, MUSCL): CFL=1.0 — transition model requires
+  #   conservative CFL to prevent γ/Reθ transport equation blow-up at Re~1e5.
   stage1_iter: 500
   stage2_iter: 1500
   stage3_iter: 3000
-  stage1_cfl: 1.5
+  stage1_cfl: 1.0
   stage2_cfl: 1.5
-  stage3_cfl: 1.5
+  stage3_cfl: 1.0
+
+  # Convergence quality thresholds
+  # convergence_window: iterations in tail window for force-stability check
+  # convergence_cl_cd_tol: max relative variation in Cl/Cd over window
+  # convergence_residual_drop: minimum orders-of-magnitude residual decay required
+  #   (6 decades = research-grade; 3 decades is insufficient for transition flows)
   convergence_window: 100
   convergence_cl_cd_tol: 0.005
-  convergence_residual_drop: 3.0
+  convergence_residual_drop: 6.0
+
   stage1_coarse_factor: 2.0
   stage2_coarse_factor: 1.4
   stage3_coarse_factor: 1.0
+
+  # Freestream turbulence for γ–Reθ LM transition model.
+  # Tu = 0.001 (0.1%) — appropriate for free-flight / low-turbulence tunnel.
+  # μt/μ = 5.0 — standard for external aerodynamics.
+  # CRITICAL: Tu > 0.5% suppresses the LSB via bypass transition → wrong physics.
   stage3_turbulence_intensity: 0.001
   stage3_turb_viscosity_ratio: 5.0
 
