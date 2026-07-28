@@ -81,12 +81,12 @@ solver:
   stage1_iter: 500
   stage2_iter: 1500
   stage3_iter: 3000
-  stage1_cfl: 5.0
-  stage2_cfl: 3.0
-  stage3_cfl: 2.0
+  stage1_cfl: 1.5
+  stage2_cfl: 1.5
+  stage3_cfl: 1.5
   convergence_window: 100
   convergence_cl_cd_tol: 0.005
-  convergence_residual_drop: 6.0
+  convergence_residual_drop: 3.0
   stage1_coarse_factor: 2.0
   stage2_coarse_factor: 1.4
   stage3_coarse_factor: 1.0

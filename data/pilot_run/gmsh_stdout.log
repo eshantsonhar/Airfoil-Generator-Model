@@ -1,5 +1,5 @@
 Info    : Running 'bin/gmsh.exe airfoil.geo -2 -format su2 -o airfoil.su2' [Gmsh 4.13.1, 1 node, max. 1 thread]
-Info    : Started on Tue Jul 28 16:53:25 2026
+Info    : Started on Tue Jul 28 17:12:44 2026
 Info    : Reading 'airfoil.geo'...
 Info    : Done reading 'airfoil.geo'
 Info    : Meshing 1D...
@@ -166,12 +166,12 @@ Info    : [100%] Meshing curve 200001 (Line)
 Info    : [100%] Meshing curve 200002 (Line)
 Info    : [100%] Meshing curve 200003 (Line)
 Info    : [100%] Meshing curve 200004 (Line)
-Info    : Done meshing 1D (Wall 0.0170853s, CPU 0s)
+Info    : Done meshing 1D (Wall 0.0175869s, CPU 0s)
 Info    : Meshing 2D...
 Info    : Meshing surface 1 (Plane, Delaunay)
-Info    : Done meshing 2D (Wall 0.00959206s, CPU 0s)
+Info    : Done meshing 2D (Wall 0.00588012s, CPU 0s)
 Info    : 222 nodes 607 elements
 Info    : Writing 'airfoil.su2'...
 Info    : Writing 235 elements and 222 nodes
 Info    : Done writing 'airfoil.su2'
-Info    : Stopped on Tue Jul 28 16:53:25 2026 (From start: Wall 0.0570424s, CPU 0.015625s)
+Info    : Stopped on Tue Jul 28 17:12:44 2026 (From start: Wall 0.0409863s, CPU 0s)
