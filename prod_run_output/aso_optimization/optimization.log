@@ -1,0 +1,387 @@
+2026-07-28 22:39:40 [INFO] aso_pde_optimizer: ============================================================
+2026-07-28 22:39:40 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-07-28 22:39:40 [INFO] aso_pde_optimizer: Method: mma
+2026-07-28 22:39:40 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-07-28 22:39:40 [INFO] aso_pde_optimizer: Max iterations: 5
+2026-07-28 22:39:40 [INFO] aso_pde_optimizer: ============================================================
+2026-07-28 22:39:40 [INFO] aso_pde_optimizer: SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:40 [INFO] aso_pde_optimizer: SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:40 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil.su2
+2026-07-28 22:39:46 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/5 ===
+2026-07-28 22:39:46 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-28 22:39:46 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-28 22:39:46 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-28 22:39:46 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-28 22:39:46 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-28 22:39:46 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:47 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785258586. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-28 22:39:47 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-28 22:39:47 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785258587
+2026-07-28 22:39:47 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-28 22:39:47 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-28 22:39:47 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-28 22:39:47 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-28 22:39:47 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-28 22:39:47 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-28 22:39:47 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-28 22:39:47 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:48 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785258587. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-28 22:39:48 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-28 22:39:48 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785258588
+2026-07-28 22:39:48 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-28 22:39:48 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-28 22:39:48 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-28 22:39:48 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-28 22:39:48 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-28 22:39:48 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-28 22:39:48 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-28 22:39:48 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:49 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785258588. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-28 22:39:49 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-28 22:39:49 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785258589
+2026-07-28 22:39:49 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-28 22:39:49 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-28 22:39:49 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-28 22:39:49 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-28 22:39:49 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-28 22:39:49 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-28 22:39:49 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-28 22:39:49 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:50 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785258589. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-28 22:39:50 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-28 22:39:50 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785258590
+2026-07-28 22:39:50 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-28 22:39:50 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-28 22:39:50 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-28 22:39:50 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-28 22:39:50 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-28 22:39:50 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-28 22:39:50 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-28 22:39:50 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:51 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785258590. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-28 22:39:51 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-28 22:39:51 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785258591
+2026-07-28 22:39:51 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-28 22:39:51 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-28 22:39:51 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-28 22:39:51 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-28 22:39:51 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-28 22:39:51 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-28 22:39:51 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-28 22:39:51 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:52 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785258591. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-28 22:39:52 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-28 22:39:52 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785258592
+2026-07-28 22:39:52 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-28 22:39:52 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-28 22:39:52 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-28 22:39:52 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-28 22:39:52 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-28 22:39:52 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-28 22:39:52 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-28 22:39:52 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:53 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785258592. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-28 22:39:53 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-28 22:39:53 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785258593
+2026-07-28 22:39:53 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-28 22:39:53 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-28 22:39:53 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-28 22:39:53 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-28 22:39:53 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-28 22:39:53 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-28 22:39:53 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-28 22:39:53 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:54 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785258593. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-28 22:39:54 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-28 22:39:54 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785258594
+2026-07-28 22:39:54 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-28 22:39:54 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-28 22:39:54 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-28 22:39:54 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-28 22:39:54 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-28 22:39:54 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-28 22:39:54 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-28 22:39:54 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:55 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785258594. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-28 22:39:55 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-28 22:39:55 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785258595
+2026-07-28 22:39:55 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-28 22:39:55 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-28 22:39:55 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-28 22:39:55 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-28 22:39:55 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-28 22:39:55 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-28 22:39:55 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-28 22:39:55 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:56 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785258595. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-28 22:39:56 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-28 22:39:56 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785258596
+2026-07-28 22:39:56 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-28 22:39:56 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-28 22:39:56 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-28 22:39:56 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-28 22:39:56 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-28 22:39:56 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-28 22:39:56 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-28 22:39:56 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:57 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785258596. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-28 22:39:57 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-28 22:39:57 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785258597
+2026-07-28 22:39:57 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-28 22:39:57 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-28 22:39:57 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-28 22:39:57 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-28 22:39:57 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-28 22:39:57 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-28 22:39:57 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-28 22:39:57 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:58 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785258597. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-28 22:39:58 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-28 22:39:58 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785258598
+2026-07-28 22:39:58 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-28 22:39:58 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-28 22:39:58 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-28 22:39:58 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-28 22:39:58 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-28 22:39:58 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-28 22:39:58 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-28 22:39:58 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:39:59 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785258598. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-28 22:39:59 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-28 22:39:59 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785258599
+2026-07-28 22:39:59 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-28 22:39:59 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-28 22:39:59 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-28 22:40:00 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-28 22:40:00 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-28 22:40:00 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-28 22:40:00 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-28 22:40:00 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-28 22:40:00 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785258599. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-28 22:40:00 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-28 22:40:00 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785258600
+2026-07-28 22:40:00 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-28 22:40:00 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-28 22:40:00 [ERROR] airfoil_discovery.aso.optimizer: Zero gradient detected (|∇Cd|=0.000000e+00). This indicates failed adjoint/FD calculation.
+2026-07-28 22:40:00 [ERROR] aso_pde_optimizer: Optimization failed with exception: Zero gradient at iteration 1: adjoint/FD fallback failed to produce meaningful sensitivities
+Traceback (most recent call last):
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\scripts\run_aso_pde_optimization.py", line 247, in main
+    history = optimizer.run(method=args.method)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\src\airfoil_discovery\aso\optimizer.py", line 1232, in run
+    return self.run_mma()
+           ^^^^^^^^^^^^^^
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\src\airfoil_discovery\aso\optimizer.py", line 1130, in run_mma
+    raise RuntimeError(f"Zero gradient at iteration {iteration}: adjoint/FD fallback failed to produce meaningful sensitivities")
+RuntimeError: Zero gradient at iteration 1: adjoint/FD fallback failed to produce meaningful sensitivities
+2026-07-29 06:57:17 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 06:57:17 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-07-29 06:57:17 [INFO] aso_pde_optimizer: Method: mma
+2026-07-29 06:57:17 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-07-29 06:57:17 [INFO] aso_pde_optimizer: Max iterations: 5
+2026-07-29 06:57:17 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 06:57:17 [INFO] aso_pde_optimizer: SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:17 [INFO] aso_pde_optimizer: SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:17 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil.su2
+2026-07-29 06:57:23 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/5 ===
+2026-07-29 06:57:23 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:57:24 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:57:24 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:57:24 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:57:24 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:57:24 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:24 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785288443. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 06:57:24 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 06:57:24 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288444
+2026-07-29 06:57:24 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:57:24 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-29 06:57:24 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:57:25 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:57:25 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:57:25 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:57:25 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:57:25 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:25 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785288444. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 06:57:25 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 06:57:25 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288445
+2026-07-29 06:57:25 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:57:25 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-29 06:57:25 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:57:26 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:57:26 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:57:26 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:57:26 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:57:26 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:26 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785288445. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 06:57:26 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 06:57:26 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288446
+2026-07-29 06:57:26 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:57:26 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-29 06:57:26 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:57:27 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:57:27 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:57:27 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:57:27 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:57:27 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:27 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785288446. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 06:57:27 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 06:57:27 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288447
+2026-07-29 06:57:28 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:57:28 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-29 06:57:28 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:57:28 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:57:28 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:57:28 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:57:28 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:57:28 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:28 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785288448. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 06:57:28 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 06:57:28 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288448
+2026-07-29 06:57:29 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:57:29 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-29 06:57:29 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:57:29 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:57:29 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:57:29 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:57:29 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:57:29 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:29 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785288449. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 06:57:29 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 06:57:29 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288449
+2026-07-29 06:57:30 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:57:30 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-29 06:57:30 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:57:30 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:57:30 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:57:30 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:57:30 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:57:30 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:30 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785288450. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 06:57:30 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 06:57:30 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288450
+2026-07-29 06:57:31 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:57:31 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-29 06:57:31 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:57:31 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:57:31 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:57:31 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:57:31 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:57:31 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:31 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785288451. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 06:57:31 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 06:57:31 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288451
+2026-07-29 06:57:32 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:57:32 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-29 06:57:32 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:57:32 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:57:32 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:57:32 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:57:32 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:57:32 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:32 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785288452. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 06:57:32 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 06:57:32 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288452
+2026-07-29 06:57:33 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:57:33 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-29 06:57:33 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:57:33 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:57:33 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:57:33 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:57:33 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:57:33 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:33 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785288453. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 06:57:33 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 06:57:33 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288453
+2026-07-29 06:57:34 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:57:34 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-29 06:57:34 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:57:34 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:57:34 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:57:34 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:57:34 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:57:34 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:34 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785288454. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 06:57:34 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 06:57:34 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288454
+2026-07-29 06:57:35 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:57:35 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-29 06:57:35 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:57:35 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:57:35 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:57:35 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:57:35 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:57:35 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:35 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785288455. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 06:57:35 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 06:57:35 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288455
+2026-07-29 06:57:36 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:57:36 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-29 06:57:36 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:57:36 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:57:36 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:57:36 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:57:36 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:57:36 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:36 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785288456. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 06:57:36 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 06:57:36 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288456
+2026-07-29 06:57:37 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:57:37 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-29 06:57:37 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:57:37 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:57:37 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:57:37 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:57:37 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:57:37 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:57:37 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\eval_1785288457. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 06:57:37 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 06:57:37 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288457
+2026-07-29 06:57:38 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:57:38 [ERROR] airfoil_discovery.aso.mesh_deform: Mesh deformation failed
+2026-07-29 06:57:38 [ERROR] airfoil_discovery.aso.optimizer: Zero gradient detected (|∇Cd|=0.000000e+00). This indicates failed adjoint/FD calculation.
+2026-07-29 06:57:38 [ERROR] aso_pde_optimizer: Optimization failed with exception: Zero gradient at iteration 1: adjoint/FD fallback failed to produce meaningful sensitivities
+Traceback (most recent call last):
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\scripts\run_aso_pde_optimization.py", line 247, in main
+    history = optimizer.run(method=args.method)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\src\airfoil_discovery\aso\optimizer.py", line 1232, in run
+    return self.run_mma()
+           ^^^^^^^^^^^^^^
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\src\airfoil_discovery\aso\optimizer.py", line 1130, in run_mma
+    raise RuntimeError(f"Zero gradient at iteration {iteration}: adjoint/FD fallback failed to produce meaningful sensitivities")
+RuntimeError: Zero gradient at iteration 1: adjoint/FD fallback failed to produce meaningful sensitivities
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: Method: mma
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: Max iterations: 5
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil.su2
+2026-07-29 06:59:27 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/5 ===
+2026-07-29 06:59:27 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:59:27 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:59:27 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:59:27 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:59:27 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:59:27 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=200, upper=1, lower=199
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.000218, min=0.000000, max=0.000140
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288568
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288568\mesh_deformed.su2
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.optimizer: Cd=0.025229, |∇Cd|=0.000218, t/c=0.1480, accepted=True, ρ=0.2000
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.optimizer: Converged at iteration 1: |∇Cd|=2.179363e-04
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.optimizer: Results saved to C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Optimization Complete
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Time elapsed: 2.2 seconds (0.0 minutes)
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Total iterations: 1
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Converged: True
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Initial Cd: 0.025229, Final Cd: 0.025229 (delta: +0.000000)
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Initial Cl: 0.492532, Final Cl: 0.492532 (delta: +0.000000)
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Initial |∇Cd|: 0.000218, Final |∇Cd|: 0.000218
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: ============================================================

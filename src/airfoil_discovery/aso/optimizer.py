@@ -964,7 +964,7 @@ class PDEOptimizer:
 
                 logger.info(
                     f"Iter {record.iteration:3d}: Cd={result.cd:.6f}, Cl={result.cl:.6f}, "
-                    f"|∇Cd|={record.grad_norm:.6f}, t/c={max_t:.4f}"
+                    f"|grad Cd|={record.grad_norm:.6f}, t/c={max_t:.4f}"
                 )
 
         logger.info("Starting SLSQP optimization...")
@@ -1126,7 +1126,7 @@ class PDEOptimizer:
             
             # CRITICAL: Never accept zero gradients - this indicates a failed adjoint/FD
             if grad_norm < 1e-12:
-                logger.error(f"Zero gradient detected (|∇Cd|={grad_norm:.6e}). This indicates failed adjoint/FD calculation.")
+                logger.error(f"Zero gradient detected (|grad Cd|={grad_norm:.6e}). This indicates failed adjoint/FD calculation.")
                 raise RuntimeError(f"Zero gradient at iteration {iteration}: adjoint/FD fallback failed to produce meaningful sensitivities")
 
             # Compute thickness constraint
@@ -1176,8 +1176,8 @@ class PDEOptimizer:
             self.history.add(record)
 
             logger.info(
-                f"Cd={cd:.6f}, |∇Cd|={grad_norm:.6f}, t/c={max_t:.4f}, "
-                f"accepted={step_accepted}, ρ={trust_radius:.4f}"
+                f"Cd={cd:.6f}, |grad Cd|={grad_norm:.6f}, t/c={max_t:.4f}, "
+                f"accepted={step_accepted}, rho={trust_radius:.4f}"
             )
 
             if step_accepted:
@@ -1198,7 +1198,7 @@ class PDEOptimizer:
 
             # Check convergence
             if grad_norm < self.convergence_tolerance and step_accepted:
-                logger.info(f"Converged at iteration {iteration}: |∇Cd|={grad_norm:.6e}")
+                logger.info(f"Converged at iteration {iteration}: |grad Cd|={grad_norm:.6e}")
                 self.history.finalize(converged=True)
                 return self.history
 
@@ -1322,7 +1322,7 @@ class PDEOptimizer:
 
         if self.history.iterations:
             for rec in self.history.iterations[:5]:
-                summary.append(f"  Iter {rec.iteration:3d}: Cd={rec.cd:.6f}, Cl={rec.cl:.6f}, |∇|={rec.grad_norm:.6f}")
+                summary.append(f"  Iter {rec.iteration:3d}: Cd={rec.cd:.6f}, Cl={rec.cl:.6f}, |grad|={rec.grad_norm:.6f}")
             if len(self.history.iterations) > 10:
                 summary.append(f"  ... ({len(self.history.iterations) - 10} intermediate iterations) ...")
             for rec in self.history.iterations[-5:]:

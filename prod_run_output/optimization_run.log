@@ -1,0 +1,85 @@
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: Method: mma
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: Max iterations: 5
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: SU2_CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:59:26 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil.su2
+2026-07-29 06:59:27 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/5 ===
+2026-07-29 06:59:27 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat, AoA=4.0°, Re=1.0e+05
+2026-07-29 06:59:27 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'CD', 'CL', 'CEff', 'CMz']
+2026-07-29 06:59:27 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.492531940
+2026-07-29 06:59:27 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.025228945
+2026-07-29 06:59:27 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.492532, CD=0.025229, converged=True
+2026-07-29 06:59:27 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=200, upper=1, lower=199
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.000218, min=0.000000, max=0.000140
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\bin\SU2_CFD.bat config_deform.cfg in C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288568
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization\cfd_cases\def_1785288568\mesh_deformed.su2
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\eshan\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py", line 1113, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Users\eshan\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2207' in position 74: character maps to <undefined>
+Call stack:
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\scripts\run_aso_pde_optimization.py", line 276, in <module>
+    main()
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\scripts\run_aso_pde_optimization.py", line 247, in main
+    history = optimizer.run(method=args.method)
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\src\airfoil_discovery\aso\optimizer.py", line 1232, in run
+    return self.run_mma()
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\src\airfoil_discovery\aso\optimizer.py", line 1178, in run_mma
+    logger.info(
+Message: 'Cd=0.025229, |\u2207Cd|=0.000218, t/c=0.1480, accepted=True, \u03c1=0.2000'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\eshan\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py", line 1113, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Users\eshan\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2207' in position 87: character maps to <undefined>
+Call stack:
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\scripts\run_aso_pde_optimization.py", line 276, in <module>
+    main()
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\scripts\run_aso_pde_optimization.py", line 247, in main
+    history = optimizer.run(method=args.method)
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\src\airfoil_discovery\aso\optimizer.py", line 1232, in run
+    return self.run_mma()
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\src\airfoil_discovery\aso\optimizer.py", line 1201, in run_mma
+    logger.info(f"Converged at iteration {iteration}: |\u2207Cd|={grad_norm:.6e}")
+Message: 'Converged at iteration 1: |\u2207Cd|=2.179363e-04'
+Arguments: ()
+2026-07-29 06:59:28 [INFO] airfoil_discovery.aso.optimizer: Results saved to C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Optimization Complete
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Time elapsed: 2.2 seconds (0.0 minutes)
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Total iterations: 1
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Converged: True
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Initial Cd: 0.025229, Final Cd: 0.025229 (delta: +0.000000)
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Initial Cl: 0.492532, Final Cl: 0.492532 (delta: +0.000000)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\eshan\AppData\Local\Programs\Python\Python311\Lib\logging\__init__.py", line 1113, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Users\eshan\AppData\Local\Programs\Python\Python311\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2207' in position 55: character maps to <undefined>
+Call stack:
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\scripts\run_aso_pde_optimization.py", line 276, in <module>
+    main()
+  File "C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\scripts\run_aso_pde_optimization.py", line 269, in main
+    logger.info(f"Initial |\u2207Cd|: {first.grad_norm:.6f}, Final |\u2207Cd|: {last.grad_norm:.6f}")
+Message: 'Initial |\u2207Cd|: 0.000218, Final |\u2207Cd|: 0.000218'
+Arguments: ()
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\prod_run_output\aso_optimization
+2026-07-29 06:59:28 [INFO] aso_pde_optimizer: ============================================================

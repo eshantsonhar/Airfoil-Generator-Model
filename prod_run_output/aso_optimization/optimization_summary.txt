@@ -1,0 +1,17 @@
+============================================================
+PDE-Constrained Aerodynamic Shape Optimization Results
+============================================================
+Method: MMA
+Total iterations: 1
+Converged: True
+
+Final Design Variables (CST coefficients):
+  Upper: [0.18 0.28 0.34 0.25 0.15 0.08]
+  Lower: [-0.215  -0.145  -0.115  -0.07   -0.035  -0.0175]
+
+Final Objective (Cd): 0.025229
+Final Cl: 0.492532
+
+Convergence History (first 5 and last 5):
+  Iter   1: Cd=0.025229, Cl=0.492532, |∇|=0.000218
+  Iter   1: Cd=0.025229, Cl=0.492532, |∇|=0.000218

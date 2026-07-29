@@ -20,6 +20,7 @@ Step 3 - Verify output and report result.
 """
 from __future__ import annotations
 
+import os
 import re
 import shutil
 import subprocess
@@ -409,17 +410,79 @@ def _divider(char: str = "=", width: int = 70) -> str:
     return char * width
 
 
+# Standard Windows install paths for TeX distributions
+TEX_SEARCH_PATHS = [
+    # MiKTeX
+    r"C:\Program Files\MiKTeX\miktex\bin\x64",
+    r"C:\Program Files (x86)\MiKTeX\miktex\bin",
+    r"C:\Users\%USERNAME%\AppData\Local\Programs\MiKTeX\miktex\bin\x64",
+    # TeX Live
+    r"C:\texlive\2024\bin\windows",
+    r"C:\texlive\2024\bin\win32",
+    r"C:\texlive\2023\bin\windows",
+    r"C:\texlive\2023\bin\win32",
+    r"C:\texlive\2022\bin\windows",
+    r"C:\texlive\2022\bin\win32",
+    # Common fallback
+    r"C:\texlive\latest\bin\windows",
+    r"C:\texlive\latest\bin\win32",
+]
+
+
+def _expand_user_paths(paths: list[str]) -> list[str]:
+    """Expand %USERNAME% and environment variables in path strings."""
+    expanded = []
+    for p in paths:
+        p = os.path.expandvars(p)
+        p = os.path.expanduser(p)
+        expanded.append(p)
+    return expanded
+
+
 def check_pdflatex_available() -> bool:
-    """Return True if pdflatex is found on PATH, else print diagnostic and return False."""
+    """
+    Check if pdflatex is available on PATH. If not, search standard Windows
+    TeX distribution install paths and dynamically append to os.environ['PATH']
+    before failing.
+
+    Returns True if pdflatex was found (either on PATH or auto-discovered).
+    """
+    # First check PATH
     pdflatex_path = shutil.which(PDFLATEX_CMD)
-    if pdflatex_path is None:
-        print(_err(f"{PDFLATEX_CMD} not found in system PATH"))
-        print(_info("Install a TeX distribution to enable PDF compilation:"))
-        print(_info("  TeX Live : https://tug.org/texlive/"))
-        print(_info("  MiKTeX   : https://miktex.org/"))
-        return False
-    print(_info(f"{PDFLATEX_CMD} found at: {pdflatex_path}"))
-    return True
+    if pdflatex_path is not None:
+        print(_info(f"{PDFLATEX_CMD} found at: {pdflatex_path}"))
+        return True
+
+    # Not on PATH — search standard install locations
+    print(_warn(f"{PDFLATEX_CMD} not found in system PATH"))
+    print(_info("Searching standard TeX distribution install paths..."))
+
+    search_dirs = _expand_user_paths(TEX_SEARCH_PATHS)
+    found_paths: list[str] = []
+
+    for d in search_dirs:
+        candidate = Path(d) / f"{PDFLATEX_CMD}.exe"
+        if candidate.is_file():
+            found_paths.append(str(candidate))
+            # Add the directory to PATH for subprocess calls
+            os.environ["PATH"] = str(Path(d)) + os.pathsep + os.environ.get("PATH", "")
+            print(_ok(f"Auto-discovered: {candidate}"))
+
+    if found_paths:
+        # Verify it's now accessible
+        pdflatex_path = shutil.which(PDFLATEX_CMD)
+        if pdflatex_path is not None:
+            print(_ok(f"{PDFLATEX_CMD} now available at: {pdflatex_path}"))
+            return True
+
+    # Still not found — give detailed install instructions
+    print(_err("No TeX distribution found on this system."))
+    print(_info("Install one of the following to enable PDF compilation:"))
+    print(_info("  TeX Live : https://tug.org/texlive/"))
+    print(_info("  MiKTeX   : https://miktex.org/"))
+    print(_info("After installation, ensure pdflatex is added to your system PATH"))
+    print(_info("or re-run this script and it will auto-discover the binary."))
+    return False
 
 
 def main() -> int:

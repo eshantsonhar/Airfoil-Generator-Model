@@ -1,0 +1,33 @@
+name: Compile Airfoil Research Paper
+
+on:
+  push:
+    paths:
+      - 'docs/paper/**'
+  workflow_dispatch:
+
+jobs:
+  build-paper:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install TeX Live Environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended
+
+      - name: Run Build & Verification Pipeline
+        run: python docs/paper/compile_paper.py
+
+      - name: Upload PDF Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: airfoil_paper_pdf
+          path: docs/paper/build/airfoil_paper_fixed.pdf

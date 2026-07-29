@@ -1,0 +1,15 @@
+{
+  "report_dir": "C:\\Eshant_Sonhar\\airfoil research paper\\airfoil generator model\\docs\\reports\\prod_run_latest",
+  "plots": [
+    "airfoil_geometry_overlay.png",
+    "ld_evolution.png",
+    "residual_convergence.png",
+    "pressure_distribution.png"
+  ],
+  "report": "production_run_report.md",
+  "n_evaluations": 27,
+  "n_converged": 0,
+  "baseline_ld": 0.270012829992847,
+  "best_ld": 0.270012829992847,
+  "ld_gain_pct": 0.0
+}

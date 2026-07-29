@@ -122,7 +122,7 @@ def plot_convergence_history(history_path: Path, output_dir: Path, dpi: int, fmt
     ax = axes[1, 0]
     ax.semilogy(iters, [max(g, 1e-12) for g in grad_norm], "g-^", markersize=4, linewidth=1.5)
     ax.set_xlabel("Iteration")
-    ax.set_ylabel(r"$\|\nabla C_D\|$")
+    ax.set_ylabel(r"$|grad C_D|$")
     ax.set_title("Gradient Norm Convergence")
     ax.grid(True, alpha=0.3)
     ax.axhline(y=1e-4, color="gray", linestyle="--", alpha=0.5, label="Tolerance")

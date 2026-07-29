@@ -1,0 +1,8 @@
+Mock SU2_CFD: Reading config from config_adjoint.cfg
+  AoA=4.0 deg, Re=1.0e+05, Ma=0.1, iter=200
+  Mode: DISCRETE_ADJOINT, Objective: DRAG_COEFFICIENT
+  Simulating solver run (0.20s)...
+  Generated history.csv: 200 iterations, CL~0.5000, CD~0.025000
+  Generated surface_adjoint.csv: 200 points
+  Generated restart_flow.dat
+Mock SU2_CFD: Completed successfully
