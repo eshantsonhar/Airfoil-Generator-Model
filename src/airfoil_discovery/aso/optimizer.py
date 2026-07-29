@@ -250,6 +250,7 @@ def run_primal_and_adjoint(
     objective: str = "DRAG",
     timeout_primal: float = 3600.0,
     timeout_adjoint: float = 600.0,
+    use_adjoint: bool = True,
 ) -> CFDResult:
     """
     Run complete primal + adjoint CFD evaluation.
@@ -320,8 +321,9 @@ def run_primal_and_adjoint(
         reynolds=reynolds,
         mach=mach,
         n_iter=n_iter_primal,
-        cfl_initial=cfl_primal * 0.5,
+        cfl_initial=cfl_primal,
         cfl_final=cfl_primal,
+        cfl_adapt=False,
         transition_model=transition_model,
         turbulence_intensity=turbulence_intensity,
         turb_viscosity_ratio=turb_viscosity_ratio,
@@ -375,6 +377,15 @@ def run_primal_and_adjoint(
     cl, cd, primal_conv = _parse_history(history_file)
 
     logger.info(f"Primal CFD: CL={cl:.6f}, CD={cd:.6f}, converged={primal_conv}")
+
+    if not use_adjoint:
+        logger.info("Skipping adjoint solve; using finite-difference gradient fallback.")
+        return CFDResult(
+            cl=cl, cd=cd, converged=primal_conv,
+            adjoint_gradient=np.zeros(N_DESIGN_VARS), gradient_valid=False,
+            primal_converged=primal_conv, adjoint_converged=False,
+            case_dir=case_dir, mesh_path=mesh_in_case,
+        )
 
     # ── 4. Run adjoint ──
     adj_cfg = case_dir / "config_adjoint.cfg"
@@ -659,6 +670,7 @@ class ASOObjectiveFunction:
         su2_def_bin: Optional[str] = None,
         previous_mesh_path: Optional[Path] = None,
         previous_dv: Optional[np.ndarray] = None,
+        use_adjoint: bool = True,
     ):
         self.su2_cfd_bin = su2_cfd_bin
         self.mesh_path = mesh_path
@@ -681,6 +693,7 @@ class ASOObjectiveFunction:
         # Internal state
         self.current_mesh_path = mesh_path
         self.previous_dv = previous_dv
+        self.use_adjoint = use_adjoint
         self._last_gradient: Optional[np.ndarray] = None
         self._last_result: Optional[CFDResult] = None
 
@@ -709,6 +722,10 @@ class ASOObjectiveFunction:
             logger.warning(f"Invalid geometry: {reason}")
             return 1e10  # Large penalty
 
+        # Reset last gradient for a new design point
+        self._last_gradient = None
+        self._last_dv = dv.copy()
+
         # Run CFD evaluation
         case_dir = self.case_root / f"eval_{int(time.time())}"
         result = run_primal_and_adjoint(
@@ -728,6 +745,7 @@ class ASOObjectiveFunction:
             turbulence_intensity=self.turbulence_intensity,
             turb_viscosity_ratio=self.turb_viscosity_ratio,
             objective=self.objective,
+            use_adjoint=self.use_adjoint,
         )
 
         self._last_result = result
@@ -781,18 +799,27 @@ class ASOObjectiveFunction:
         """
         if self._last_gradient is not None:
             return self._last_gradient
+        if not self.use_adjoint:
+            self._last_gradient = self._finite_difference_gradient(dv)
+            return self._last_gradient
         # If gradient not available, compute via finite differences as fallback
         return self._finite_difference_gradient(dv)
 
     def _finite_difference_gradient(self, dv: np.ndarray, eps: float = 1e-5) -> np.ndarray:
         """Fallback: compute gradient via forward finite differences."""
         grad = np.zeros_like(dv)
-        f0 = self(dv)
+        if self._last_result is not None and self._last_dv is not None and np.array_equal(dv, self._last_dv):
+            f0 = self._last_result.cd
+        else:
+            f0 = self(dv)
+
         for i in range(len(dv)):
             dv_pert = dv.copy()
             dv_pert[i] += eps
             fi = self(dv_pert)
             grad[i] = (fi - f0) / eps
+
+        self._last_gradient = grad
         return grad
 
     def _deform_mesh_for_next(self, dv_new: np.ndarray) -> None:
@@ -853,6 +880,7 @@ class PDEOptimizer:
         use_slsqp_fallback: bool = True,
         su2_def_bin: Optional[str] = None,
         use_mesh_deformation: bool = True,
+        use_adjoint: bool = True,
         max_iterations: int = 50,
         convergence_tolerance: float = 1e-4,
     ):
@@ -861,6 +889,7 @@ class PDEOptimizer:
         self.mesh_path = mesh_path
         self.work_dir = work_dir
         self.bounds = bounds or CSTBounds.default()
+        self.use_adjoint = use_adjoint
         self.aoa_deg = aoa_deg
         self.reynolds = reynolds
         self.mach = mach
@@ -937,6 +966,7 @@ class PDEOptimizer:
             su2_def_bin=self.su2_def_bin,
             previous_mesh_path=self.mesh_path,
             previous_dv=self.dv_initial,
+            use_adjoint=self.use_adjoint,
         )
 
         def callback(xk: np.ndarray) -> None:
@@ -1045,6 +1075,7 @@ class PDEOptimizer:
             su2_def_bin=self.su2_def_bin,
             previous_mesh_path=self.mesh_path,
             previous_dv=self.dv_initial,
+            use_adjoint=self.use_adjoint,
         )
 
         dv = self.dv_initial.copy()
@@ -1115,19 +1146,49 @@ class PDEOptimizer:
                 best_dv = dv.copy()
                 update_emergency_state(best_dv=best_dv, best_cd=best_cd)
 
-            # Get gradient
+            # Get gradient — with fallback to finite differences on zero/failed adjoint
             try:
                 grad = self.obj_function.gradient(dv)
             except Exception as e:
                 logger.error(f"Gradient extraction failed: {e}")
-                raise RuntimeError(f"Gradient calculation failed at iteration {iteration}: {e}")
+                grad = None
 
-            grad_norm = float(np.linalg.norm(grad))
-            
-            # CRITICAL: Never accept zero gradients - this indicates a failed adjoint/FD
+            grad_norm = float(np.linalg.norm(grad)) if grad is not None else 0.0
+
+            # If adjoint produced zero or failed gradient, try finite differences directly
+            if grad is None or grad_norm < 1e-12:
+                logger.warning(
+                    f"Iter {iteration}: adjoint gradient zero or unavailable "
+                    f"(norm={grad_norm:.3e}). Computing via finite differences."
+                )
+                try:
+                    grad = self.obj_function._finite_difference_gradient(dv)
+                    grad_norm = float(np.linalg.norm(grad))
+                except Exception as fd_err:
+                    logger.error(f"Finite difference gradient also failed: {fd_err}")
+                    consecutive_cfd_failures += 1
+                    if consecutive_cfd_failures >= max_consecutive_failures:
+                        logger.error(f"Cannot compute gradient after {consecutive_cfd_failures} attempts. Stopping.")
+                        self.history.finalize(converged=False)
+                        return self.history
+                    dv = dv_safe.copy()
+                    self.move_limit *= backtrack_factor
+                    continue
+
+            # After FD fallback, if still zero — backtrack instead of hard crash
             if grad_norm < 1e-12:
-                logger.error(f"Zero gradient detected (|grad Cd|={grad_norm:.6e}). This indicates failed adjoint/FD calculation.")
-                raise RuntimeError(f"Zero gradient at iteration {iteration}: adjoint/FD fallback failed to produce meaningful sensitivities")
+                logger.warning(
+                    f"Iter {iteration}: gradient still zero after FD fallback. "
+                    f"Backtracking and reducing move limit."
+                )
+                consecutive_cfd_failures += 1
+                if consecutive_cfd_failures >= max_consecutive_failures:
+                    logger.error(f"Zero gradient persists after {consecutive_cfd_failures} attempts. Stopping.")
+                    self.history.finalize(converged=False)
+                    return self.history
+                dv = dv_safe.copy()
+                self.move_limit *= backtrack_factor
+                continue
 
             # Compute thickness constraint
             upper, lower = compute_surface_coordinates(dv, te_thickness=self.bounds.te_thickness)
@@ -1326,7 +1387,8 @@ class PDEOptimizer:
             if len(self.history.iterations) > 10:
                 summary.append(f"  ... ({len(self.history.iterations) - 10} intermediate iterations) ...")
             for rec in self.history.iterations[-5:]:
-                summary.append(f"  Iter {rec.iteration:3d}: Cd={rec.cd:.6f}, Cl={rec.cl:.6f}, |∇|={rec.grad_norm:.6f}")
+                # ASCII-safe: avoid nabla U+2207 which crashes Windows cp1252 console
+                summary.append(f"  Iter {rec.iteration:3d}: Cd={rec.cd:.6f}, Cl={rec.cl:.6f}, |grad|={rec.grad_norm:.6f}")
 
         summary_path = output_dir / "optimization_summary.txt"
         summary_path.write_text("\n".join(summary), encoding="utf-8")

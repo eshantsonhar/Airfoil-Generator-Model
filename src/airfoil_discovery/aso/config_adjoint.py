@@ -49,15 +49,62 @@ def generate_adjoint_config(
     """
     # Objective function mapping
     objective_map = {
-        "DRAG": "DRAG_COEFFICIENT",
-        "LIFT": "LIFT_COEFFICIENT",
+        "DRAG": "DRAG",
+        "LIFT": "LIFT",
         "EFFICIENCY": "EFFICIENCY",
         "SURFACE_SENSITIVITY": "SURFACE_SENSITIVITY",
     }
-    obj_value = objective_map.get(objective.upper(), "DRAG_COEFFICIENT")
+    obj_value = objective_map.get(objective.upper(), "DRAG")
 
-    # Adjoint solver type (mirrors primal)
-    solver = "INC_RANS" if "INC_" in open(primal_config_filename).read().split("\n")[0] else "RANS"
+    # Detect solver type, turbulence/transition settings, and adjoint freestream values from primal config.
+    solver = "INC_RANS"
+    turb_model = "SST"
+    trans_model: Optional[str] = None
+    conv_turb = "FDS"
+    muscl_turb = "NO"
+    slope_limiter_turb = "VENKATAKRISHNAN"
+    adj_mach_number = 0.1
+    adj_aoa = 0.0
+    adj_sideslip_angle = 0.0
+    adj_reynolds_number = 1e5
+    adj_freestream_temperature = 288.15
+    adj_freestream_pressure = 101325.0
+    try:
+        from pathlib import Path as _Path
+        _p = _Path(primal_config_filename)
+        if _p.exists():
+            _text = _p.read_text(encoding="utf-8", errors="replace")
+            for _line in _text.splitlines():
+                _stripped = _line.strip()
+                if _stripped.startswith("SOLVER") and "=" in _stripped and not _stripped.startswith("%"):
+                    _val = _stripped.split("=", 1)[1].strip().split()[0]
+                    solver = _val
+                elif _stripped.startswith("KIND_TURB_MODEL") and "=" in _stripped and not _stripped.startswith("%"):
+                    turb_model = _stripped.split("=", 1)[1].strip().split()[0]
+                elif _stripped.startswith("KIND_TRANS_MODEL") and "=" in _stripped and not _stripped.startswith("%"):
+                    trans_model = _stripped.split("=", 1)[1].strip().split()[0]
+                elif _stripped.startswith("CONV_NUM_METHOD_TURB") and "=" in _stripped and not _stripped.startswith("%"):
+                    _val = _stripped.split("=", 1)[1].strip().split()[0]
+                    if _val != "JST":
+                        conv_turb = _val
+                elif _stripped.startswith("MUSCL_TURB") and "=" in _stripped and not _stripped.startswith("%"):
+                    muscl_turb = _stripped.split("=", 1)[1].strip().split()[0]
+                elif _stripped.startswith("SLOPE_LIMITER_TURB") and "=" in _stripped and not _stripped.startswith("%"):
+                    slope_limiter_turb = _stripped.split("=", 1)[1].strip().split()[0]
+                elif _stripped.startswith("MACH_NUMBER") and "=" in _stripped and not _stripped.startswith("%"):
+                    adj_mach_number = float(_stripped.split("=", 1)[1].strip().split()[0])
+                elif _stripped.startswith("AOA") and "=" in _stripped and not _stripped.startswith("%"):
+                    adj_aoa = float(_stripped.split("=", 1)[1].strip().split()[0])
+                elif _stripped.startswith("SIDESLIP_ANGLE") and "=" in _stripped and not _stripped.startswith("%"):
+                    adj_sideslip_angle = float(_stripped.split("=", 1)[1].strip().split()[0])
+                elif _stripped.startswith("REYNOLDS_NUMBER") and "=" in _stripped and not _stripped.startswith("%"):
+                    adj_reynolds_number = float(_stripped.split("=", 1)[1].strip().split()[0])
+                elif _stripped.startswith("FREESTREAM_TEMPERATURE") and "=" in _stripped and not _stripped.startswith("%"):
+                    adj_freestream_temperature = float(_stripped.split("=", 1)[1].strip().split()[0])
+                elif _stripped.startswith("FREESTREAM_PRESSURE") and "=" in _stripped and not _stripped.startswith("%"):
+                    adj_freestream_pressure = float(_stripped.split("=", 1)[1].strip().split()[0])
+    except Exception:
+        pass  # Keep defaults
 
     lines = [
         f"% ------- SU2 Discrete Adjoint Configuration -------",
@@ -72,11 +119,6 @@ def generate_adjoint_config(
         f"% ------------ Objective Function ------------",
         f"OBJECTIVE_FUNCTION= {obj_value}",
         f"",
-        f"% ------------ Design Variables (Surface) ------------",
-        "DV_KIND= SURFACE",
-        "DV_PARAM= ( AIRFOIL, 0.0, 100.0 )",
-        "DV_MARKER= ( airfoil )",
-        "",
         f"% ------------ Mesh (same as primal) ------------",
         f"MESH_FILENAME= {mesh_filename}",
         "MESH_FORMAT= SU2",
@@ -86,25 +128,34 @@ def generate_adjoint_config(
         "MARKER_FAR= ( farfield )",
         "MARKER_MONITORING= ( airfoil )",
         "MARKER_PLOTTING= ( airfoil )",
-        "MARKER_EULER= ( symmetry )",
+        "",
+        f"% ------------ Turbulence Model ------------",
+        f"KIND_TURB_MODEL= {turb_model}",
+        f"KIND_TRANS_MODEL= {trans_model if trans_model is not None else 'NONE'}",
+        "",
+        f"% ------------ Freestream / Flow Reference ------------",
+        f"MACH_NUMBER= {adj_mach_number}",
+        f"AOA= {adj_aoa}",
+        f"SIDESLIP_ANGLE= {adj_sideslip_angle}",
+        f"REYNOLDS_NUMBER= {adj_reynolds_number}",
+        f"FREESTREAM_TEMPERATURE= {adj_freestream_temperature}",
+        f"FREESTREAM_PRESSURE= {adj_freestream_pressure}",
         "",
         f"% ------------ Adjoint Numerical Method ------------",
-        "CONV_NUM_METHOD_FLOW= FDS",
-        "CONV_NUM_METHOD_TURB= ROE_TURB",
+        "CONV_NUM_METHOD_FLOW= JST",
+        f"CONV_NUM_METHOD_TURB= {conv_turb}",
         "NUM_METHOD_GRAD= WEIGHTED_LEAST_SQUARES",
         "NUM_METHOD_GRAD_RECON= LEAST_SQUARES",
         "",
         f"% ------------ MUSCL for Adjoint ------------",
-        "MUSCL_FLOW= YES",
-        "MUSCL_TURB= YES",
-        "SLOPE_LIMITER_FLOW= VENKATAKRISHNAN_WANG",
-        "SLOPE_LIMITER_TURB= VENKATAKRISHNAN_WANG",
+        "MUSCL_FLOW= NO",
+        "MUSCL_TURB= NO",
+        "SLOPE_LIMITER_FLOW= VENKATAKRISHNAN",
+        "SLOPE_LIMITER_TURB= VENKATAKRISHNAN",
         "",
         f"% ------------ Time Integration ------------",
         "TIME_DISCRE_FLOW= EULER_IMPLICIT",
         "TIME_DISCRE_TURB= EULER_IMPLICIT",
-        f"CFL_NUMBER_ADJFLOW= {cfl_adjoint}",
-        f"CFL_NUMBER_ADJTURB= {cfl_adjoint}",
         "CFL_ADAPT= NO",
         "",
         f"% ------------ Iterations ------------",
@@ -115,14 +166,6 @@ def generate_adjoint_config(
         "LINEAR_SOLVER_PREC= ILU",
         "LINEAR_SOLVER_ERROR= 1e-10",
         "LINEAR_SOLVER_ITER= 20",
-        "",
-        f"% ------------ Adjoint-Specific ------------",
-        "ADJ_MACH_NUMBER= 0.1",
-        "ADJ_AOA= 0.0",
-        "ADJ_SIDESLIP_ANGLE= 0.0",
-        "ADJ_REYNOLDS_NUMBER= 1e5",
-        "ADJ_FREESTREAM_TEMPERATURE= 288.15",
-        "ADJ_FREESTREAM_PRESSURE= 101325.0",
         "",
         f"% ------------ Output ------------",
         "TABULAR_FORMAT= CSV",
@@ -135,7 +178,6 @@ def generate_adjoint_config(
         f"SCREEN_OUTPUT= (INNER_ITER, RMS_RES)",
         f"HISTORY_OUTPUT= (INNER_ITER, RMS_RES)",
         f"CONV_STARTITER= 10",
-        f"OUTPUT_DIR= {output_dir}",
     ]
 
     if restart_filename:

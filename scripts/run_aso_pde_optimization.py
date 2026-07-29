@@ -130,6 +130,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--no-transition", action="store_true", help="Disable γ-Re_θ transition model")
     parser.add_argument("--turb-intensity", type=float, default=0.001, help="Freestream turbulence intensity")
     parser.add_argument("--turb-viscosity-ratio", type=float, default=5.0, help="Freestream μ_t/μ")
+    parser.add_argument("--no-adjoint", action="store_true", help="Skip adjoint solves and use finite-difference gradients")
 
     # Smoke test and preflight
     parser.add_argument("--smoke-test", action="store_true",
@@ -189,14 +190,41 @@ def main() -> None:
     # Install signal handlers for graceful shutdown
     setup_signal_handlers()
 
+    # Create optimizer object early so the default design vector is available for pre-flight.
+    bounds = CSTBounds.default()
+    optimizer = PDEOptimizer(
+        su2_cfd_bin=su2_cfd_bin,
+        mesh_path=mesh_path,
+        work_dir=output_dir,
+        dv_initial=dv_initial,
+        bounds=bounds,
+        aoa_deg=args.aoa,
+        reynolds=args.reynolds,
+        mach=args.mach,
+        n_iter_primal=args.n_iter_primal,
+        n_iter_adjoint=args.n_iter_adjoint,
+        cfl_primal=args.cfl_primal,
+        cfl_adjoint=args.cfl_adjoint,
+        transition_model=not args.no_transition,
+        turbulence_intensity=args.turb_intensity,
+        turb_viscosity_ratio=args.turb_viscosity_ratio,
+        move_limit=0.05,
+        use_slsqp_fallback=(args.method == "slsqp"),
+        su2_def_bin=su2_def_bin,
+        use_mesh_deformation=args.mesh_deform and not args.no_mesh_deform,
+        max_iterations=args.max_iter,
+        convergence_tolerance=args.tol,
+        use_adjoint=not args.no_adjoint,
+    )
+
     # Run pre-flight checks (unless skipped)
     if not args.no_preflight:
         preflight_report = run_preflight_checks(
             su2_cfd_bin=su2_cfd_bin,
             mesh_path=mesh_path,
             output_dir=output_dir,
-            dv=dv_initial,
-            bounds=CSTBounds.default(),
+            dv=optimizer.dv_initial,
+            bounds=bounds,
             su2_def_bin=su2_def_bin,
             verbose=True,
         )
@@ -266,7 +294,7 @@ def main() -> None:
         last = history.iterations[-1]
         logger.info(f"Initial Cd: {first.cd:.6f}, Final Cd: {last.cd:.6f} (delta: {last.cd - first.cd:+.6f})")
         logger.info(f"Initial Cl: {first.cl:.6f}, Final Cl: {last.cl:.6f} (delta: {last.cl - first.cl:+.6f})")
-        logger.info(f"Initial |∇Cd|: {first.grad_norm:.6f}, Final |∇Cd|: {last.grad_norm:.6f}")
+        logger.info(f"Initial |grad Cd|: {first.grad_norm:.6f}, Final |grad Cd|: {last.grad_norm:.6f}")
 
     logger.info(f"Results saved to: {output_dir.resolve()}")
     logger.info("=" * 60)

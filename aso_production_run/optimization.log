@@ -1,0 +1,20 @@
+2026-07-29 16:59:20 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 16:59:20 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-07-29 16:59:20 [INFO] aso_pde_optimizer: Method: mma
+2026-07-29 16:59:20 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-07-29 16:59:20 [INFO] aso_pde_optimizer: Max iterations: 10
+2026-07-29 16:59:20 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 16:59:20 [INFO] aso_pde_optimizer: SU2_CFD: SU2_CFD
+2026-07-29 16:59:20 [INFO] aso_pde_optimizer: SU2_DEF: SU2_DEF
+2026-07-29 16:59:20 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\airfoil_perfect.su2
+2026-07-29 16:59:20 [ERROR] aso_pde_optimizer: Pre-flight checks failed. Aborting.
+2026-07-29 16:59:34 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 16:59:34 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-07-29 16:59:34 [INFO] aso_pde_optimizer: Method: mma
+2026-07-29 16:59:34 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-07-29 16:59:34 [INFO] aso_pde_optimizer: Max iterations: 10
+2026-07-29 16:59:34 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 16:59:34 [INFO] aso_pde_optimizer: SU2_CFD: bin/SU2_CFD.exe
+2026-07-29 16:59:34 [INFO] aso_pde_optimizer: SU2_DEF: bin/SU2_DEF.exe
+2026-07-29 16:59:34 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\airfoil_perfect.su2
+2026-07-29 16:59:36 [ERROR] aso_pde_optimizer: Pre-flight checks failed. Aborting.

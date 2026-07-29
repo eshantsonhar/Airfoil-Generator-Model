@@ -1,0 +1,221 @@
+2026-07-29 16:58:41 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 16:58:41 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-07-29 16:58:41 [INFO] aso_pde_optimizer: Method: mma
+2026-07-29 16:58:41 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-07-29 16:58:41 [INFO] aso_pde_optimizer: Max iterations: 10
+2026-07-29 16:58:41 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 16:58:41 [INFO] aso_pde_optimizer: SU2_CFD: SU2_CFD
+2026-07-29 16:58:41 [INFO] aso_pde_optimizer: SU2_DEF: SU2_DEF
+2026-07-29 16:58:41 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\airfoil_perfect.su2
+2026-07-29 16:58:41 [ERROR] aso_pde_optimizer: Pre-flight checks failed. Aborting.
+2026-07-29 16:58:57 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 16:58:57 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-07-29 16:58:57 [INFO] aso_pde_optimizer: Method: mma
+2026-07-29 16:58:57 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-07-29 16:58:57 [INFO] aso_pde_optimizer: Max iterations: 10
+2026-07-29 16:58:57 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 16:58:57 [INFO] aso_pde_optimizer: SU2_CFD: bin/SU2_CFD.exe
+2026-07-29 16:58:57 [INFO] aso_pde_optimizer: SU2_DEF: bin/SU2_DEF.exe
+2026-07-29 16:58:57 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\airfoil_perfect.su2
+2026-07-29 16:59:05 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/10 ===
+2026-07-29 16:59:05 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 16:59:06 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1): 
+2026-07-29 16:59:06 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 16:59:06 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 2/10 ===
+2026-07-29 16:59:06 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 16:59:07 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1): 
+2026-07-29 16:59:07 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 16:59:07 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 3/10 ===
+2026-07-29 16:59:07 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 16:59:08 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1): 
+2026-07-29 16:59:08 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 16:59:08 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 4/10 ===
+2026-07-29 16:59:08 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 16:59:09 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1): 
+2026-07-29 16:59:09 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 16:59:09 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 5/10 ===
+2026-07-29 16:59:09 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 16:59:10 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1): 
+2026-07-29 16:59:10 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 16:59:10 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 6/10 ===
+2026-07-29 16:59:10 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 16:59:11 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1): 
+2026-07-29 16:59:11 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 16:59:11 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 7/10 ===
+2026-07-29 16:59:11 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 16:59:12 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1): 
+2026-07-29 16:59:12 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 16:59:12 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 8/10 ===
+2026-07-29 16:59:12 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 16:59:13 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1): 
+2026-07-29 16:59:13 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 16:59:13 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 9/10 ===
+2026-07-29 16:59:13 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 16:59:14 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1): 
+2026-07-29 16:59:14 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 16:59:14 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 10/10 ===
+2026-07-29 16:59:14 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 16:59:16 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1): 
+2026-07-29 16:59:16 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 16:59:16 [INFO] airfoil_discovery.aso.optimizer: Results saved to aso_results_final
+2026-07-29 16:59:16 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 16:59:16 [INFO] aso_pde_optimizer: Optimization Complete
+2026-07-29 16:59:16 [INFO] aso_pde_optimizer: Time elapsed: 18.7 seconds (0.3 minutes)
+2026-07-29 16:59:16 [INFO] aso_pde_optimizer: Total iterations: 0
+2026-07-29 16:59:16 [INFO] aso_pde_optimizer: Converged: False
+2026-07-29 16:59:16 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\aso_results_final
+2026-07-29 16:59:16 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 19:04:28 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 19:04:28 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-07-29 19:04:28 [INFO] aso_pde_optimizer: Method: mma
+2026-07-29 19:04:28 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-07-29 19:04:28 [INFO] aso_pde_optimizer: Max iterations: 5
+2026-07-29 19:04:28 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 19:04:28 [INFO] aso_pde_optimizer: SU2_CFD: .\bin\SU2_CFD.exe
+2026-07-29 19:04:28 [INFO] aso_pde_optimizer: SU2_DEF: .\bin\SU2_DEF.exe
+2026-07-29 19:04:28 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil_perfect.su2
+2026-07-29 19:04:30 [ERROR] aso_pde_optimizer: Pre-flight checks failed. Aborting.
+2026-07-29 19:05:49 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 19:05:49 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-07-29 19:05:49 [INFO] aso_pde_optimizer: Method: mma
+2026-07-29 19:05:49 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-07-29 19:05:49 [INFO] aso_pde_optimizer: Max iterations: 5
+2026-07-29 19:05:49 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 19:05:49 [INFO] aso_pde_optimizer: SU2_CFD: .\bin\SU2_CFD.exe
+2026-07-29 19:05:49 [INFO] aso_pde_optimizer: SU2_DEF: .\bin\SU2_DEF.exe
+2026-07-29 19:05:49 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil_perfect.su2
+2026-07-29 19:06:00 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/5 ===
+2026-07-29 19:06:00 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 19:06:11 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-29 19:06:11 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2275.694311
+2026-07-29 19:06:11 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 2208.716012
+2026-07-29 19:06:11 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2275.694311, CD=2208.716012, converged=False
+2026-07-29 19:06:11 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: .\bin\SU2_CFD.exe
+2026-07-29 19:06:12 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in aso_results_final\cfd_cases\eval_1785332160. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 19:06:12 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 19:06:12 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: 
+2026-07-29 19:06:12 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 19:06:12 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 2/5 ===
+2026-07-29 19:06:12 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 19:06:23 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-29 19:06:23 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2275.694311
+2026-07-29 19:06:23 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 2208.716012
+2026-07-29 19:06:23 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2275.694311, CD=2208.716012, converged=False
+2026-07-29 19:06:23 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: .\bin\SU2_CFD.exe
+2026-07-29 19:06:24 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in aso_results_final\cfd_cases\eval_1785332172. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 19:06:24 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 19:06:24 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: 
+2026-07-29 19:06:24 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 19:06:24 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 3/5 ===
+2026-07-29 19:06:24 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 19:06:34 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-29 19:06:34 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2275.694311
+2026-07-29 19:06:34 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 2208.716012
+2026-07-29 19:06:34 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2275.694311, CD=2208.716012, converged=False
+2026-07-29 19:06:34 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: .\bin\SU2_CFD.exe
+2026-07-29 19:06:35 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in aso_results_final\cfd_cases\eval_1785332184. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 19:06:35 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 19:06:35 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: 
+2026-07-29 19:06:35 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 19:06:35 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 4/5 ===
+2026-07-29 19:06:35 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 19:06:47 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-29 19:06:47 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2275.694311
+2026-07-29 19:06:47 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 2208.716012
+2026-07-29 19:06:47 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2275.694311, CD=2208.716012, converged=False
+2026-07-29 19:06:47 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: .\bin\SU2_CFD.exe
+2026-07-29 19:06:48 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in aso_results_final\cfd_cases\eval_1785332195. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 19:06:48 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 19:06:48 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: 
+2026-07-29 19:06:48 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 19:06:48 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 5/5 ===
+2026-07-29 19:06:48 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 19:06:58 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-29 19:06:58 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2275.694311
+2026-07-29 19:06:58 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 2208.716012
+2026-07-29 19:06:58 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2275.694311, CD=2208.716012, converged=False
+2026-07-29 19:06:58 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: .\bin\SU2_CFD.exe
+2026-07-29 19:06:59 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in aso_results_final\cfd_cases\eval_1785332208. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 19:06:59 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 19:06:59 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: 
+2026-07-29 19:06:59 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 19:06:59 [INFO] airfoil_discovery.aso.optimizer: Results saved to aso_results_final
+2026-07-29 19:06:59 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 19:06:59 [INFO] aso_pde_optimizer: Optimization Complete
+2026-07-29 19:06:59 [INFO] aso_pde_optimizer: Time elapsed: 68.9 seconds (1.1 minutes)
+2026-07-29 19:06:59 [INFO] aso_pde_optimizer: Total iterations: 0
+2026-07-29 19:06:59 [INFO] aso_pde_optimizer: Converged: False
+2026-07-29 19:06:59 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\aso_results_final
+2026-07-29 19:06:59 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 19:55:04 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 19:55:04 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-07-29 19:55:04 [INFO] aso_pde_optimizer: Method: mma
+2026-07-29 19:55:04 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-07-29 19:55:04 [INFO] aso_pde_optimizer: Max iterations: 5
+2026-07-29 19:55:04 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 19:55:04 [INFO] aso_pde_optimizer: SU2_CFD: .\bin\SU2_CFD.exe
+2026-07-29 19:55:04 [INFO] aso_pde_optimizer: SU2_DEF: .\bin\SU2_DEF.exe
+2026-07-29 19:55:04 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil_perfect.su2
+2026-07-29 19:55:13 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/5 ===
+2026-07-29 19:55:13 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 19:55:18 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-29 19:55:18 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2275.694311
+2026-07-29 19:55:18 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 2208.716012
+2026-07-29 19:55:18 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2275.694311, CD=2208.716012, converged=False
+2026-07-29 19:55:18 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: .\bin\SU2_CFD.exe
+2026-07-29 19:55:19 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in aso_results_final\cfd_cases\eval_1785335113. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 19:55:19 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 19:55:19 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: 
+2026-07-29 19:55:19 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 19:55:19 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 2/5 ===
+2026-07-29 19:55:19 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 19:55:25 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-29 19:55:25 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2275.694311
+2026-07-29 19:55:25 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 2208.716012
+2026-07-29 19:55:25 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2275.694311, CD=2208.716012, converged=False
+2026-07-29 19:55:25 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: .\bin\SU2_CFD.exe
+2026-07-29 19:55:26 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in aso_results_final\cfd_cases\eval_1785335119. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 19:55:26 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 19:55:26 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: 
+2026-07-29 19:55:26 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 19:55:26 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 3/5 ===
+2026-07-29 19:55:26 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 19:55:32 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-29 19:55:32 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2275.694311
+2026-07-29 19:55:32 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 2208.716012
+2026-07-29 19:55:32 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2275.694311, CD=2208.716012, converged=False
+2026-07-29 19:55:32 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: .\bin\SU2_CFD.exe
+2026-07-29 19:55:33 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in aso_results_final\cfd_cases\eval_1785335126. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 19:55:33 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 19:55:33 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: 
+2026-07-29 19:55:33 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 19:55:33 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 4/5 ===
+2026-07-29 19:55:33 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 19:55:39 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-29 19:55:39 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2275.694311
+2026-07-29 19:55:39 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 2208.716012
+2026-07-29 19:55:39 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2275.694311, CD=2208.716012, converged=False
+2026-07-29 19:55:39 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: .\bin\SU2_CFD.exe
+2026-07-29 19:55:40 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in aso_results_final\cfd_cases\eval_1785335133. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 19:55:40 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 19:55:40 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: 
+2026-07-29 19:55:40 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 19:55:40 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 5/5 ===
+2026-07-29 19:55:40 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-29 19:55:45 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-29 19:55:45 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2275.694311
+2026-07-29 19:55:45 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 2208.716012
+2026-07-29 19:55:45 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2275.694311, CD=2208.716012, converged=False
+2026-07-29 19:55:45 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: .\bin\SU2_CFD.exe
+2026-07-29 19:55:46 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in aso_results_final\cfd_cases\eval_1785335140. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
+2026-07-29 19:55:46 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
+2026-07-29 19:55:46 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: 
+2026-07-29 19:55:46 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
+2026-07-29 19:55:46 [INFO] airfoil_discovery.aso.optimizer: Results saved to aso_results_final
+2026-07-29 19:55:46 [INFO] aso_pde_optimizer: ============================================================
+2026-07-29 19:55:46 [INFO] aso_pde_optimizer: Optimization Complete
+2026-07-29 19:55:46 [INFO] aso_pde_optimizer: Time elapsed: 40.3 seconds (0.7 minutes)
+2026-07-29 19:55:46 [INFO] aso_pde_optimizer: Total iterations: 0
+2026-07-29 19:55:46 [INFO] aso_pde_optimizer: Converged: False
+2026-07-29 19:55:46 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\aso_results_final
+2026-07-29 19:55:46 [INFO] aso_pde_optimizer: ============================================================

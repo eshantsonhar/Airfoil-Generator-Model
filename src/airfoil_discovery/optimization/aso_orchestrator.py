@@ -11,7 +11,7 @@ class KKTAuditor:
     def audit(self, df_norm: float, dg_norms: list[float], multipliers: np.ndarray, constraints: np.ndarray) -> dict:
         """
         Calculates the first-order optimality (KKT) residuals.
-        Stationarity: ||∇L|| -> 0
+        Stationarity: ||grad L|| -> 0
         Complementarity: sum(μ_i * g_i) -> 0
         """
         # Simplified residual calculation

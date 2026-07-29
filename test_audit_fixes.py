@@ -43,10 +43,10 @@ try:
     grad_norm = np.linalg.norm(grad)
     
     if grad_norm < 1e-12:
-        print(f"✓ Zero gradient detected: |∇| = {grad_norm:.6e}")
+        print(f"✓ Zero gradient detected: |grad| = {grad_norm:.6e}")
         print("  This would now raise RuntimeError in production code")
     else:
-        print(f"✗ FAIL: Zero gradient not detected: |∇| = {grad_norm:.6e}")
+        print(f"✗ FAIL: Zero gradient not detected: |grad| = {grad_norm:.6e}")
 except Exception as e:
     print(f"✓ Exception raised as expected: {e}")
 
@@ -55,9 +55,9 @@ mock_obj = MockObjective(return_zero_grad=False)
 grad = mock_obj.gradient(np.ones(12))
 grad_norm = np.linalg.norm(grad)
 if grad_norm > 1e-12:
-    print(f"✓ Non-zero gradient accepted: |∇| = {grad_norm:.6e}")
+    print(f"✓ Non-zero gradient accepted: |grad| = {grad_norm:.6e}")
 else:
-    print(f"✗ FAIL: Non-zero gradient rejected: |∇| = {grad_norm:.6e}")
+    print(f"✗ FAIL: Non-zero gradient rejected: |grad| = {grad_norm:.6e}")
 
 # Test 2: SU2 History File Parsing
 print("\n" + "=" * 60)

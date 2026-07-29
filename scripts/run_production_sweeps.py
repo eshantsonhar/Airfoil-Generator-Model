@@ -98,6 +98,7 @@ def parse_args() -> argparse.Namespace:
                         help="Path to .npy initial design vector")
     parser.add_argument("--resume", action="store_true",
                         help="Skip completed cases if output files exist")
+    parser.add_argument("--no-adjoint", action="store_true", help="Skip adjoint solves and use finite-difference gradients")
     parser.add_argument("--no-mesh-deform", action="store_true", help="Disable mesh deformation")
     parser.add_argument("-v", "--verbose", action="store_true", help="Verbose output")
     return parser.parse_args()
@@ -209,6 +210,7 @@ def main() -> None:
                     use_mesh_deformation=(not args.no_mesh_deform),
                     max_iterations=args.max_iter,
                     convergence_tolerance=1e-4,
+                    use_adjoint=not args.no_adjoint,
                 )
 
                 # Run
