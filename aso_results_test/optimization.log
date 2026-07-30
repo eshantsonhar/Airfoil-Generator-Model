@@ -1,778 +1,245 @@
-2026-07-29 21:48:06 [INFO] aso_pde_optimizer: ============================================================
-2026-07-29 21:48:06 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
-2026-07-29 21:48:06 [INFO] aso_pde_optimizer: Method: mma
-2026-07-29 21:48:06 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
-2026-07-29 21:48:06 [INFO] aso_pde_optimizer: Max iterations: 3
-2026-07-29 21:48:06 [INFO] aso_pde_optimizer: ============================================================
-2026-07-29 21:48:06 [INFO] aso_pde_optimizer: SU2_CFD: .\bin\SU2_CFD.exe
-2026-07-29 21:48:06 [INFO] aso_pde_optimizer: SU2_DEF: .\bin\SU2_DEF.exe
-2026-07-29 21:48:06 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil_perfect.su2
-2026-07-29 21:48:14 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/3 ===
-2026-07-29 21:48:14 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-29 21:48:19 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-29 21:48:19 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-29 21:48:19 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-29 21:48:19 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-29 21:48:19 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: .\bin\SU2_CFD.exe
-2026-07-29 21:48:20 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in aso_results_test\cfd_cases\eval_1785341894. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
-2026-07-29 21:48:20 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
-2026-07-29 21:48:20 [ERROR] airfoil_discovery.aso.optimizer: NON-PHYSICAL DRAG: Cd=0.555608 outside bounds [0.001, 0.15]. This indicates CFD divergence or geometry error. Rejecting result.
-2026-07-29 21:48:20 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
-2026-07-29 21:48:20 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 2/3 ===
-2026-07-29 21:48:20 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-29 21:48:26 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-29 21:48:26 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-29 21:48:26 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-29 21:48:26 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-29 21:48:26 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: .\bin\SU2_CFD.exe
-2026-07-29 21:48:27 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in aso_results_test\cfd_cases\eval_1785341900. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
-2026-07-29 21:48:27 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
-2026-07-29 21:48:27 [ERROR] airfoil_discovery.aso.optimizer: NON-PHYSICAL DRAG: Cd=0.555608 outside bounds [0.001, 0.15]. This indicates CFD divergence or geometry error. Rejecting result.
-2026-07-29 21:48:27 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
-2026-07-29 21:48:27 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 3/3 ===
-2026-07-29 21:48:27 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-29 21:48:32 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-29 21:48:32 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-29 21:48:32 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-29 21:48:32 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-29 21:48:32 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: .\bin\SU2_CFD.exe
-2026-07-29 21:48:33 [ERROR] airfoil_discovery.aso.optimizer: Gradient extraction failed: No adjoint surface sensitivity file found in aso_results_test\cfd_cases\eval_1785341907. Searched patterns: ['surface_adjoint*.csv', 'surface_adjoint*.dat', '*surface_adjoint*', '*drag*surface*']
-2026-07-29 21:48:33 [WARNING] airfoil_discovery.aso.optimizer: Adjoint failed or invalid, falling back to finite difference gradient
-2026-07-29 21:48:33 [ERROR] airfoil_discovery.aso.optimizer: NON-PHYSICAL DRAG: Cd=0.555608 outside bounds [0.001, 0.15]. This indicates CFD divergence or geometry error. Rejecting result.
-2026-07-29 21:48:33 [WARNING] airfoil_discovery.aso.optimizer: CFD produced invalid Cd=1.0000e+10. Rejecting step.
-2026-07-29 21:48:33 [INFO] airfoil_discovery.aso.optimizer: Results saved to aso_results_test
-2026-07-29 21:48:33 [INFO] aso_pde_optimizer: ============================================================
-2026-07-29 21:48:33 [INFO] aso_pde_optimizer: Optimization Complete
-2026-07-29 21:48:33 [INFO] aso_pde_optimizer: Time elapsed: 24.6 seconds (0.4 minutes)
-2026-07-29 21:48:33 [INFO] aso_pde_optimizer: Total iterations: 0
-2026-07-29 21:48:33 [INFO] aso_pde_optimizer: Converged: False
-2026-07-29 21:48:33 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\aso_results_test
-2026-07-29 21:48:33 [INFO] aso_pde_optimizer: ============================================================
-2026-07-30 15:45:12 [INFO] aso_pde_optimizer: ============================================================
-2026-07-30 15:45:12 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
-2026-07-30 15:45:12 [INFO] aso_pde_optimizer: Method: mma
-2026-07-30 15:45:12 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
-2026-07-30 15:45:12 [INFO] aso_pde_optimizer: Max iterations: 3
-2026-07-30 15:45:12 [INFO] aso_pde_optimizer: ============================================================
-2026-07-30 15:45:12 [INFO] aso_pde_optimizer: SU2_CFD: .\bin\SU2_CFD.exe
-2026-07-30 15:45:12 [INFO] aso_pde_optimizer: SU2_DEF: .\bin\SU2_DEF.exe
-2026-07-30 15:45:12 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil_perfect.su2
-2026-07-30 15:45:21 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/3 ===
-2026-07-30 15:45:21 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:45:26 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:45:26 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:45:26 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:45:26 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:45:26 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:45:26 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406526
-2026-07-30 15:45:26 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:45:26 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406526\mesh_deformed.su2
-2026-07-30 15:45:26 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:45:31 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:45:31 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:45:31 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:45:31 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:45:31 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:45:31 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406531
-2026-07-30 15:45:31 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:45:31 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406531\mesh_deformed.su2
-2026-07-30 15:45:31 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:45:36 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:45:36 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:45:36 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:45:36 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:45:36 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:45:36 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406536
-2026-07-30 15:45:36 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:45:36 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406536\mesh_deformed.su2
-2026-07-30 15:45:36 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:45:41 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:45:41 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:45:41 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:45:41 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:45:41 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:45:41 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406541
-2026-07-30 15:45:42 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:45:42 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406541\mesh_deformed.su2
-2026-07-30 15:45:42 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:45:47 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:45:47 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:45:47 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:45:47 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:45:47 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:45:47 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406547
-2026-07-30 15:45:47 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:45:47 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406547\mesh_deformed.su2
-2026-07-30 15:45:47 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:45:52 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:45:52 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:45:52 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:45:52 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:45:52 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:45:52 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406552
-2026-07-30 15:45:52 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:45:52 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406552\mesh_deformed.su2
-2026-07-30 15:45:52 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:45:57 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:45:57 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:45:57 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:45:57 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:45:57 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:45:57 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406557
-2026-07-30 15:45:57 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:45:57 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406557\mesh_deformed.su2
-2026-07-30 15:45:57 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:46:02 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:46:02 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:46:02 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:46:02 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:46:02 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:46:02 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406562
-2026-07-30 15:46:02 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:46:02 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406562\mesh_deformed.su2
-2026-07-30 15:46:02 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:46:11 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:46:11 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:46:11 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:46:11 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:46:11 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:46:11 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406571
-2026-07-30 15:46:11 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:46:11 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406571\mesh_deformed.su2
-2026-07-30 15:46:11 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:46:19 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:46:19 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:46:19 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:46:19 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:46:19 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:46:19 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406579
-2026-07-30 15:46:20 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:46:20 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406579\mesh_deformed.su2
-2026-07-30 15:46:20 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:46:28 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:46:28 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:46:28 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:46:28 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:46:28 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:46:28 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406588
-2026-07-30 15:46:28 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:46:28 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406588\mesh_deformed.su2
-2026-07-30 15:46:28 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:46:33 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:46:33 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:46:33 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:46:33 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:46:33 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:46:33 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406593
-2026-07-30 15:46:34 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:46:34 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406593\mesh_deformed.su2
-2026-07-30 15:46:34 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:46:39 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:46:39 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:46:39 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:46:39 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:46:39 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:46:39 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406599
-2026-07-30 15:46:39 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:46:39 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406599\mesh_deformed.su2
-2026-07-30 15:46:39 [WARNING] airfoil_discovery.aso.optimizer: Iter 1: adjoint gradient zero or unavailable (norm=0.000e+00). Computing via finite differences.
-2026-07-30 15:46:39 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:46:44 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:46:44 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:46:44 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:46:44 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:46:44 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:46:44 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406604
-2026-07-30 15:46:44 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:46:44 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406604\mesh_deformed.su2
-2026-07-30 15:46:44 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:46:49 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:46:49 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:46:49 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:46:49 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:46:49 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:46:49 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406609
-2026-07-30 15:46:49 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:46:49 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406609\mesh_deformed.su2
-2026-07-30 15:46:49 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:46:54 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:46:54 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:46:54 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:46:54 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:46:54 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:46:54 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406614
-2026-07-30 15:46:54 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:46:54 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406614\mesh_deformed.su2
-2026-07-30 15:46:54 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:47:00 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:47:00 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:47:00 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:47:00 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:47:00 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:47:00 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406620
-2026-07-30 15:47:00 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:47:00 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406620\mesh_deformed.su2
-2026-07-30 15:47:00 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:47:08 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:47:08 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:47:08 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:47:08 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:47:08 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:47:08 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406628
-2026-07-30 15:47:08 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:47:08 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406628\mesh_deformed.su2
-2026-07-30 15:47:08 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:47:13 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:47:13 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:47:13 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:47:13 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:47:13 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:47:13 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406633
-2026-07-30 15:47:13 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:47:13 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406633\mesh_deformed.su2
-2026-07-30 15:47:13 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:47:18 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:47:18 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:47:18 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:47:18 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:47:18 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:47:18 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406638
-2026-07-30 15:47:18 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:47:18 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406638\mesh_deformed.su2
-2026-07-30 15:47:18 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:47:23 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:47:23 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:47:23 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:47:23 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:47:23 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:47:23 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406643
-2026-07-30 15:47:23 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:47:23 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406643\mesh_deformed.su2
-2026-07-30 15:47:23 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:47:28 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:47:28 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:47:28 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:47:28 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:47:28 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:47:28 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406648
-2026-07-30 15:47:28 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:47:28 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406648\mesh_deformed.su2
-2026-07-30 15:47:28 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:47:33 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:47:33 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:47:33 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:47:33 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:47:33 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:47:33 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406653
-2026-07-30 15:47:33 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:47:33 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406653\mesh_deformed.su2
-2026-07-30 15:47:33 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:47:38 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:47:38 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:47:38 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:47:38 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:47:38 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:47:38 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406658
-2026-07-30 15:47:38 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:47:38 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406658\mesh_deformed.su2
-2026-07-30 15:47:38 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:47:43 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:47:43 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:47:43 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:47:43 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:47:43 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:47:43 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406663
-2026-07-30 15:47:43 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:47:43 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406663\mesh_deformed.su2
-2026-07-30 15:47:43 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:47:48 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:47:48 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:47:48 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:47:48 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:47:48 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:47:48 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406668
-2026-07-30 15:47:48 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:47:48 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406668\mesh_deformed.su2
-2026-07-30 15:47:48 [WARNING] airfoil_discovery.aso.optimizer: Iter 1: gradient still zero after FD fallback. Backtracking and reducing move limit.
-2026-07-30 15:47:48 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 2/3 ===
-2026-07-30 15:47:48 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:47:53 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:47:53 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:47:53 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:47:53 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:47:53 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:47:53 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406673
-2026-07-30 15:47:53 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:47:53 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406673\mesh_deformed.su2
-2026-07-30 15:47:53 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:47:58 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:47:58 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:47:58 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:47:58 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:47:58 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:47:58 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406678
-2026-07-30 15:47:59 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:47:59 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406678\mesh_deformed.su2
-2026-07-30 15:47:59 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:48:03 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:48:03 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:48:03 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:48:03 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:48:03 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:48:03 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406683
-2026-07-30 15:48:04 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:48:04 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406683\mesh_deformed.su2
-2026-07-30 15:48:04 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:48:08 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:48:08 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:48:08 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:48:08 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:48:08 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:48:08 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406688
-2026-07-30 15:48:09 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:48:09 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406688\mesh_deformed.su2
-2026-07-30 15:48:09 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:48:13 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:48:13 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:48:13 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:48:13 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:48:13 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:48:13 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406693
-2026-07-30 15:48:14 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:48:14 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406693\mesh_deformed.su2
-2026-07-30 15:48:14 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:48:19 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:48:19 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:48:19 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:48:19 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:48:19 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:48:19 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406699
-2026-07-30 15:48:19 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:48:19 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406699\mesh_deformed.su2
-2026-07-30 15:48:19 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:48:24 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:48:24 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:48:24 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:48:24 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:48:24 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:48:24 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406704
-2026-07-30 15:48:24 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:48:24 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406704\mesh_deformed.su2
-2026-07-30 15:48:24 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:48:29 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:48:29 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:48:29 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:48:29 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:48:29 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:48:29 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406709
-2026-07-30 15:48:29 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:48:29 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406709\mesh_deformed.su2
-2026-07-30 15:48:29 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:48:34 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:48:34 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:48:34 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:48:34 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:48:34 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:48:34 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406714
-2026-07-30 15:48:34 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:48:34 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406714\mesh_deformed.su2
-2026-07-30 15:48:34 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:48:39 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:48:39 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:48:39 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:48:39 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:48:39 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:48:39 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406719
-2026-07-30 15:48:39 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:48:39 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406719\mesh_deformed.su2
-2026-07-30 15:48:39 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:48:44 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:48:44 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:48:44 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:48:44 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:48:44 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:48:44 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406724
-2026-07-30 15:48:44 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:48:44 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406724\mesh_deformed.su2
-2026-07-30 15:48:44 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:48:49 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:48:49 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:48:49 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:48:49 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:48:49 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:48:49 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406729
-2026-07-30 15:48:49 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:48:49 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406729\mesh_deformed.su2
-2026-07-30 15:48:49 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:48:54 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:48:54 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:48:54 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:48:54 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:48:54 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:48:54 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406734
-2026-07-30 15:48:54 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:48:54 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406734\mesh_deformed.su2
-2026-07-30 15:48:54 [WARNING] airfoil_discovery.aso.optimizer: Iter 2: adjoint gradient zero or unavailable (norm=0.000e+00). Computing via finite differences.
-2026-07-30 15:48:54 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:48:59 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:48:59 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:48:59 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:48:59 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:48:59 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:48:59 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406739
-2026-07-30 15:49:00 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:49:00 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406739\mesh_deformed.su2
-2026-07-30 15:49:00 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:49:05 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:49:05 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:49:05 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:49:05 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:49:05 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:49:05 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406745
-2026-07-30 15:49:05 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:49:05 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406745\mesh_deformed.su2
-2026-07-30 15:49:05 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:49:10 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:49:10 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:49:10 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:49:10 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:49:10 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:49:10 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406750
-2026-07-30 15:49:10 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:49:10 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406750\mesh_deformed.su2
-2026-07-30 15:49:10 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:49:15 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:49:15 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:49:15 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:49:15 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:49:15 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:49:15 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406755
-2026-07-30 15:49:15 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:49:15 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406755\mesh_deformed.su2
-2026-07-30 15:49:15 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:49:20 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:49:20 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:49:20 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:49:20 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:49:20 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:49:20 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406760
-2026-07-30 15:49:20 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:49:20 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406760\mesh_deformed.su2
-2026-07-30 15:49:20 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:49:25 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:49:25 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:49:25 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:49:25 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:49:25 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:49:25 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406765
-2026-07-30 15:49:25 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:49:25 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406765\mesh_deformed.su2
-2026-07-30 15:49:25 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:49:30 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:49:30 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:49:30 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:49:30 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:49:30 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:49:30 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406770
-2026-07-30 15:49:30 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:49:30 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406770\mesh_deformed.su2
-2026-07-30 15:49:31 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:49:35 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:49:35 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:49:35 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:49:35 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:49:35 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:49:35 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406775
-2026-07-30 15:49:36 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:49:36 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406775\mesh_deformed.su2
-2026-07-30 15:49:36 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:49:40 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:49:40 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:49:40 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:49:40 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:49:40 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:49:40 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406780
-2026-07-30 15:49:41 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:49:41 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406780\mesh_deformed.su2
-2026-07-30 15:49:41 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:49:46 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:49:46 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:49:46 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:49:46 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:49:46 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:49:46 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406786
-2026-07-30 15:49:46 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:49:46 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406786\mesh_deformed.su2
-2026-07-30 15:49:46 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:49:51 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:49:51 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:49:51 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:49:51 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:49:51 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:49:51 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406791
-2026-07-30 15:49:51 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:49:51 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406791\mesh_deformed.su2
-2026-07-30 15:49:51 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:49:59 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:49:59 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:49:59 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:49:59 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:49:59 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:49:59 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406799
-2026-07-30 15:49:59 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:49:59 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406799\mesh_deformed.su2
-2026-07-30 15:50:00 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:50:09 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:50:09 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:50:09 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:50:09 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:50:09 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:50:09 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406809
-2026-07-30 15:50:09 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:50:09 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406809\mesh_deformed.su2
-2026-07-30 15:50:09 [WARNING] airfoil_discovery.aso.optimizer: Iter 2: gradient still zero after FD fallback. Backtracking and reducing move limit.
-2026-07-30 15:50:09 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 3/3 ===
-2026-07-30 15:50:09 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:50:17 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:50:17 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:50:17 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:50:17 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:50:17 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:50:17 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406817
-2026-07-30 15:50:18 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:50:18 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406817\mesh_deformed.su2
-2026-07-30 15:50:18 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:50:26 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:50:26 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:50:26 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:50:26 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:50:26 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:50:26 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406826
-2026-07-30 15:50:26 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:50:26 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406826\mesh_deformed.su2
-2026-07-30 15:50:26 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:50:34 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:50:34 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:50:34 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:50:34 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:50:34 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:50:34 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406834
-2026-07-30 15:50:35 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:50:35 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406834\mesh_deformed.su2
-2026-07-30 15:50:35 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:50:43 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:50:43 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:50:43 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:50:43 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:50:43 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:50:43 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406843
-2026-07-30 15:50:43 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:50:43 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406843\mesh_deformed.su2
-2026-07-30 15:50:43 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:50:52 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:50:52 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:50:52 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:50:52 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:50:52 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:50:52 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406852
-2026-07-30 15:50:52 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:50:52 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406852\mesh_deformed.su2
-2026-07-30 15:50:52 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:51:00 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:51:00 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:51:00 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:51:00 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:51:00 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:51:01 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406860
-2026-07-30 15:51:01 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:51:01 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406860\mesh_deformed.su2
-2026-07-30 15:51:01 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:51:09 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:51:09 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:51:09 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:51:09 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:51:09 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:51:09 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406869
-2026-07-30 15:51:09 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:51:09 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406869\mesh_deformed.su2
-2026-07-30 15:51:09 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:51:18 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:51:18 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:51:18 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:51:18 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:51:18 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:51:18 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406878
-2026-07-30 15:51:18 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:51:18 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406878\mesh_deformed.su2
-2026-07-30 15:51:18 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:51:26 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:51:26 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:51:26 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:51:26 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:51:26 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:51:26 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406886
-2026-07-30 15:51:26 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:51:26 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406886\mesh_deformed.su2
-2026-07-30 15:51:26 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:51:35 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:51:35 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:51:35 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:51:35 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:51:35 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:51:35 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406895
-2026-07-30 15:51:35 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:51:35 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406895\mesh_deformed.su2
-2026-07-30 15:51:35 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:51:43 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:51:43 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:51:43 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:51:43 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:51:43 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:51:43 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406903
-2026-07-30 15:51:43 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:51:43 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406903\mesh_deformed.su2
-2026-07-30 15:51:43 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:51:51 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:51:51 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:51:51 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:51:51 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:51:51 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:51:51 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406911
-2026-07-30 15:51:52 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:51:52 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406911\mesh_deformed.su2
-2026-07-30 15:51:52 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:52:00 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:52:00 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:52:00 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:52:00 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:52:00 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:52:00 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406920
-2026-07-30 15:52:00 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:52:00 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406920\mesh_deformed.su2
-2026-07-30 15:52:00 [WARNING] airfoil_discovery.aso.optimizer: Iter 3: adjoint gradient zero or unavailable (norm=0.000e+00). Computing via finite differences.
-2026-07-30 15:52:00 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:52:08 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:52:08 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:52:08 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:52:08 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:52:08 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:52:08 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406928
-2026-07-30 15:52:08 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:52:08 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406928\mesh_deformed.su2
-2026-07-30 15:52:08 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:52:17 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:52:17 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:52:17 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:52:17 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:52:17 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:52:17 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406937
-2026-07-30 15:52:17 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:52:17 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406937\mesh_deformed.su2
-2026-07-30 15:52:17 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:52:25 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:52:25 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:52:25 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:52:25 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:52:25 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:52:25 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406945
-2026-07-30 15:52:25 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:52:25 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406945\mesh_deformed.su2
-2026-07-30 15:52:25 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:52:34 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:52:34 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:52:34 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:52:34 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:52:34 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:52:34 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406954
-2026-07-30 15:52:34 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:52:34 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406954\mesh_deformed.su2
-2026-07-30 15:52:34 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:52:43 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:52:43 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:52:43 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:52:43 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:52:43 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:52:43 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406963
-2026-07-30 15:52:43 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:52:43 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406963\mesh_deformed.su2
-2026-07-30 15:52:43 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:52:51 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:52:51 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:52:51 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:52:51 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:52:51 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:52:51 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406971
-2026-07-30 15:52:51 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:52:51 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406971\mesh_deformed.su2
-2026-07-30 15:52:51 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:52:59 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:52:59 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:52:59 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:52:59 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:52:59 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:52:59 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406979
-2026-07-30 15:52:59 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:52:59 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406979\mesh_deformed.su2
-2026-07-30 15:52:59 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:53:08 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:53:08 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:53:08 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:53:08 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:53:08 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:53:08 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406988
-2026-07-30 15:53:08 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:53:08 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406988\mesh_deformed.su2
-2026-07-30 15:53:08 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:53:16 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:53:16 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:53:16 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:53:16 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:53:16 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:53:16 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785406996
-2026-07-30 15:53:16 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:53:16 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785406996\mesh_deformed.su2
-2026-07-30 15:53:16 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:53:25 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:53:25 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:53:25 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:53:25 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:53:25 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:53:25 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785407005
-2026-07-30 15:53:25 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:53:25 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785407005\mesh_deformed.su2
-2026-07-30 15:53:25 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:53:34 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:53:34 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:53:34 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:53:34 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:53:34 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:53:34 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785407014
-2026-07-30 15:53:34 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:53:34 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785407014\mesh_deformed.su2
-2026-07-30 15:53:34 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:53:42 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:53:42 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:53:42 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:53:42 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:53:42 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:53:42 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785407022
-2026-07-30 15:53:42 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:53:42 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785407022\mesh_deformed.su2
-2026-07-30 15:53:43 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
-2026-07-30 15:53:48 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
-2026-07-30 15:53:48 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5939248942
-2026-07-30 15:53:48 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5556079344
-2026-07-30 15:53:48 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.593925, CD=0.555608, converged=True
-2026-07-30 15:53:48 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
-2026-07-30 15:53:48 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785407028
-2026-07-30 15:53:48 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
-2026-07-30 15:53:48 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785407028\mesh_deformed.su2
-2026-07-30 15:53:48 [WARNING] airfoil_discovery.aso.optimizer: Iter 3: gradient still zero after FD fallback. Backtracking and reducing move limit.
-2026-07-30 15:53:48 [INFO] airfoil_discovery.aso.optimizer: Results saved to aso_results_test
-2026-07-30 15:53:48 [INFO] aso_pde_optimizer: ============================================================
-2026-07-30 15:53:48 [INFO] aso_pde_optimizer: Optimization Complete
-2026-07-30 15:53:48 [INFO] aso_pde_optimizer: Time elapsed: 513.6 seconds (8.6 minutes)
-2026-07-30 15:53:48 [INFO] aso_pde_optimizer: Total iterations: 0
-2026-07-30 15:53:48 [INFO] aso_pde_optimizer: Converged: False
-2026-07-30 15:53:48 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\aso_results_test
-2026-07-30 15:53:48 [INFO] aso_pde_optimizer: ============================================================
+2026-07-30 20:53:13 [INFO] aso_pde_optimizer: ============================================================
+2026-07-30 20:53:13 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-07-30 20:53:13 [INFO] aso_pde_optimizer: Method: mma
+2026-07-30 20:53:13 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-07-30 20:53:13 [INFO] aso_pde_optimizer: Max iterations: 1
+2026-07-30 20:53:13 [INFO] aso_pde_optimizer: ============================================================
+2026-07-30 20:53:13 [INFO] aso_pde_optimizer: SU2_CFD: .\bin\SU2_CFD.exe
+2026-07-30 20:53:13 [INFO] aso_pde_optimizer: SU2_DEF: .\bin\SU2_DEF.exe
+2026-07-30 20:53:13 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\cache\final_test\airfoil_perfect.su2
+2026-07-30 20:53:16 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/1 ===
+2026-07-30 20:53:16 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:53:19 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:53:19 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:53:19 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:53:19 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:53:19 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:53:19 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\def_1785424999
+2026-07-30 20:53:19 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:19 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\def_1785424999\mesh_deformed.su2
+2026-07-30 20:53:19 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_0_1785424999
+2026-07-30 20:53:19 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:19 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_0_1785424999\mesh_deformed.su2
+2026-07-30 20:53:19 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:53:22 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:53:22 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:53:22 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:53:22 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:53:22 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:53:22 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_1_1785425002
+2026-07-30 20:53:22 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:22 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_1_1785425002\mesh_deformed.su2
+2026-07-30 20:53:22 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:53:25 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:53:25 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:53:25 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:53:25 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:53:25 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:53:25 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_2_1785425005
+2026-07-30 20:53:25 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:25 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_2_1785425005\mesh_deformed.su2
+2026-07-30 20:53:25 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:53:28 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:53:28 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:53:28 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:53:28 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:53:28 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:53:28 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_3_1785425008
+2026-07-30 20:53:28 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:28 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_3_1785425008\mesh_deformed.su2
+2026-07-30 20:53:28 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:53:31 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:53:31 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:53:31 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:53:31 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:53:31 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:53:31 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_4_1785425011
+2026-07-30 20:53:31 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:31 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_4_1785425011\mesh_deformed.su2
+2026-07-30 20:53:31 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:53:34 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:53:34 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:53:34 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:53:34 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:53:34 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:53:34 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_5_1785425014
+2026-07-30 20:53:35 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:35 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_5_1785425014\mesh_deformed.su2
+2026-07-30 20:53:35 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:53:37 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:53:37 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:53:37 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:53:37 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:53:37 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:53:37 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_6_1785425017
+2026-07-30 20:53:38 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:38 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_6_1785425017\mesh_deformed.su2
+2026-07-30 20:53:38 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:53:40 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:53:40 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:53:40 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:53:40 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:53:40 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:53:40 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_7_1785425020
+2026-07-30 20:53:40 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:40 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_7_1785425020\mesh_deformed.su2
+2026-07-30 20:53:40 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:53:43 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:53:43 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:53:43 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:53:43 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:53:43 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:53:43 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_8_1785425023
+2026-07-30 20:53:43 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:43 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_8_1785425023\mesh_deformed.su2
+2026-07-30 20:53:43 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:53:46 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:53:46 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:53:46 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:53:46 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:53:46 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:53:46 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_9_1785425026
+2026-07-30 20:53:47 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:47 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_9_1785425026\mesh_deformed.su2
+2026-07-30 20:53:47 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:53:50 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:53:50 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:53:50 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:53:50 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:53:50 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:53:50 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_10_1785425030
+2026-07-30 20:53:50 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:50 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_10_1785425030\mesh_deformed.su2
+2026-07-30 20:53:50 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:53:52 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:53:52 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:53:52 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:53:52 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:53:52 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:53:53 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_11_1785425032
+2026-07-30 20:53:53 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:53 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_11_1785425032\mesh_deformed.su2
+2026-07-30 20:53:53 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:53:55 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:53:55 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:53:55 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:53:55 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:53:55 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:53:55 [WARNING] airfoil_discovery.aso.optimizer: Iter 1: adjoint gradient zero or unavailable (norm=0.000e+00). Computing via finite differences.
+2026-07-30 20:53:55 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_0_1785425035
+2026-07-30 20:53:56 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:56 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_0_1785425035\mesh_deformed.su2
+2026-07-30 20:53:56 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:53:58 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:53:58 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:53:58 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:53:58 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:53:58 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:53:58 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_1_1785425038
+2026-07-30 20:53:58 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:53:58 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_1_1785425038\mesh_deformed.su2
+2026-07-30 20:53:58 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:54:01 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:54:01 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:54:01 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:54:01 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:54:01 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:54:01 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_2_1785425041
+2026-07-30 20:54:01 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:54:01 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_2_1785425041\mesh_deformed.su2
+2026-07-30 20:54:01 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:54:04 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:54:04 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:54:04 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:54:04 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:54:04 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:54:04 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_3_1785425044
+2026-07-30 20:54:05 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:54:05 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_3_1785425044\mesh_deformed.su2
+2026-07-30 20:54:05 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:54:08 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:54:08 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:54:08 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:54:08 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:54:08 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:54:08 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_4_1785425048
+2026-07-30 20:54:08 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:54:08 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_4_1785425048\mesh_deformed.su2
+2026-07-30 20:54:08 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:54:11 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:54:11 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:54:11 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:54:11 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:54:11 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:54:11 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_5_1785425051
+2026-07-30 20:54:11 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:54:11 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_5_1785425051\mesh_deformed.su2
+2026-07-30 20:54:11 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:54:14 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:54:14 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:54:14 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:54:14 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:54:14 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:54:14 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_6_1785425054
+2026-07-30 20:54:14 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:54:14 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_6_1785425054\mesh_deformed.su2
+2026-07-30 20:54:14 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:54:17 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:54:17 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:54:17 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:54:17 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:54:17 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:54:17 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_7_1785425057
+2026-07-30 20:54:18 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:54:18 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_7_1785425057\mesh_deformed.su2
+2026-07-30 20:54:18 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:54:20 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:54:20 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:54:20 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:54:20 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:54:20 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:54:20 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_8_1785425060
+2026-07-30 20:54:21 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:54:21 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_8_1785425060\mesh_deformed.su2
+2026-07-30 20:54:21 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:54:24 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:54:24 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:54:24 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:54:24 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:54:24 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:54:24 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_9_1785425064
+2026-07-30 20:54:24 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:54:24 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_9_1785425064\mesh_deformed.su2
+2026-07-30 20:54:24 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:54:26 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:54:26 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:54:26 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:54:26 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:54:26 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:54:27 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_10_1785425066
+2026-07-30 20:54:27 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:54:27 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_10_1785425066\mesh_deformed.su2
+2026-07-30 20:54:27 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:54:30 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:54:30 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:54:30 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:54:30 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:54:30 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:54:30 [INFO] airfoil_discovery.aso.mesh_deform: Running SU2_DEF: .\bin\SU2_DEF.exe config_deform.cfg in aso_results_test\cfd_cases\fd_def_11_1785425070
+2026-07-30 20:54:30 [INFO] airfoil_discovery.aso.mesh_deform: SU2_DEF completed successfully (rc=0)
+2026-07-30 20:54:30 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_results_test\cfd_cases\fd_def_11_1785425070\mesh_deformed.su2
+2026-07-30 20:54:30 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: .\bin\SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-30 20:54:33 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[P]', 'rms[U]', 'rms[V]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff']
+2026-07-30 20:54:33 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.5706907695
+2026-07-30 20:54:33 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5840924417
+2026-07-30 20:54:33 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.570691, CD=0.584092, converged=True
+2026-07-30 20:54:33 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-07-30 20:54:33 [WARNING] airfoil_discovery.aso.optimizer: Iter 1: gradient still zero after FD fallback. Backtracking and reducing move limit.
+2026-07-30 20:54:33 [INFO] airfoil_discovery.aso.optimizer: Results saved to aso_results_test
+2026-07-30 20:54:33 [INFO] aso_pde_optimizer: ============================================================
+2026-07-30 20:54:33 [INFO] aso_pde_optimizer: Optimization Complete
+2026-07-30 20:54:33 [INFO] aso_pde_optimizer: Time elapsed: 78.2 seconds (1.3 minutes)
+2026-07-30 20:54:33 [INFO] aso_pde_optimizer: Total iterations: 0
+2026-07-30 20:54:33 [INFO] aso_pde_optimizer: Converged: False
+2026-07-30 20:54:33 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\aso_results_test
+2026-07-30 20:54:33 [INFO] aso_pde_optimizer: ============================================================

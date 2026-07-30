@@ -805,7 +805,7 @@ class ASOObjectiveFunction:
         # If gradient not available, compute via finite differences as fallback
         return self._finite_difference_gradient(dv)
 
-    def _finite_difference_gradient(self, dv: np.ndarray, eps: float = 1e-5) -> np.ndarray:
+    def _finite_difference_gradient(self, dv: np.ndarray, eps: float = 1e-3) -> np.ndarray:
         """Fallback: compute gradient via forward finite differences."""
         grad = np.zeros_like(dv)
         if self._last_result is not None and self._last_dv is not None and np.array_equal(dv, self._last_dv):
@@ -813,14 +813,92 @@ class ASOObjectiveFunction:
         else:
             f0 = self(dv)
 
+        # Save the baseline mesh path before FD perturbations
+        baseline_mesh = self.current_mesh_path
+        baseline_dv = self._previous_dv_stored.copy() if self._previous_dv_stored is not None else None
+
         for i in range(len(dv)):
             dv_pert = dv.copy()
             dv_pert[i] += eps
-            fi = self(dv_pert)
+
+            # Deform mesh from baseline to perturbed design BEFORE CFD evaluation
+            if self.use_mesh_deformation and self.su2_def_bin and baseline_dv is not None:
+                def_dir = self.case_root / f"fd_def_{i}_{int(time.time())}"
+                deformed = deform_mesh(
+                    su2_def_bin=self.su2_def_bin,
+                    original_mesh_path=baseline_mesh,
+                    dv_old=baseline_dv,
+                    dv_new=dv_pert,
+                    work_dir=def_dir,
+                )
+                if deformed is not None:
+                    self.current_mesh_path = deformed
+                else:
+                    logger.warning(f"FD perturbation {i}: mesh deformation failed, using baseline mesh")
+                    self.current_mesh_path = baseline_mesh
+            else:
+                self.current_mesh_path = baseline_mesh
+
+            fi = self._evaluate_cfd_only(dv_pert)
             grad[i] = (fi - f0) / eps
 
+            # Restore baseline mesh for next perturbation
+            self.current_mesh_path = baseline_mesh
+
+        # Restore baseline state
+        self._previous_dv_stored = baseline_dv
         self._last_gradient = grad
         return grad
+
+    def _evaluate_cfd_only(self, dv: np.ndarray) -> float:
+        """
+        Evaluate CFD only (no mesh deformation post-processing).
+        Used by the FD gradient loop to avoid interfering with mesh tracking.
+        """
+        valid, reason = check_geometry_validity(dv, bounds=self.bounds)
+        if not valid:
+            logger.warning(f"Invalid geometry: {reason}")
+            return 1e10
+
+        case_dir = self.case_root / f"eval_{int(time.time())}"
+        result = run_primal_and_adjoint(
+            su2_cfd_bin=self.su2_cfd_bin,
+            su2_adj_bin=self.su2_cfd_bin,
+            mesh_path=self.current_mesh_path,
+            dv=dv,
+            case_dir=case_dir,
+            aoa_deg=self.aoa_deg,
+            reynolds=self.reynolds,
+            mach=self.mach,
+            n_iter_primal=self.n_iter_primal,
+            n_iter_adjoint=self.n_iter_adjoint,
+            cfl_primal=self.cfl_primal,
+            cfl_adjoint=self.cfl_adjoint,
+            transition_model=self.transition_model,
+            turbulence_intensity=self.turbulence_intensity,
+            turb_viscosity_ratio=self.turb_viscosity_ratio,
+            objective=self.objective,
+            use_adjoint=self.use_adjoint,
+        )
+
+        if not result.converged:
+            logger.warning(f"CFD not converged: {result.failure_reason}")
+            return 1e10
+
+        cl_lower = -0.5
+        cl_upper = 2.5
+        cd_lower = 0.001
+        cd_upper = 1.0
+
+        if result.cl < cl_lower or result.cl > cl_upper:
+            logger.error(f"NON-PHYSICAL LIFT: Cl={result.cl:.6f}. Rejecting.")
+            return 1e10
+
+        if result.cd < cd_lower or result.cd > cd_upper:
+            logger.error(f"NON-PHYSICAL DRAG: Cd={result.cd:.6f}. Rejecting.")
+            return 1e10
+
+        return result.cd
 
     def _deform_mesh_for_next(self, dv_new: np.ndarray) -> None:
         """Deform the mesh from previous to new shape."""

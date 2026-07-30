@@ -31,6 +31,7 @@ def generate_su2_def_config(
     n_iter: int = 500,
     young_modulus: float = 1e6,
     poisson_ratio: float = 0.3,
+    new_airfoil_dat: str = "airfoil_new.dat",
 ) -> str:
     """
     Generate an SU2_DEF configuration file for mesh deformation.
@@ -50,6 +51,8 @@ def generate_su2_def_config(
         Number of FEA iterations for deformation.
     young_modulus, poisson_ratio : float
         Material properties for elasticity analogy.
+    new_airfoil_dat : str
+        Filename of the target airfoil coordinates .dat file.
 
     Returns
     -------
@@ -80,6 +83,9 @@ def generate_su2_def_config(
         f"DEFORM_LINEAR_SOLVER_ERROR= 1e-10",
         f"DEFORM_NONLINEAR_ITER= {n_iter}",
         f"DEFORM_CONSOLE_OUTPUT= YES",
+        "",
+        f"% ------------ Boundary Displacement ------------",
+        f"MARKER_DEFORM_MESH= ( {marker}, FILE, {new_airfoil_dat}, 1.0 )",
         "",
         f"% ------------ Elasticity Parameters ------------",
         f"DEFORM_ELASTICITY_MODULUS= {young_modulus}",
@@ -271,6 +277,7 @@ def deform_mesh(
         mesh_output=mesh_output.name,
         marker=marker,
         n_iter=n_iter_def,
+        new_airfoil_dat=new_dat.name,
     )
     def_config.write_text(config_text, encoding="utf-8")
 
