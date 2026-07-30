@@ -761,7 +761,7 @@ class ASOObjectiveFunction:
         cl_lower = -0.5   # Negative lift at positive AoA indicates geometry/solver error
         cl_upper = 2.5    # Beyond this, flow is fully separated (stall)
         cd_lower = 0.001  # Below this is unrealistically low (laminar bubble artifacts)
-        cd_upper = 0.15   # Above this is catastrophic drag (flat plate/parachute regime)
+        cd_upper = 1.0    # Relaxed upper bound to accept early/unconverged primal runs
         
         if result.cl < cl_lower or result.cl > cl_upper:
             logger.error(

@@ -267,6 +267,7 @@ def main() -> None:
         use_mesh_deformation=args.mesh_deform and not args.no_mesh_deform,
         max_iterations=args.max_iter,
         convergence_tolerance=args.tol,
+        use_adjoint=not args.no_adjoint,
     )
 
     # Run optimization
