@@ -1,0 +1,5 @@
+CL: -1484.397472
+CD: 4891.827475
+L/D: -0.30
+Converged: False
+Primal Converged: False

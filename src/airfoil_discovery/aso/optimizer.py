@@ -20,11 +20,9 @@ import datetime
 import json
 import logging
 import signal
-import subprocess
 import os
 import shutil
 import time
-import traceback
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Callable, Dict, List, Optional, Tuple, Any
@@ -48,6 +46,9 @@ from .mesh_deform import deform_mesh, compute_mesh_displacement
 from .subprocess_utils import run_solver_safe
 
 logger = logging.getLogger(__name__)
+
+CFD_FAILURE_CD = 1.0
+GRADIENT_NORM_WARNING_THRESHOLD = 1e3
 
 
 _STALE_SU2_OUTPUTS = (
@@ -350,9 +351,10 @@ def run_primal_and_adjoint(
         reynolds=reynolds,
         mach=mach,
         n_iter=n_iter_primal,
-        cfl_initial=cfl_primal,
-        cfl_final=cfl_primal,
-        cfl_adapt=False,
+        cfl_initial=1.5,
+        cfl_final=50.0,
+        cfl_adapt=True,
+        use_cfl_adapt=True,
         transition_model=transition_model,
         turbulence_intensity=turbulence_intensity,
         turb_viscosity_ratio=turb_viscosity_ratio,
@@ -413,28 +415,27 @@ def run_primal_and_adjoint(
     su2_adj_bin = su2_cfd_bin  # SU2 uses the same binary with different config
 
     logger.info(f"Running adjoint CFD: {su2_adj_bin}")
-    try:
-        adj_result = subprocess.run(
-            [su2_adj_bin, adj_cfg.name],
-            cwd=case_dir,
-            capture_output=True,
-            text=True,
-            timeout=timeout_adjoint,
-            creationflags=creation_flags,
-        )
-    except subprocess.TimeoutExpired:
+    adj_ok, adj_rc, adj_stdout, adj_stderr = run_solver_safe(
+        [su2_adj_bin, adj_cfg.name],
+        case_dir,
+        label="SU2_CFD adjoint",
+        timeout=timeout_adjoint,
+    )
+    if not adj_ok:
+        (case_dir / "su2_adjoint_stdout.log").write_text(adj_stdout, encoding="utf-8", errors="ignore")
+        (case_dir / "su2_adjoint_stderr.log").write_text(adj_stderr, encoding="utf-8", errors="ignore")
         return CFDResult(
             cl=cl, cd=cd, converged=False,
             adjoint_gradient=np.zeros(N_DESIGN_VARS), gradient_valid=False,
             primal_converged=primal_conv, adjoint_converged=False,
-            case_dir=case_dir, mesh_path=mesh_path,
-            failure_reason=f"Adjoint CFD timed out after {timeout_adjoint}s",
+            case_dir=case_dir, mesh_path=mesh_in_case,
+            failure_reason=f"Adjoint CFD failed (rc={adj_rc}): {adj_stderr[:500]}",
         )
 
-    (case_dir / "su2_adjoint_stdout.log").write_text(adj_result.stdout, encoding="utf-8", errors="ignore")
-    (case_dir / "su2_adjoint_stderr.log").write_text(adj_result.stderr, encoding="utf-8", errors="ignore")
+    (case_dir / "su2_adjoint_stdout.log").write_text(adj_stdout, encoding="utf-8", errors="ignore")
+    (case_dir / "su2_adjoint_stderr.log").write_text(adj_stderr, encoding="utf-8", errors="ignore")
 
-    adj_conv = (adj_result.returncode == 0)
+    adj_conv = True
 
     # ── 5. Extract gradient (if adjoint succeeded) ──
     try:
@@ -506,14 +507,14 @@ def _parse_history(history_path: Path) -> Tuple[float, float, bool]:
     # Ensure we have matching header/value counts
     if len(values) != len(header):
         logger.warning(f"Header/value count mismatch: {len(header)} headers, {len(values)} values")
-        # Try to use positional parsing as fallback
+        # Try to use positional parsing as fallback, but do not claim convergence
+        # because column-aligned residual checks are unavailable.
         if len(values) >= 8:
-            # Common SU2 format: Iter, Time, CL, CD, ... (positions 2, 3)
             try:
                 cl = float(values[2])
                 cd = float(values[3])
                 logger.warning(f"Using positional parsing: CL={cl}, CD={cd}")
-                return cl, cd, True
+                return cl, cd, False
             except (ValueError, IndexError):
                 return 0.0, 0.0, False
         return 0.0, 0.0, False
@@ -567,85 +568,88 @@ def _parse_history(history_path: Path) -> Tuple[float, float, bool]:
         logger.warning(f"Failed to parse CL/CD values: cl_str='{cl_str}', cd_str='{cd_str}', error={e}")
         return 0.0, 0.0, False
 
-    # Check for convergence from RMS residual info
-    rms_cols = [k for k in mapping if k.startswith("RMS_") or "rms" in k.lower()]
-    converged = True  # default to converged if we got numbers
-    forces_stabilized = True
-    
-    if len(values) > 3:
-        # Check if the last few CL values show stabilization
-        data_rows = []
-        for line in lines[1:]:
-            s = line.strip()
-            if s and s != ',':
-                vals = [v.strip() for v in s.split(",")]
-                if len(vals) == len(header):
-                    data_rows.append(vals)
+    if not np.isfinite(cl) or not np.isfinite(cd):
+        logger.warning(f"Non-finite force coefficients detected: CL={cl}, CD={cd}")
+        return cl, cd, False
 
-        if len(data_rows) > 10:
-            last_cls = []
-            last_cds = []
-            for row in data_rows[-10:]:
-                row_map = dict(zip(header, row))
-                cl_v = row_map.get("CL") or row_map.get("LIFT") or "0.0"
-                cd_v = row_map.get("CD") or row_map.get("DRAG") or "0.0"
+    if cd <= 0.0 or abs(cl) > 10.0 or cd > 10.0:
+        logger.warning(f"Out-of-range force coefficients detected: CL={cl}, CD={cd}")
+        return cl, cd, False
+
+    data_rows = []
+    for line in lines[1:]:
+        s = line.strip()
+        if s and s != ',':
+            vals = [v.strip() for v in s.split(",")]
+            if len(vals) == len(header):
+                data_rows.append(dict(zip(header, vals)))
+
+    if len(data_rows) < 2:
+        return cl, cd, False
+
+    def row_float(row: Dict[str, str], candidates: List[str]) -> Optional[float]:
+        for candidate in candidates:
+            if candidate in row:
                 try:
-                    last_cls.append(float(cl_v))
-                    last_cds.append(float(cd_v))
+                    value = float(row[candidate])
                 except (ValueError, TypeError):
-                    pass
+                    return None
+                return value if np.isfinite(value) else None
+        upper_map = {key.upper(): key for key in row}
+        for candidate in candidates:
+            key = upper_map.get(candidate.upper())
+            if key is not None:
+                try:
+                    value = float(row[key])
+                except (ValueError, TypeError):
+                    return None
+                return value if np.isfinite(value) else None
+        return None
 
-            if len(last_cls) > 3:
-                cl_std = np.std(last_cls)
-                cl_mean = np.mean(np.abs(last_cls))
-                cd_std = np.std(last_cds)
-                cd_mean = np.mean(np.abs(last_cds))
-                
-                # Check if forces are stabilized (low relative std)
-                if cl_mean > 1e-10 and cl_std / cl_mean > 0.1:
-                    forces_stabilized = False
-                if cd_mean > 1e-10 and cd_std / cd_mean > 0.1:
-                    forces_stabilized = False
-                
-                if not forces_stabilized:
-                    converged = False  # Forces still oscillating significantly
+    rms_cols = [k for k in header if k.startswith("rms[") or k.startswith("RMS_") or "rms" in k.lower()]
+    residual_converged = False
+    residual_drop = 0.0
+    if rms_cols:
+        last_residuals = []
+        for col in rms_cols:
+            value = row_float(data_rows[-1], [col])
+            if value is not None:
+                last_residuals.append(value)
+        residual_converged = bool(last_residuals) and min(last_residuals) <= -8.0
 
-    # Low-Re relaxation: if forces are stabilized and residual dropped >= 1 order, accept
-    if not converged and forces_stabilized and rms_cols:
-        # Check residual drop
-        if len(data_rows) > 20:
-            first_rms = None
-            last_rms = None
-            for row in data_rows[:10]:
-                row_map = dict(zip(header, row))
-                for rms_col in rms_cols:
-                    if rms_col in row_map:
-                        try:
-                            first_rms = float(row_map[rms_col])
-                            break
-                        except (ValueError, TypeError):
-                            pass
-                if first_rms is not None:
-                    break
-            
-            for row in data_rows[-10:]:
-                row_map = dict(zip(header, row))
-                for rms_col in rms_cols:
-                    if rms_col in row_map:
-                        try:
-                            last_rms = float(row_map[rms_col])
-                            break
-                        except (ValueError, TypeError):
-                            pass
-                if last_rms is not None:
-                    break
-            
-            if first_rms is not None and last_rms is not None:
-                if first_rms != 0:
-                    residual_drop = np.log10(abs(first_rms)) - np.log10(abs(last_rms))
-                    if residual_drop >= 1.0:
-                        logger.info(f"Low-Re relaxation: forces stabilized, residual dropped {residual_drop:.2f} orders. Accepting as converged.")
-                        converged = True
+        first_primary = row_float(data_rows[0], [rms_cols[0]])
+        last_primary = row_float(data_rows[-1], [rms_cols[0]])
+        if first_primary is not None and last_primary is not None:
+            residual_drop = first_primary - last_primary
+
+    force_window = data_rows[-min(100, len(data_rows)):]
+    cl_window = []
+    cd_window = []
+    for row in force_window:
+        cl_v = row_float(row, cl_candidates)
+        cd_v = row_float(row, cd_candidates)
+        if cl_v is not None and cd_v is not None:
+            cl_window.append(cl_v)
+            cd_window.append(cd_v)
+
+    forces_stabilized = False
+    if len(cl_window) >= 10 and len(cd_window) >= 10:
+        cl_span = float(np.max(cl_window) - np.min(cl_window))
+        cd_span = float(np.max(cd_window) - np.min(cd_window))
+        forces_stabilized = cl_span <= 1e-5 and cd_span <= 1e-5
+        if not forces_stabilized:
+            logger.info(
+                "Force convergence window not flat enough: "
+                f"CL span={cl_span:.3e}, CD span={cd_span:.3e}"
+            )
+
+    converged = residual_converged or (forces_stabilized and residual_drop >= 1.0)
+    if not converged:
+        logger.warning(
+            "CFD history did not satisfy convergence checks: "
+            f"residual_converged={residual_converged}, "
+            f"residual_drop={residual_drop:.3f}, forces_stabilized={forces_stabilized}"
+        )
 
     return cl, cd, converged
 
@@ -765,7 +769,7 @@ class ASOObjectiveFunction:
 
         if not result.converged:
             logger.warning(f"CFD not converged: {result.failure_reason}")
-            return 1e10  # Large penalty for non-converged CFD
+            return CFD_FAILURE_CD
 
         # ── AERODYNAMIC SANITY BOUNDS ──
         # Physical limits for 2D airfoil at Re=100,000, AoA=4°
@@ -780,14 +784,14 @@ class ASOObjectiveFunction:
                 f"NON-PHYSICAL LIFT: Cl={result.cl:.6f} outside bounds [{cl_lower}, {cl_upper}]. "
                 f"This indicates geometry/solver error. Rejecting result."
             )
-            return 1e10
+            return CFD_FAILURE_CD
         
         if result.cd < cd_lower or result.cd > cd_upper:
             logger.error(
                 f"NON-PHYSICAL DRAG: Cd={result.cd:.6f} outside bounds [{cd_lower}, {cd_upper}]. "
                 f"This indicates CFD divergence or geometry error. Rejecting result."
             )
-            return 1e10
+            return CFD_FAILURE_CD
 
         if self.use_mesh_deformation and self.su2_def_bin and self._previous_dv_stored is not None:
             self._deform_mesh_for_next(dv)
@@ -810,6 +814,12 @@ class ASOObjectiveFunction:
         grad : np.ndarray, shape (12,)
         """
         if self._last_gradient is not None:
+            grad_norm = float(np.linalg.norm(self._last_gradient))
+            if grad_norm > GRADIENT_NORM_WARNING_THRESHOLD:
+                logger.warning(
+                    f"Large gradient norm {grad_norm:.3e}; "
+                    "possible CFD non-convergence or noisy force history."
+                )
             return self._last_gradient
         if not self.use_adjoint:
             self._last_gradient = self._finite_difference_gradient(dv)
@@ -817,7 +827,7 @@ class ASOObjectiveFunction:
         # If gradient not available, compute via finite differences as fallback
         return self._finite_difference_gradient(dv)
 
-    def _finite_difference_gradient(self, dv: np.ndarray, eps: float = 0.1) -> np.ndarray:
+    def _finite_difference_gradient(self, dv: np.ndarray, eps: float = 1e-5) -> np.ndarray:
         """
         Compute gradient via forward finite differences.
 
@@ -826,7 +836,7 @@ class ASOObjectiveFunction:
         dv : np.ndarray, shape (12,)
             Current design vector.
         eps : float
-            Perturbation step size. Default 0.1 (~1.7% chord displacement).
+            Perturbation step size. Default 1e-5 for CST coefficients (reduced from 1e-3 for stability).
         """
         # Save the original baseline mesh BEFORE calling f0 = self(dv),
         # because __call__ will call _deform_mesh_for_next which changes
@@ -835,10 +845,22 @@ class ASOObjectiveFunction:
         original_dv = self.dv_initial if hasattr(self, 'dv_initial') else self._previous_dv_stored
 
         grad = np.zeros_like(dv)
-        if self._last_result is not None and self._last_dv is not None and np.array_equal(dv, self._last_dv):
+        if (
+            self._last_result is not None
+            and self._last_result.converged
+            and self._last_dv is not None
+            and np.array_equal(dv, self._last_dv)
+        ):
             f0 = self._last_result.cd
         else:
             f0 = self(dv)
+        if not np.isfinite(f0) or f0 >= CFD_FAILURE_CD:
+            logger.warning(
+                "Baseline CFD did not converge cleanly for finite differences; "
+                "returning a zero gradient to avoid contaminating the optimizer."
+            )
+            self._last_gradient = grad
+            return grad
 
         # Save the baseline mesh path before FD perturbations
         baseline_mesh = self.current_mesh_path
@@ -878,7 +900,14 @@ class ASOObjectiveFunction:
                 self.current_mesh_path = baseline_mesh
 
             fi = self._evaluate_cfd_only(dv_pert)
-            grad[i] = (fi - f0) / eps
+            if not np.isfinite(fi) or fi >= CFD_FAILURE_CD:
+                logger.warning(
+                    f"[FD Step {i+1}/{n_vars}] Perturbed CFD invalid/non-converged; "
+                    "leaving gradient component at 0.0"
+                )
+                grad[i] = 0.0
+            else:
+                grad[i] = (fi - f0) / eps
 
             logger.info(f"[FD Step {i+1}/{n_vars}] f0={f0:.6f}, fi={fi:.6f}, grad[{i}]={grad[i]:.6e}")
 
@@ -887,6 +916,12 @@ class ASOObjectiveFunction:
 
         # Restore baseline state
         self._previous_dv_stored = baseline_dv
+        grad_norm = float(np.linalg.norm(grad))
+        if grad_norm > GRADIENT_NORM_WARNING_THRESHOLD:
+            logger.warning(
+                f"Large finite-difference gradient norm {grad_norm:.3e}; "
+                "possible CFD non-convergence or noisy force history."
+            )
         self._last_gradient = grad
         return grad
 
@@ -923,7 +958,7 @@ class ASOObjectiveFunction:
 
         if not result.converged:
             logger.warning(f"CFD not converged: {result.failure_reason}")
-            return 1e10
+            return CFD_FAILURE_CD
 
         cl_lower = -0.5
         cl_upper = 2.5
@@ -932,11 +967,11 @@ class ASOObjectiveFunction:
 
         if result.cl < cl_lower or result.cl > cl_upper:
             logger.error(f"NON-PHYSICAL LIFT: Cl={result.cl:.6f}. Rejecting.")
-            return 1e10
+            return CFD_FAILURE_CD
 
         if result.cd < cd_lower or result.cd > cd_upper:
             logger.error(f"NON-PHYSICAL DRAG: Cd={result.cd:.6f}. Rejecting.")
-            return 1e10
+            return CFD_FAILURE_CD
 
         return result.cd
 

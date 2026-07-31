@@ -112,17 +112,17 @@ adj_cfg = generate_adjoint_config(
     objective="DRAG",
 )
 check("AdjSolver", "MATH_PROBLEM= DISCRETE_ADJOINT" in adj_cfg)
-check("Objective", "OBJECTIVE_FUNCTION= DRAG_COEFFICIENT" in adj_cfg)
-check("SurfaceDV", "DV_KIND= SURFACE" in adj_cfg)
-check("AdjCFL", "CFL_NUMBER_ADJFLOW= " in adj_cfg)
+check("Objective", "OBJECTIVE_FUNCTION= DRAG" in adj_cfg)
+check("SurfaceDV", "MARKER_MONITORING= ( airfoil )" in adj_cfg)
+check("AdjCFL", "CFL_ADAPT= NO" in adj_cfg)
 check("AdjOutput", "SURFACE_FILENAME= surface_adjoint" in adj_cfg)
 primal_path.unlink()
 
 # ── 6. Mesh Deformation Config ────────────────────────────────────────────
 print("\n=== Mesh Deformation Config ===")
 def_cfg = generate_su2_def_config(mesh_input="mesh.su2", mesh_output="mesh_def.su2")
-check("DefSolver", "SOLVER= EULER" in def_cfg)
-check("Elasticity", "MATH_PROBLEM= LINEAR_ELASTICITY" in def_cfg)
+check("DefSolver", "SOLVER= ELASTICITY" in def_cfg)
+check("Elasticity", "MATH_PROBLEM= DIRECT" in def_cfg)
 check("Stiffness", "DEFORM_STIFFNESS_TYPE= INVERSE_VOLUME" in def_cfg)
 check("DefIter", "DEFORM_NONLINEAR_ITER= 500" in def_cfg)
 

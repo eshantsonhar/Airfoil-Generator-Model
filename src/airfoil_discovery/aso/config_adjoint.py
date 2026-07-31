@@ -156,6 +156,8 @@ def generate_adjoint_config(
         f"% ------------ Time Integration ------------",
         "TIME_DISCRE_FLOW= EULER_IMPLICIT",
         "TIME_DISCRE_TURB= EULER_IMPLICIT",
+        f"CFL_REDUCTION_ADJFLOW= {cfl_adjoint}",
+        f"CFL_REDUCTION_ADJTURB= {cfl_adjoint}",
         "CFL_ADAPT= NO",
         "",
         f"% ------------ Iterations ------------",

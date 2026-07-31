@@ -1,0 +1,17 @@
+
+
+Error in "void CConfig::SetPostprocessing(SU2_COMPONENT, short unsigned int, short unsigned int)": 
+-------------------------------------------------------------------------
+Sutherland's law only valid for ideal gases in incompressible flows.
+ Must use VISCOSITY_MODEL=CONSTANT_VISCOSITY and set viscosity with
+ MU_CONSTANT, or use DENSITY_MODEL= VARIABLE with FLUID_MODEL= INC_IDEAL_GAS or INC_IDEAL_GAS_POLY for VISCOSITY_MODEL=SUTHERLAND.
+ NOTE: FREESTREAM_VISCOSITY is no longer used for incompressible flows!
+------------------------------ Error Exit -------------------------------
+
+
+
+job aborted:
+[ranks] message
+
+[0] application aborted
+aborting MPI_COMM_WORLD (comm=0x44000000), error 1, comm rank 0

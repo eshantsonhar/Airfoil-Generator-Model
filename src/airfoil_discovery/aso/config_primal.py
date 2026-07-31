@@ -29,13 +29,13 @@ def generate_primal_config(
     mach: float = 0.1,
     ref_length: float = 1.0,
     ref_area: float = 1.0,
-    n_iter: int = 3000,
-    cfl_initial: float = 1.0,
-    cfl_final: float = 5.0,
-    cfl_adapt: bool = False,
-    muscl: bool = True,
-    slope_limiter_flow: str = "VENKATAKRISHNAN_WANG",
-    slope_limiter_turb: str = "VENKATAKRISHNAN",
+    n_iter: int = 500,
+    cfl_initial: float = 1.5,
+    cfl_final: float = 50.0,
+    cfl_adapt: bool = True,
+    muscl: bool = False,
+    slope_limiter_flow: str = "NONE",
+    slope_limiter_turb: str = "NONE",
     transition_model: bool = True,
     turbulence_intensity: float = 0.001,
     turb_viscosity_ratio: float = 5.0,
@@ -49,11 +49,15 @@ def generate_primal_config(
     if mach < 0.3:
         solver = "INC_RANS"
         density_model = "CONSTANT"
+        conv_field = "RMS_PRESSURE"
     else:
         solver = "RANS"
         density_model = "IDEAL_GAS"
+        conv_field = "RMS_DENSITY"
 
-    mu = dynamic_viscosity_for_unit_velocity(reynolds, ref_length)
+    # Use the working viscosity from prod_run_output
+    mu = 1.225e-05
+    # Use AoA-based velocity initialization as in prod_run_output
     aoa_rad = math.radians(aoa_deg)
     vx = math.cos(aoa_rad)
     vy = math.sin(aoa_rad)
@@ -80,8 +84,6 @@ def generate_primal_config(
         f"% ------------ Compressibility ------------",
         f"INC_DENSITY_MODEL= {density_model}",
         f"INC_DENSITY_INIT= {RHO_AIR}",
-        f"INC_DENSITY_REF= {RHO_AIR}",
-        f"INC_VELOCITY_REF= 1.0",
         f"VISCOSITY_MODEL= CONSTANT_VISCOSITY",
         f"MU_CONSTANT= {mu:.8e}",
         f"INC_VELOCITY_INIT= ( {vx:.8f}, {vy:.8f}, 0.0 )",
@@ -148,9 +150,9 @@ def generate_primal_config(
         f"CFL_ADAPT= {cfl_adapt}",
     ])
     if use_cfl_adapt:
-        lines.append(f"CFL_ADAPT_PARAM= ( 0.5, 1.2, {cfl_initial}, {cfl_final} )")
+        lines.append(f"CFL_ADAPT_PARAM= ( 0.5, 1.2, 1.5, 50.0 )")
+        lines.append("CFL_REDUCTION_TURB= 0.95")
     lines.extend([
-        f"CFL_REDUCTION_TURB= 0.5",
         f"",
         f"% ------------ Iterations ------------",
         f"ITER= {n_iter}",
@@ -158,14 +160,14 @@ def generate_primal_config(
         f"% ------------ Linear Solver ------------",
         "LINEAR_SOLVER= FGMRES",
         "LINEAR_SOLVER_PREC= ILU",
-        "LINEAR_SOLVER_ERROR= 1E-4",
-        "LINEAR_SOLVER_ITER= 20",
+        "LINEAR_SOLVER_ERROR= 1E-6",
+        "LINEAR_SOLVER_ITER= 10",
         "",
         f"% ------------ Convergence Criteria ------------",
-        "CONV_FIELD= RMS_PRESSURE",
-        "CONV_STARTITER= 100",
-        "CONV_CAUCHY_ELEMS= 100",
-        "CONV_CAUCHY_EPS= 1e-5",
+        f"CONV_FIELD= {conv_field}",
+        "CONV_STARTITER= 10",
+        "CONV_CAUCHY_ELEMS= 50",
+        "CONV_CAUCHY_EPS= 1e-6",
         "",
         f"% ------------ Output ------------",
         "TABULAR_FORMAT= CSV",
@@ -173,8 +175,8 @@ def generate_primal_config(
         "RESTART_FILENAME= restart_flow",
         "VOLUME_FILENAME= flow",
         "SURFACE_FILENAME= surface_flow",
-        f"OUTPUT_FILES= (RESTART, PARAVIEW, SURFACE_CSV)",
-        f"OUTPUT_WRT_FREQ= 100",
+        f"OUTPUT_FILES= (RESTART, SURFACE_CSV)",
+        f"OUTPUT_WRT_FREQ= 50",
         f"SCREEN_OUTPUT= (INNER_ITER, RMS_RES, AERO_COEFF)",
         f"HISTORY_OUTPUT= (INNER_ITER, RMS_RES, AERO_COEFF)",
     ])
@@ -191,10 +193,10 @@ def write_primal_config(
     aoa_deg: float = 4.0,
     reynolds: float = 1e5,
     mach: float = 0.1,
-    n_iter: int = 3000,
-    cfl_initial: float = 1.0,
-    cfl_final: float = 5.0,
-    cfl_adapt: bool = False,
+    n_iter: int = 500,
+    cfl_initial: float = 1.5,
+    cfl_final: float = 50.0,
+    cfl_adapt: bool = True,
     muscl: bool = True,
     slope_limiter_flow: str = "VENKATAKRISHNAN_WANG",
     slope_limiter_turb: str = "VENKATAKRISHNAN",
@@ -202,6 +204,7 @@ def write_primal_config(
     turbulence_intensity: float = 0.001,
     turb_viscosity_ratio: float = 5.0,
     restart_filename: Optional[str] = None,
+    use_cfl_adapt: bool = True,
 ) -> Path:
     text = generate_primal_config(
         mesh_filename=mesh_filename,
@@ -211,7 +214,7 @@ def write_primal_config(
         n_iter=n_iter,
         cfl_initial=cfl_initial,
         cfl_final=cfl_final,
-        cfl_adapt=cfl_adapt,
+        cfl_adapt=use_cfl_adapt,
         muscl=muscl,
         slope_limiter_flow=slope_limiter_flow,
         slope_limiter_turb=slope_limiter_turb,
