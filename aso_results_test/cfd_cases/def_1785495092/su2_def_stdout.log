@@ -1,0 +1,92 @@
+
+-------------------------------------------------------------------------
+|    ___ _   _ ___                                                      |
+|   / __| | | |_  )   Release 8.4.0 "Harrier"                           |
+|   \__ \ |_| |/ /                                                      |
+|   |___/\___//___|   Suite (Mesh Deformation Code)                     |
+|                                                                       |
+-------------------------------------------------------------------------
+| SU2 Project Website: https://su2code.github.io                        |
+|                                                                       |
+| The SU2 Project is maintained by the SU2 Foundation                   |
+| (http://su2foundation.org)                                            |
+-------------------------------------------------------------------------
+| Copyright 2012-2026, SU2 Contributors                                 |
+|                                                                       |
+| SU2 is free software; you can redistribute it and/or                  |
+| modify it under the terms of the GNU Lesser General Public            |
+| License as published by the Free Software Foundation; either          |
+| version 2.1 of the License, or (at your option) any later version.    |
+|                                                                       |
+| SU2 is distributed in the hope that it will be useful,                |
+| but WITHOUT ANY WARRANTY; without even the implied warranty of        |
+| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU      |
+| Lesser General Public License for more details.                       |
+|                                                                       |
+| You should have received a copy of the GNU Lesser General Public      |
+| License along with SU2. If not, see <http://www.gnu.org/licenses/>.   |
+-------------------------------------------------------------------------
+
+----------------- Physical Case Definition ( Zone 0 ) -------------------
+Input mesh file name: mesh_original.su2
+
+---------------- Grid deformation parameters ( Zone 0 )  ----------------
+Grid deformation using linear elasticity method.
+
+-------------------- Output Information ( Zone 0 ) ----------------------
+Output mesh file name: mesh_deformed.su2. 
+Cell stiffness scaled by inverse of the cell volume.
+
+------------- Config File Boundary Information ( Zone 0 ) ---------------
++-----------------------------------------------------------------------+
+|                        Marker Type|                        Marker Name|
++-----------------------------------------------------------------------+
+|                          Far-field|                           farfield|
++-----------------------------------------------------------------------+
+|           Deformable mesh boundary|                            airfoil|
+|                                   |                               FILE|
+|                                   |                    airfoil_new.dat|
+|                                   |                                1.0|
++-----------------------------------------------------------------------+
+|                     Heat flux wall|                            airfoil|
++-----------------------------------------------------------------------+
+Two dimensional problem.
+11249 grid points.
+11249 volume elements.
+2 surface markers.
+359 boundary elements in index 0 (Marker = airfoil).
+120 boundary elements in index 1 (Marker = farfield).
+479 triangles.
+10770 quadrilaterals.
+
+----------------------- Preprocessing computations ----------------------
+Setting local point connectivity.
+Checking the numerical grid orientation of the interior elements.
+There has been a re-orientation of 479 TRIANGLE volume elements.
+There has been a re-orientation of 10770 QUADRILATERAL volume elements.
+There has been a re-orientation of 359 LINE surface elements.
+Identify edges and vertices.
+  Info: Ignoring the following volume output fields/groups:
+  SOLUTION
+Volume output fields: COORDINATES
+Screen output fields: 
+History output group(s): 
+Warning: No (valid) fields chosen for convergence monitoring. Convergence monitoring inactive.
+Warning: No (valid) fields chosen for time convergence monitoring. Time convergence monitoring inactive.
+
+Completed in 0.000002 seconds on 1 core.
+
+----------------------- Write deformed grid files -----------------------
+|SU2 mesh                           |mesh_deformed.su2                  |
+
+------------------------- Finalize Solver -------------------------
+Deleted CNumerics container.
+Deleted CSolver container.
+Deleted CGeometry container.
+Deleted CSurfaceMovement class.
+Deleted CVolumetricMovement class.
+Deleted CConfig container.
+Deleted COutput class.
+
+------------------------- Exit Success (SU2_DEF) ------------------------
+

@@ -22,6 +22,7 @@ import logging
 import signal
 import subprocess
 import os
+import shutil
 import time
 import traceback
 from dataclasses import dataclass, field, asdict
@@ -44,8 +45,35 @@ from .config_primal import generate_primal_config, write_primal_config
 from .config_adjoint import generate_adjoint_config, write_adjoint_config
 from .adjoint import extract_adjoint_gradient, verify_adjoint_gradient
 from .mesh_deform import deform_mesh, compute_mesh_displacement
+from .subprocess_utils import run_solver_safe
 
 logger = logging.getLogger(__name__)
+
+
+_STALE_SU2_OUTPUTS = (
+    "solution_flow.dat",
+    "solution_flow.csv",
+    "history.csv",
+    "history.vtk",
+    "restart_flow.dat",
+    "flow.vtu",
+    "surface_flow.csv",
+)
+
+
+def _new_case_dir(case_root: Path, prefix: str) -> Path:
+    """Create a unique case directory without reusing old solver outputs."""
+    case_dir = case_root / f"{prefix}_{time.time_ns()}"
+    case_dir.mkdir(parents=True, exist_ok=False)
+    return case_dir
+
+
+def _remove_stale_solver_outputs(case_dir: Path) -> None:
+    """Remove SU2 outputs that could otherwise be mistaken for fresh results."""
+    for name in _STALE_SU2_OUTPUTS:
+        path = case_dir / name
+        if path.exists():
+            path.unlink()
 
 
 # ── Emergency State for Signal Handlers ────────────────────────────────────────
@@ -303,13 +331,14 @@ def run_primal_and_adjoint(
     CFDResult
     """
     case_dir.mkdir(parents=True, exist_ok=True)
-    # Copy mesh to case directory using the original filename to ensure SU2 can find it
-    mesh_name = mesh_path.name
+    _remove_stale_solver_outputs(case_dir)
 
-    # Copy mesh to case directory
+    # Always present the selected mesh to SU2_CFD with a fixed local name.
+    # This makes every eval_* directory self-contained and avoids hardcoded
+    # baseline mesh references in generated configs.
+    mesh_name = "mesh_deformed.su2"
     mesh_in_case = case_dir / mesh_name
-    if mesh_path != mesh_in_case:
-        import shutil
+    if mesh_path.resolve() != mesh_in_case.resolve():
         shutil.copy2(mesh_path, mesh_in_case)
 
     # ── 1. Write primal config ──
@@ -331,45 +360,27 @@ def run_primal_and_adjoint(
 
     # ── 2. Run primal ──
     logger.info(f"Running primal CFD: {su2_cfd_bin}, AoA={aoa_deg}°, Re={reynolds:.1e}")
-    creation_flags = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+    primal_ok, primal_rc, primal_stdout, primal_stderr = run_solver_safe(
+        [su2_cfd_bin, primal_cfg.name],
+        case_dir,
+        label="SU2_CFD primal",
+        timeout=timeout_primal,
+    )
 
-    try:
-        primal_result = subprocess.run(
-            [su2_cfd_bin, primal_cfg.name],
-            cwd=case_dir,
-            capture_output=True,
-            text=True,
-            timeout=timeout_primal,
-            creationflags=creation_flags,
-        )
-    except subprocess.TimeoutExpired:
+    # Save logs regardless of outcome
+    (case_dir / "su2_primal_stdout.log").write_text(primal_stdout, encoding="utf-8", errors="ignore")
+    (case_dir / "su2_primal_stderr.log").write_text(primal_stderr, encoding="utf-8", errors="ignore")
+
+    if not primal_ok:
+        failure_reason = f"Primal CFD failed (rc={primal_rc})"
+        if primal_stderr:
+            failure_reason += f": {primal_stderr[:500]}"
         return CFDResult(
             cl=0.0, cd=0.0, converged=False,
             adjoint_gradient=np.zeros(N_DESIGN_VARS), gradient_valid=False,
             primal_converged=False, adjoint_converged=False,
-            case_dir=case_dir, mesh_path=mesh_path,
-            failure_reason=f"Primal CFD timed out after {timeout_primal}s",
-        )
-    except FileNotFoundError:
-        return CFDResult(
-            cl=0.0, cd=0.0, converged=False,
-            adjoint_gradient=np.zeros(N_DESIGN_VARS), gradient_valid=False,
-            primal_converged=False, adjoint_converged=False,
-            case_dir=case_dir, mesh_path=mesh_path,
-            failure_reason=f"SU2_CFD binary not found: {su2_cfd_bin}",
-        )
-
-    # Save logs
-    (case_dir / "su2_primal_stdout.log").write_text(primal_result.stdout, encoding="utf-8", errors="ignore")
-    (case_dir / "su2_primal_stderr.log").write_text(primal_result.stderr, encoding="utf-8", errors="ignore")
-
-    if primal_result.returncode != 0:
-        return CFDResult(
-            cl=0.0, cd=0.0, converged=False,
-            adjoint_gradient=np.zeros(N_DESIGN_VARS), gradient_valid=False,
-            primal_converged=False, adjoint_converged=False,
-            case_dir=case_dir, mesh_path=mesh_path,
-            failure_reason=f"Primal CFD failed (rc={primal_result.returncode}): {primal_result.stderr[:500]}",
+            case_dir=case_dir, mesh_path=mesh_in_case,
+            failure_reason=failure_reason,
         )
 
     # ── 3. Extract Cl, Cd from history ──
@@ -696,6 +707,7 @@ class ASOObjectiveFunction:
         self.use_adjoint = use_adjoint
         self._last_gradient: Optional[np.ndarray] = None
         self._last_result: Optional[CFDResult] = None
+        self._last_dv: Optional[np.ndarray] = None
 
         # Previous design vector for mesh deformation tracking
         self._previous_dv_stored = previous_dv
@@ -727,7 +739,7 @@ class ASOObjectiveFunction:
         self._last_dv = dv.copy()
 
         # Run CFD evaluation
-        case_dir = self.case_root / f"eval_{int(time.time())}"
+        case_dir = _new_case_dir(self.case_root, "eval")
         result = run_primal_and_adjoint(
             su2_cfd_bin=self.su2_cfd_bin,
             su2_adj_bin=self.su2_cfd_bin,
@@ -805,8 +817,23 @@ class ASOObjectiveFunction:
         # If gradient not available, compute via finite differences as fallback
         return self._finite_difference_gradient(dv)
 
-    def _finite_difference_gradient(self, dv: np.ndarray, eps: float = 1e-3) -> np.ndarray:
-        """Fallback: compute gradient via forward finite differences."""
+    def _finite_difference_gradient(self, dv: np.ndarray, eps: float = 0.1) -> np.ndarray:
+        """
+        Compute gradient via forward finite differences.
+
+        Parameters
+        ----------
+        dv : np.ndarray, shape (12,)
+            Current design vector.
+        eps : float
+            Perturbation step size. Default 0.1 (~1.7% chord displacement).
+        """
+        # Save the original baseline mesh BEFORE calling f0 = self(dv),
+        # because __call__ will call _deform_mesh_for_next which changes
+        # self.current_mesh_path and self._previous_dv_stored.
+        original_mesh = self.mesh_path  # permanent reference to the baseline mesh
+        original_dv = self.dv_initial if hasattr(self, 'dv_initial') else self._previous_dv_stored
+
         grad = np.zeros_like(dv)
         if self._last_result is not None and self._last_dv is not None and np.array_equal(dv, self._last_dv):
             f0 = self._last_result.cd
@@ -817,13 +844,16 @@ class ASOObjectiveFunction:
         baseline_mesh = self.current_mesh_path
         baseline_dv = self._previous_dv_stored.copy() if self._previous_dv_stored is not None else None
 
-        for i in range(len(dv)):
+        n_vars = len(dv)
+        for i in range(n_vars):
             dv_pert = dv.copy()
             dv_pert[i] += eps
 
+            logger.info(f"[FD Step {i+1}/{n_vars}] Perturbing DV[{i}] by {eps:.2e}")
+
             # Deform mesh from baseline to perturbed design BEFORE CFD evaluation
             if self.use_mesh_deformation and self.su2_def_bin and baseline_dv is not None:
-                def_dir = self.case_root / f"fd_def_{i}_{int(time.time())}"
+                def_dir = _new_case_dir(self.case_root, f"fd_def_{i}")
                 deformed = deform_mesh(
                     su2_def_bin=self.su2_def_bin,
                     original_mesh_path=baseline_mesh,
@@ -833,14 +863,24 @@ class ASOObjectiveFunction:
                 )
                 if deformed is not None:
                     self.current_mesh_path = deformed
+                    # Verify deformed mesh exists and log its metadata
+                    if deformed.exists():
+                        mtime = deformed.stat().st_mtime
+                        size = deformed.stat().st_size
+                        logger.info(f"[FD Step {i+1}/{n_vars}] Deformed mesh: {deformed} ({size} bytes, mtime={mtime:.0f})")
+                    else:
+                        logger.error(f"[FD Step {i+1}/{n_vars}] Deformed mesh file missing: {deformed}")
+                        self.current_mesh_path = baseline_mesh
                 else:
-                    logger.warning(f"FD perturbation {i}: mesh deformation failed, using baseline mesh")
+                    logger.warning(f"[FD Step {i+1}/{n_vars}] Mesh deformation failed, using baseline mesh")
                     self.current_mesh_path = baseline_mesh
             else:
                 self.current_mesh_path = baseline_mesh
 
             fi = self._evaluate_cfd_only(dv_pert)
             grad[i] = (fi - f0) / eps
+
+            logger.info(f"[FD Step {i+1}/{n_vars}] f0={f0:.6f}, fi={fi:.6f}, grad[{i}]={grad[i]:.6e}")
 
             # Restore baseline mesh for next perturbation
             self.current_mesh_path = baseline_mesh
@@ -860,7 +900,7 @@ class ASOObjectiveFunction:
             logger.warning(f"Invalid geometry: {reason}")
             return 1e10
 
-        case_dir = self.case_root / f"eval_{int(time.time())}"
+        case_dir = _new_case_dir(self.case_root, "eval")
         result = run_primal_and_adjoint(
             su2_cfd_bin=self.su2_cfd_bin,
             su2_adj_bin=self.su2_cfd_bin,
@@ -904,7 +944,7 @@ class ASOObjectiveFunction:
         """Deform the mesh from previous to new shape."""
         if self._previous_dv_stored is None or self.su2_def_bin is None:
             return
-        def_dir = self.case_root / f"def_{int(time.time())}"
+        def_dir = _new_case_dir(self.case_root, "def")
         deformed = deform_mesh(
             su2_def_bin=self.su2_def_bin,
             original_mesh_path=self.current_mesh_path,
@@ -1323,7 +1363,7 @@ class PDEOptimizer:
                 dv = x_candidate.copy()
                 # Deform mesh to new shape
                 if self.use_mesh_deformation and self.su2_def_bin and iteration > 1:
-                    def_dir = self.case_root / f"def_iter_{iteration}"
+                    def_dir = _new_case_dir(self.case_root, f"def_iter_{iteration}")
                     deformed = deform_mesh(
                         su2_def_bin=self.su2_def_bin,
                         original_mesh_path=self.obj_function.current_mesh_path,
