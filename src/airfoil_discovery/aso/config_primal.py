@@ -46,14 +46,13 @@ def generate_primal_config(
     """
     Generate the full text of an SU2 primal configuration file.
     """
-    if mach < 0.3:
-        solver = "INC_RANS"
-        density_model = "CONSTANT"
-        conv_field = "RMS_PRESSURE"
-    else:
-        solver = "RANS"
-        density_model = "IDEAL_GAS"
-        conv_field = "RMS_DENSITY"
+    # Force compressible RANS for transition modeling support
+    # Transition model (LM) requires compressible RANS solver
+    solver = "RANS"
+    density_model = "IDEAL_GAS"
+    conv_field = "RMS_DENSITY"
+    conv_scheme = "ROE"
+    use_inc_density = False
 
     # Use the working viscosity from prod_run_output
     mu = 1.225e-05
@@ -65,7 +64,27 @@ def generate_primal_config(
     trans_model = "LM" if transition_model else "NONE"
     cfl_number = cfl_initial
     use_cfl_adapt = cfl_adapt
-    cfl_adapt = "YES" if use_cfl_adapt else "NO"
+    cfl_adapt_str = "YES" if use_cfl_adapt else "NO"
+    
+    # Transition model requires specific numerical schemes
+    if transition_model:
+        # Use ROE with MUSCL for transition modeling
+        conv_scheme = "ROE"
+        muscl = True
+        slope_limiter_flow = "VENKATAKRISHNAN_WANG"
+        venkat_coeff = 0.03  # Lower coefficient for transition stability
+        conv_scheme_turb = "SCALAR_UPWIND"
+        muscl_turb = False
+        n_iter = 1500  # More iterations for transition convergence
+    else:
+        # Conservative settings for SST-only
+        conv_scheme = "ROE"
+        muscl = muscl
+        slope_limiter_flow = slope_limiter_flow if muscl else "NONE"
+        venkat_coeff = 0.05
+        conv_scheme_turb = "SCALAR_UPWIND"
+        muscl_turb = muscl
+        n_iter = n_iter
 
     lines = [
         f"% ------- SU2 Primal Configuration -------",
@@ -82,12 +101,24 @@ def generate_primal_config(
         f"KIND_TRANS_MODEL= {trans_model}",
         f"",
         f"% ------------ Compressibility ------------",
-        f"INC_DENSITY_MODEL= {density_model}",
-        f"INC_DENSITY_INIT= {RHO_AIR}",
-        f"VISCOSITY_MODEL= CONSTANT_VISCOSITY",
-        f"MU_CONSTANT= {mu:.8e}",
-        f"INC_VELOCITY_INIT= ( {vx:.8f}, {vy:.8f}, 0.0 )",
-        f"",
+    ]
+    
+    if use_inc_density:
+        lines.extend([
+            f"INC_DENSITY_MODEL= {density_model}",
+            f"INC_DENSITY_INIT= {RHO_AIR}",
+            f"VISCOSITY_MODEL= CONSTANT_VISCOSITY",
+            f"MU_CONSTANT= {mu:.8e}",
+            f"INC_VELOCITY_INIT= ( {vx:.8f}, {vy:.8f}, 0.0 )",
+        ])
+    else:
+        lines.extend([
+            f"VISCOSITY_MODEL= CONSTANT_VISCOSITY",
+            f"MU_CONSTANT= {mu:.8e}",
+        ])
+    
+    lines.extend([
+        "",
         f"% ------------ Freestream ------------",
         f"MACH_NUMBER= {mach}",
         f"AOA= {aoa_deg}",
@@ -105,7 +136,7 @@ def generate_primal_config(
         f"REF_AREA= {ref_area}",
         f"",
         f"% ------------ Transition Model Parameters ------------",
-    ]
+    ])
 
     if transition_model:
         lines.extend([
@@ -132,25 +163,26 @@ def generate_primal_config(
         "MARKER_PLOTTING= ( airfoil )",
         "",
         f"% ------------ Numerical Method ------------",
-        "CONV_NUM_METHOD_FLOW= FDS",
-        "NUM_METHOD_GRAD= WEIGHTED_LEAST_SQUARES",
+        f"CONV_NUM_METHOD_FLOW= {conv_scheme}",
+        f"CONV_NUM_METHOD_TURB= {conv_scheme_turb}",
+        "NUM_METHOD_GRAD= GREEN_GAUSS",
         "NUM_METHOD_GRAD_RECON= LEAST_SQUARES",
         "",
         f"% ------------ MUSCL & Limiter ------------",
         f"MUSCL_FLOW= {'YES' if muscl else 'NO'}",
-        f"MUSCL_TURB= {'YES' if muscl else 'NO'}",
+        f"MUSCL_TURB= {'YES' if muscl_turb else 'NO'}",
         f"SLOPE_LIMITER_FLOW= {slope_limiter_flow if muscl else 'NONE'}",
-        f"SLOPE_LIMITER_TURB= {slope_limiter_turb if muscl else 'NONE'}",
-        "VENKAT_LIMITER_COEFF= 0.05",
+        f"SLOPE_LIMITER_TURB= {slope_limiter_turb if muscl_turb else 'NONE'}",
+        f"VENKAT_LIMITER_COEFF= {venkat_coeff}",
         "",
         f"% ------------ Time Integration ------------",
         f"TIME_DISCRE_FLOW= EULER_IMPLICIT",
         f"TIME_DISCRE_TURB= EULER_IMPLICIT",
         f"CFL_NUMBER= {cfl_number}",
-        f"CFL_ADAPT= {cfl_adapt}",
+        f"CFL_ADAPT= {cfl_adapt_str}",
     ])
     if use_cfl_adapt:
-        lines.append(f"CFL_ADAPT_PARAM= ( 0.5, 1.2, 1.5, 50.0 )")
+        lines.append(f"CFL_ADAPT_PARAM= ( 0.5, 1.2, 1.0, 30.0 )")
         lines.append("CFL_REDUCTION_TURB= 0.95")
     lines.extend([
         f"",

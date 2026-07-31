@@ -6,20 +6,20 @@ Total iterations: 5
 Converged: False
 
 Final Design Variables (CST coefficients):
-  Upper: [0.155 0.255 0.3   0.21  0.12  0.06 ]
-  Lower: [-0.165  -0.095  -0.065  -0.03   -0.005  -0.0025]
+  Upper: [0.105 0.205 0.22  0.13  0.06  0.02 ]
+  Lower: [-0.115  -0.045  -0.015   0.01    0.025   0.0125]
 
-Final Objective (Cd): 0.102124
-Final Cl: 0.493324
+Final Objective (Cd): 0.364807
+Final Cl: 0.386384
 
 Convergence History (first 5 and last 5):
-  Iter   1: Cd=0.115308, Cl=0.475334, |grad|=0.274231
-  Iter   2: Cd=0.115308, Cl=0.475334, |grad|=71.485075
-  Iter   3: Cd=0.102125, Cl=0.493321, |grad|=43.851583
-  Iter   4: Cd=0.102125, Cl=0.493323, |grad|=25.819462
-  Iter   5: Cd=0.102124, Cl=0.493324, |grad|=43.851723
-  Iter   1: Cd=0.115308, Cl=0.475334, |grad|=0.274231
-  Iter   2: Cd=0.115308, Cl=0.475334, |grad|=71.485075
-  Iter   3: Cd=0.102125, Cl=0.493321, |grad|=43.851583
-  Iter   4: Cd=0.102125, Cl=0.493323, |grad|=25.819462
-  Iter   5: Cd=0.102124, Cl=0.493324, |grad|=43.851723
+  Iter   1: Cd=0.590242, Cl=1.546541, |grad|=0.068360
+  Iter   2: Cd=0.590242, Cl=1.546541, |grad|=0.068360
+  Iter   3: Cd=0.217624, Cl=1.170578, |grad|=0.220612
+  Iter   4: Cd=0.299214, Cl=0.636631, |grad|=0.412408
+  Iter   5: Cd=0.364807, Cl=0.386384, |grad|=0.420358
+  Iter   1: Cd=0.590242, Cl=1.546541, |grad|=0.068360
+  Iter   2: Cd=0.590242, Cl=1.546541, |grad|=0.068360
+  Iter   3: Cd=0.217624, Cl=1.170578, |grad|=0.220612
+  Iter   4: Cd=0.299214, Cl=0.636631, |grad|=0.412408
+  Iter   5: Cd=0.364807, Cl=0.386384, |grad|=0.420358

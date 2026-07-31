@@ -36,7 +36,8 @@ def parse_surface_sensitivity_file(
     Parse an SU2 surface_adjoint CSV file containing nodal sensitivities.
 
     SU2 v8 format (surface_adjoint.csv):
-      x, y, z, dJ/dx, dJ/dy, dJ/dz
+      PointID, x, y, Adjoint_Density, Adjoint_Momentum_x, Adjoint_Momentum_y, 
+      Adjoint_Energy, Sensitivity_x, Sensitivity_y, Surface_Sensitivity
 
     Parameters
     ----------
@@ -48,14 +49,16 @@ def parse_surface_sensitivity_file(
     x_surf : np.ndarray, shape (N,)
         x-coordinates of surface nodes.
     dJ_dx : np.ndarray, shape (N,)
+        dJ/dx
     dJ_dy : np.ndarray, shape (N,)
+        dJ/dy
     """
     if not filepath.exists():
         raise FileNotFoundError(f"Surface sensitivity file not found: {filepath}")
 
     try:
         data = np.loadtxt(filepath, delimiter=",", skiprows=1)
-    except Exception as e:
+    except Exception:
         # Try space-delimited format
         data = np.loadtxt(filepath, skiprows=1)
 
@@ -64,12 +67,51 @@ def parse_surface_sensitivity_file(
     if data.shape[1] < 5:
         raise ValueError(
             f"Surface file has {data.shape[1]} columns, expected >= 5 "
-            f"(x, y, z, dJ/dx, dJ/dy, ...)"
-        )
+            f"(x, y, z, dJ/dx, dJ/dy, ...)")
 
-    x_surf = data[:, 0]
-    dJ_dx = data[:, 3]
-    dJ_dy = data[:, 4]
+    # Try to detect column format by checking header
+    try:
+        with open(filepath, 'r') as f:
+            header = f.readline().strip().split(',')
+        
+        # Map column names to indices
+        col_map = {name.strip().strip('"'): i for i, name in enumerate(header)}
+        
+        x_surf = data[:, col_map.get('x', 1)]
+        
+        # Check if individual sensitivity columns exist and have non-zero values
+        sens_x_col = col_map.get('Sensitivity_x', None)
+        sens_y_col = col_map.get('Sensitivity_y', None)
+        surf_sens_col = col_map.get('Surface_Sensitivity', None)
+        
+        if sens_x_col is not None and sens_y_col is not None:
+            dJ_dx = data[:, sens_x_col]
+            dJ_dy = data[:, sens_y_col]
+            
+            # If individual sensitivities are all zero, use surface sensitivity
+            if np.all(np.abs(dJ_dx) < 1e-15) and np.all(np.abs(dJ_dy) < 1e-15):
+                if surf_sens_col is not None:
+                    logger.warning("Individual sensitivities are zero, using Surface_Sensitivity column")
+                    # Use surface sensitivity as dJ/dy (normal direction approximation)
+                    dJ_dy = data[:, surf_sens_col]
+                    # Set dJ/dx to zero for normal-only sensitivity
+                    dJ_dx = np.zeros_like(dJ_dy)
+                else:
+                    logger.warning("No valid sensitivity data found")
+                    dJ_dx = np.zeros_like(x_surf)
+                    dJ_dy = np.zeros_like(x_surf)
+        else:
+            # Fallback to old format
+            x_surf = data[:, 0]
+            dJ_dx = data[:, 3]
+            dJ_dy = data[:, 4]
+            
+    except Exception as e:
+        # Fallback to old format if header parsing fails
+        logger.warning(f"Header parsing failed, using fallback format: {e}")
+        x_surf = data[:, 0]
+        dJ_dx = data[:, 3]
+        dJ_dy = data[:, 4]
 
     return x_surf, dJ_dx, dJ_dy
 

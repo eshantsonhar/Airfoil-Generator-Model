@@ -1,0 +1,26 @@
+============================================================
+PDE-Constrained Aerodynamic Shape Optimization Results
+============================================================
+Method: SLSQP
+Total iterations: 50
+Converged: False
+
+Final Design Variables (CST coefficients):
+  Upper: [0.255 0.205 0.22  0.21  0.12  0.02 ]
+  Lower: [-0.115  -0.045  -0.015   0.01    0.025   0.0125]
+
+Final Objective (Cd): 0.497837
+Final Cl: 1.930631
+
+Convergence History (first 5 and last 5):
+  Iter   1: Cd=0.590242, Cl=1.546541, |grad|=0.038492
+  Iter   2: Cd=0.590242, Cl=1.546541, |grad|=0.038492
+  Iter   3: Cd=0.306619, Cl=1.768312, |grad|=0.092276
+  Iter   4: Cd=0.420912, Cl=1.938176, |grad|=0.183387
+  Iter   5: Cd=0.497837, Cl=1.930631, |grad|=0.174604
+  ... (40 intermediate iterations) ...
+  Iter  46: Cd=0.497837, Cl=1.930631, |grad|=0.174604
+  Iter  47: Cd=0.497837, Cl=1.930631, |grad|=0.174604
+  Iter  48: Cd=0.497837, Cl=1.930631, |grad|=0.174604
+  Iter  49: Cd=0.497837, Cl=1.930631, |grad|=0.174604
+  Iter  50: Cd=0.497837, Cl=1.930631, |grad|=0.174604

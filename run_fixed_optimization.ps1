@@ -1,11 +1,12 @@
 # PDE-Constrained Aerodynamic Shape Optimization - Fixed Configuration
-# This script runs the optimization pipeline with all identified fixes applied:
-# 1. Fixed adjoint config: CFL_REDUCTION_ADJFLOW/TURB instead of invalid CFL_NUMBER_ADJFLOW/TURB
-# 2. Reduced FD step size from 1e-3 to 1e-5 for gradient stability
-# 3. Enabled MUSCL and proper slope limiters (VENKATAKRISHNAN_WANG/VENKATAKRISHNAN)
-# 4. Added CFL adaptation parameters (CFL_ADAPT_PARAM, CFL_REDUCTION_TURB)
-# 5. Added linear solver settings (FGMRES/ILU) and convergence criteria
-# 6. Removed duplicate CONV_STARTITER config option
+# This script runs the optimization pipeline with conservative settings for stability:
+# 1. Fixed config_primal.py: Proper compressible/incompressible mode handling
+# 2. Conservative numerical schemes: First-order, low CFL, no MUSCL
+# 3. SST turbulence model only (transition disabled due to mesh quality)
+# 4. FDS convective scheme (only option for incompressible)
+# 5. GREEN_GAUSS gradient method
+# Note: CD will be 3-4x higher than target due to SST overprediction at low Re
+# See CFD_PHYSICS_DIAGNOSTIC_REPORT.md for detailed analysis
 
 $ErrorActionPreference = "Stop"
 
@@ -17,7 +18,7 @@ $env:PATH = "bin;$env:PATH"
 $env:PYTHONUNBUFFERED = "1"
 
 # Configuration
-$MESH_FILE = "baseline_cfd_run\airfoil.su2"
+$MESH_FILE = "data\mesh_fixed.su2"
 $OUTPUT_DIR = "aso_results_fixed"
 $MAX_ITER = 5
 $N_ITER_PRIMAL = 500

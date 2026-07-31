@@ -1,0 +1,464 @@
+WARNING: The adjoint solver should use a non-dimensional flow solution.
+
+-------------------------------------------------------------------------
+|    ___ _   _ ___                                                      |
+|   / __| | | |_  )   Release 8.4.0 "Harrier"                           |
+|   \__ \ |_| |/ /                                                      |
+|   |___/\___//___|   Suite (Computational Fluid Dynamics Code)         |
+|                                                                       |
+-------------------------------------------------------------------------
+| SU2 Project Website: https://su2code.github.io                        |
+|                                                                       |
+| The SU2 Project is maintained by the SU2 Foundation                   |
+| (http://su2foundation.org)                                            |
+-------------------------------------------------------------------------
+| Copyright 2012-2026, SU2 Contributors                                 |
+|                                                                       |
+| SU2 is free software; you can redistribute it and/or                  |
+| modify it under the terms of the GNU Lesser General Public            |
+| License as published by the Free Software Foundation; either          |
+| version 2.1 of the License, or (at your option) any later version.    |
+|                                                                       |
+| SU2 is distributed in the hope that it will be useful,                |
+| but WITHOUT ANY WARRANTY; without even the implied warranty of        |
+| MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU      |
+| Lesser General Public License for more details.                       |
+|                                                                       |
+| You should have received a copy of the GNU Lesser General Public      |
+| License along with SU2. If not, see <http://www.gnu.org/licenses/>.   |
+-------------------------------------------------------------------------
+WARNING: The adjoint solver should use a non-dimensional flow solution.
+
+Parsing config file for zone 0
+WARNING: The adjoint solver should use a non-dimensional flow solution.
+
+----------------- Physical Case Definition ( Zone 0 ) -------------------
+Continuous RANS adjoint equations with frozen (laminar and eddy) viscosity.
+Mach number: 0.1.
+Angle of attack (AoA): 4 deg, and angle of sideslip (AoS): 0 deg.
+Reynolds number: 100000. Reference length 1.
+Reading and writing binary SU2 native restart files.
+Read adjoint solution from: solution_adj.
+Read flow solution from: solution_adj_cd.dat.
+Dimensional simulation.
+The reference area is 1 m^2.
+The semi-span will be computed using the max y(3D) value.
+The reference length is 1 m.
+Reference origin for moment evaluation is (0, 0, 0).
+Surface(s) where the force coefficients are evaluated: airfoil.
+
+Surface(s) plotted in the output file: airfoil.
+Input mesh file name: mesh_deformed.su2
+
+---------------- Design problem definition  ( Zone 0 ) ------------------
+CD objective function.
+
+--------------- Space Numerical Integration ( Zone 0 ) ------------------
+Jameson-Schmidt-Turkel scheme for the adjoint inviscid terms.
+JST viscous coefficients (1st, 2nd, & 4th): 0.15, 0.5, 0.02.
+The method includes a grid stretching correction (p = 0.3).
+Second order integration.
+The reference sharp edge distance is: 0.15. 
+Average of gradients with correction (viscous adjoint terms).
+Gradient for upwind reconstruction: unweighted Least-Squares.
+Gradient for viscous and source terms: inverse-distance weighted Least-Squares.
+
+--------------- Time Numerical Integration  ( Zone 0 ) ------------------
+Local time stepping (steady state simulation).
+Euler implicit method for the adjoint equations.
+No CFL adaptation.
+Courant-Friedrichs-Lewy number:     1.25
+
+------------------ Convergence Criteria  ( Zone 0 ) ---------------------
+Maximum number of solver subiterations: 200.
+Begin convergence monitoring at iteration 10.
+Residual minimum value: 1e-14.
+Cauchy series min. value: 1e-10.
+Number of Cauchy elements: 100.
+Begin windowed time average at iteration 0.
+
+-------------------- Output Information ( Zone 0 ) ----------------------
+File writing frequency: 
++------------------------------------+
+|                     File| Frequency|
++------------------------------------+
+|                  RESTART|       100|
+|              SURFACE_CSV|       100|
++------------------------------------+
+Writing the convergence history file every 1 inner iterations.
+Writing the screen convergence history every 1 inner iterations.
+The tabular file format is CSV (.csv).
+Convergence history file name: history_adj.
+Forces breakdown file name: forces_breakdown.dat.
+Adjoint solution file name: solution_adj.
+Restart adjoint file name: restart_adj.
+Adjoint variables file name: adj_vol_solution.
+Surface adjoint file name: surface_adjoint.
+
+------------- Config File Boundary Information ( Zone 0 ) ---------------
++-----------------------------------------------------------------------+
+|                        Marker Type|                        Marker Name|
++-----------------------------------------------------------------------+
+|                          Far-field|                           farfield|
++-----------------------------------------------------------------------+
+|                     Heat flux wall|                            airfoil|
++-----------------------------------------------------------------------+
+
+-------------------- Output Preprocessing ( Zone 0 ) --------------------
+Screen output fields: INNER_ITER, RMS_ADJ_DENSITY, RMS_ADJ_MOMENTUM-X, RMS_ADJ_MOMENTUM-Y, RMS_ADJ_ENERGY
+History output group(s): INNER_ITER, RMS_RES
+Convergence field(s): RMS_ADJ_DENSITY
+Warning: No (valid) fields chosen for time convergence monitoring. Time convergence monitoring inactive.
+Volume output fields: COORDINATES, SOLUTION, SENSITIVITY
+
+------------------- Geometry Preprocessing ( Zone 0 ) -------------------
+Two dimensional problem.
+222 grid points.
+235 volume elements.
+2 surface markers.
+50 boundary elements in index 0 (Marker = farfield).
+159 boundary elements in index 1 (Marker = airfoil).
+235 triangles.
+Setting point connectivity.
+Renumbering points (Reverse Cuthill McKee Ordering).
+Recomputing point connectivity.
+Setting element connectivity.
+Checking the numerical grid orientation.
+All volume elements are correctly oriented.
+There has been a re-orientation of 159 LINE surface elements.
+Identifying edges and vertices.
+Setting the control volume structure.
+Area of the computational grid: 599.976.
+Searching for the closest normal neighbors to the surfaces.
+Storing a mapping from global to local point index.
+Compute the surface curvature.
+Max K: 4745.63. Mean K: 31.3433. Standard deviation K: 331.045.
+Checking for periodicity.
+Computing mesh quality statistics for the dual control volumes.
++--------------------------------------------------------------+
+|           Mesh Quality Metric|        Minimum|        Maximum|
++--------------------------------------------------------------+
+|    Orthogonality Angle (deg.)|        27.9593|        89.8497|
+|     CV Face Area Aspect Ratio|            1.5|        7718.86|
+|           CV Sub-Volume Ratio|              1|         255573|
++--------------------------------------------------------------+
+Finding max control volume width.
+Wetted area = 2.01524 m.
+Area projection in the x-plane = 0.0487363 m, y-plane = 0.999802 m.
+Max. coordinate in the x-direction = 1 m, y-direction = 0.0334858 m.
+Min. coordinate in the x-direction = 0 m, y-direction = -0.0128585 m.
+Computing wall distances.
+
+-------------------- Solver Preprocessing ( Zone 0 ) --------------------
+Viscous flow: Computing pressure using the ideal gas law
+based on the free-stream temperature and a density computed
+from the Reynolds number.
+Force coefficients computed using free-stream values.
+
+-- Models:
++------------------------------------------------------------------------------+
+|          Viscosity Model|        Conductivity Model|              Fluid Model|
++------------------------------------------------------------------------------+
+|               SUTHERLAND|          CONSTANT_PRANDTL|             STANDARD_AIR|
++------------------------------------------------------------------------------+
+-- Fluid properties:
++------------------------------------------------------------------------------+
+|                  Name|    Dim. value|    Ref. value|      Unit|Non-dim. value|
++------------------------------------------------------------------------------+
+|        Ref. Viscosity|     1.716e-05|             1|   N.s/m^2|     1.716e-05|
+|      Sutherland Temp.|        273.15|             1|         K|        273.15|
+|     Sutherland Const.|         110.4|             1|         K|         110.4|
++------------------------------------------------------------------------------+
+|        Prandtl (Lam.)|             -|             -|         -|          0.72|
+|       Prandtl (Turb.)|             -|             -|         -|           0.9|
++------------------------------------------------------------------------------+
+|          Gas Constant|       287.058|             1|  N.m/kg.K|       287.058|
+|      Spec. Heat Ratio|             -|             -|         -|           1.4|
++------------------------------------------------------------------------------+
+-- Initial and free-stream conditions:
++------------------------------------------------------------------------------+
+|                  Name|    Dim. value|    Ref. value|      Unit|Non-dim. value|
++------------------------------------------------------------------------------+
+|       Static Pressure|       4349.23|             1|        Pa|       4349.23|
+|               Density|     0.0525805|             1|    kg/m^3|     0.0525805|
+|           Temperature|        288.15|             1|         K|        288.15|
+|          Total Energy|        207373|             1|   m^2/s^2|        207373|
+|            Velocity-X|       33.9468|             1|       m/s|       33.9468|
+|            Velocity-Y|       2.37379|             1|       m/s|       2.37379|
+|    Velocity Magnitude|       34.0297|             1|       m/s|       34.0297|
++------------------------------------------------------------------------------+
+|             Viscosity|    1.7893e-05|             1|   N.s/m^2|    1.7893e-05|
+|          Conductivity|             -|             1|   W/m^2.K|             -|
+|     Turb. Kin. Energy|       4.34258|             1|   m^2/s^2|       4.34258|
+|     Spec. Dissipation|       1276.11|             1|       1/s|       1276.11|
++------------------------------------------------------------------------------+
+|           Mach Number|             -|             -|         -|           0.1|
+|       Reynolds Number|             -|             -|         -|        100000|
++------------------------------------------------------------------------------+
+Initialize Jacobian structure (Navier-Stokes). MG level: 0.
+Initialize Jacobian structure (Adjoint N-S). MG level: 0.
+Initialize Jacobian structure (SST model).
+
+------------------- Numerics Preprocessing ( Zone 0 ) -------------------
+
+----------------- Integration Preprocessing ( Zone 0 ) ------------------
+
+------------------- Iteration Preprocessing ( Zone 0 ) ------------------
+Adjoint Euler/Navier-Stokes/RANS fluid iteration.
+
+------------------------------ Begin Solver -----------------------------
+
+Simulation Run using the Single-zone Driver
+Begin direct solver to store flow data (single iteration).
+Compute residuals to check the convergence of the direct problem.
+WARNING: SU2 was not compiled for an AVX-capable architecture. Performance could be better,
+         see https://su2code.github.io/docs_v7/Build-SU2-Linux-MacOS/#compiler-optimizations
+log10[Maximum residual]: 0.690198, located at point 202.
+End direct solver, begin adjoint problem.
++----------------------------------------------------------------+
+|  Inner_Iter|  rms[A_Rho]| rms[A_RhoU]| rms[A_RhoV]|    rms[A_E]|
++----------------------------------------------------------------+
+|           0|   10.342479|    8.807067|    8.891512|    6.079873|
+|           1|   10.343567|    8.807029|    8.880213|    6.072984|
+|           2|   10.344445|    8.806377|    8.875850|    6.071011|
+|           3|   10.341335|    8.803387|    8.871335|    6.070458|
+|           4|   10.339726|    8.801999|    8.863891|    6.068080|
+|           5|   10.344083|    8.804807|    8.856049|    6.065613|
+|           6|   10.343420|    8.803964|    8.855503|    6.065954|
+|           7|   10.342732|    8.803441|    8.854647|    6.065263|
+|           8|   10.343097|    8.803717|    8.855353|    6.065109|
+|           9|   10.343154|    8.803744|    8.855459|    6.064805|
+|          10|   10.343210|    8.803770|    8.855567|    6.064520|
+|          11|   10.343256|    8.803782|    8.855604|    6.064288|
+|          12|   10.343295|    8.803791|    8.855684|    6.064058|
+|          13|   10.343323|    8.803785|    8.855689|    6.063874|
+|          14|   10.343348|    8.803780|    8.855694|    6.063709|
+|          15|   10.343369|    8.803776|    8.855699|    6.063564|
+|          16|   10.343388|    8.803771|    8.855703|    6.063433|
+|          17|   10.343400|    8.803768|    8.855705|    6.063350|
+|          18|   10.343408|    8.803764|    8.855707|    6.063288|
+|          19|   10.343414|    8.803761|    8.855709|    6.063238|
+|          20|   10.343419|    8.803758|    8.855710|    6.063197|
+|          21|   10.343423|    8.803755|    8.855711|    6.063162|
+|          22|   10.343426|    8.803752|    8.855712|    6.063129|
+|          23|   10.343439|    8.803762|    8.855777|    6.063073|
+|          24|   10.343441|    8.803760|    8.855778|    6.063047|
+|          25|   10.343443|    8.803757|    8.855779|    6.063021|
+|          26|   10.343445|    8.803755|    8.855780|    6.062998|
+|          27|   10.343456|    8.803765|    8.855841|    6.062952|
+|          28|   10.343467|    8.803774|    8.855901|    6.062907|
+|          29|   10.343477|    8.803782|    8.855959|    6.062866|
+|          30|   10.343486|    8.803790|    8.856015|    6.062827|
+|          31|   10.343495|    8.803797|    8.856069|    6.062791|
+|          32|   10.343503|    8.803805|    8.856120|    6.062757|
+|          33|   10.343530|    8.803830|    8.856206|    6.062699|
+|          34|   10.343538|    8.803837|    8.856256|    6.062667|
+|          35|   10.343545|    8.803844|    8.856304|    6.062637|
+|          36|   10.343553|    8.803850|    8.856350|    6.062609|
+|          37|   10.343560|    8.803856|    8.856394|    6.062581|
+|          38|   10.343567|    8.803861|    8.856436|    6.062554|
+|          39|   10.343573|    8.803866|    8.856477|    6.062529|
+|          40|   10.343579|    8.803871|    8.856515|    6.062505|
+|          41|   10.343585|    8.803875|    8.856551|    6.062482|
+|          42|   10.343590|    8.803880|    8.856586|    6.062460|
+|          43|   10.343595|    8.803884|    8.856619|    6.062439|
+|          44|   10.343600|    8.803887|    8.856650|    6.062420|
+|          45|   10.343604|    8.803891|    8.856680|    6.062401|
+|          46|   10.343609|    8.803894|    8.856708|    6.062383|
+|          47|   10.343613|    8.803897|    8.856735|    6.062365|
+|          48|   10.343617|    8.803900|    8.856761|    6.062348|
+|          49|   10.343620|    8.803903|    8.856785|    6.062332|
+|          50|   10.343624|    8.803905|    8.856808|    6.062316|
+|          51|   10.343627|    8.803908|    8.856829|    6.062301|
+|          52|   10.344813|    8.804758|    8.855849|    6.062107|
+|          53|   10.344816|    8.804761|    8.855871|    6.062092|
+|          54|   10.344817|    8.804760|    8.855872|    6.062082|
+|          55|   10.344817|    8.804759|    8.855872|    6.062073|
+|          56|   10.344817|    8.804758|    8.855873|    6.062064|
+|          57|   10.344817|    8.804758|    8.855873|    6.062055|
+|          58|   10.344818|    8.804757|    8.855874|    6.062046|
+|          59|   10.344818|    8.804756|    8.855874|    6.062038|
+|          60|   10.344818|    8.804756|    8.855875|    6.062029|
+|          61|   10.344819|    8.804755|    8.855875|    6.062020|
+|          62|   10.344819|    8.804754|    8.855875|    6.062012|
+|          63|   10.344819|    8.804754|    8.855876|    6.062004|
+|          64|   10.344819|    8.804753|    8.855876|    6.061996|
+|          65|   10.344820|    8.804753|    8.855877|    6.061987|
+|          66|   10.344820|    8.804752|    8.855877|    6.061979|
+|          67|   10.344820|    8.804751|    8.855877|    6.061972|
+|          68|   10.344820|    8.804751|    8.855878|    6.061964|
+|          69|   10.344821|    8.804750|    8.855878|    6.061956|
+|          70|   10.344821|    8.804750|    8.855878|    6.061948|
+|          71|   10.344821|    8.804749|    8.855879|    6.061940|
+|          72|   10.344821|    8.804749|    8.855879|    6.061933|
+|          73|   10.344822|    8.804748|    8.855879|    6.061925|
+|          74|   10.344822|    8.804748|    8.855880|    6.061917|
+|          75|   10.344822|    8.804747|    8.855880|    6.061910|
+|          76|   10.344822|    8.804747|    8.855880|    6.061903|
+|          77|   10.344823|    8.804746|    8.855881|    6.061895|
+|          78|   10.344823|    8.804746|    8.855881|    6.061888|
+|          79|   10.344823|    8.804745|    8.855881|    6.061881|
+|          80|   10.344823|    8.804745|    8.855882|    6.061874|
+|          81|   10.344824|    8.804745|    8.855882|    6.061867|
+|          82|   10.344824|    8.804744|    8.855882|    6.061860|
+|          83|   10.344824|    8.804744|    8.855883|    6.061852|
+|          84|   10.344825|    8.804743|    8.855883|    6.061845|
+|          85|   10.344825|    8.804743|    8.855883|    6.061839|
+|          86|   10.344825|    8.804742|    8.855884|    6.061832|
+|          87|   10.344825|    8.804742|    8.855884|    6.061825|
+|          88|   10.344826|    8.804742|    8.855884|    6.061819|
+|          89|   10.344826|    8.804741|    8.855884|    6.061812|
+|          90|   10.344826|    8.804741|    8.855885|    6.061806|
+|          91|   10.344826|    8.804741|    8.855885|    6.061798|
+|          92|   10.344827|    8.804740|    8.855885|    6.061791|
+|          93|   10.344827|    8.804740|    8.855886|    6.061784|
+|          94|   10.344828|    8.804739|    8.855886|    6.061778|
+|          95|   10.344828|    8.804739|    8.855886|    6.061772|
+|          96|   10.344828|    8.804739|    8.855886|    6.061766|
+|          97|   10.344828|    8.804738|    8.855887|    6.061760|
+|          98|   10.344828|    8.804738|    8.855887|    6.061754|
+|          99|   10.344829|    8.804738|    8.855887|    6.061748|
+|         100|   10.344829|    8.804737|    8.855888|    6.061742|
++-----------------------------------------------------------------------+
+|        File Writing Summary       |              Filename             |
++-----------------------------------------------------------------------+
+|SU2 binary restart                 |restart_adj_cd.dat                 |
+|CSV file                           |surface_adjoint.csv                |
++-----------------------------------------------------------------------+
++----------------------------------------------------------------+
+|  Inner_Iter|  rms[A_Rho]| rms[A_RhoU]| rms[A_RhoV]|    rms[A_E]|
++----------------------------------------------------------------+
+|         101|   10.344829|    8.804737|    8.855888|    6.061736|
+|         102|   10.344829|    8.804737|    8.855888|    6.061730|
+|         103|   10.344829|    8.804736|    8.855888|    6.061724|
+|         104|   10.344830|    8.804736|    8.855889|    6.061719|
+|         105|   10.344830|    8.804736|    8.855889|    6.061713|
+|         106|   10.344830|    8.804735|    8.855889|    6.061707|
+|         107|   10.344830|    8.804735|    8.855889|    6.061702|
+|         108|   10.344830|    8.804735|    8.855889|    6.061696|
+|         109|   10.344831|    8.804734|    8.855890|    6.061691|
+|         110|   10.344831|    8.804734|    8.855890|    6.061685|
+|         111|   10.344831|    8.804734|    8.855890|    6.061680|
+|         112|   10.344831|    8.804734|    8.855890|    6.061674|
+|         113|   10.344831|    8.804733|    8.855891|    6.061669|
+|         114|   10.344831|    8.804733|    8.855891|    6.061664|
+|         115|   10.344832|    8.804733|    8.855891|    6.061659|
+|         116|   10.344832|    8.804732|    8.855891|    6.061653|
+|         117|   10.344832|    8.804732|    8.855891|    6.061648|
+|         118|   10.344832|    8.804732|    8.855892|    6.061643|
+|         119|   10.344832|    8.804732|    8.855892|    6.061638|
+|         120|   10.344833|    8.804731|    8.855892|    6.061633|
+|         121|   10.344833|    8.804731|    8.855892|    6.061628|
+|         122|   10.344833|    8.804731|    8.855893|    6.061623|
+|         123|   10.344833|    8.804731|    8.855893|    6.061618|
+|         124|   10.344833|    8.804730|    8.855893|    6.061613|
+|         125|   10.344834|    8.804730|    8.855893|    6.061608|
+|         126|   10.344834|    8.804730|    8.855893|    6.061603|
+|         127|   10.344834|    8.804729|    8.855894|    6.061599|
+|         128|   10.344834|    8.804729|    8.855894|    6.061594|
+|         129|   10.344834|    8.804729|    8.855894|    6.061589|
+|         130|   10.344834|    8.804729|    8.855894|    6.061585|
+|         131|   10.344834|    8.804729|    8.855894|    6.061580|
+|         132|   10.344835|    8.804728|    8.855895|    6.061576|
+|         133|   10.344835|    8.804728|    8.855895|    6.061571|
+|         134|   10.344835|    8.804728|    8.855895|    6.061567|
+|         135|   10.344835|    8.804728|    8.855895|    6.061562|
+|         136|   10.344835|    8.804727|    8.855895|    6.061558|
+|         137|   10.344835|    8.804727|    8.855896|    6.061553|
+|         138|   10.344835|    8.804727|    8.855896|    6.061549|
+|         139|   10.344835|    8.804727|    8.855896|    6.061545|
+|         140|   10.344836|    8.804726|    8.855896|    6.061540|
+|         141|   10.344836|    8.804726|    8.855896|    6.061536|
+|         142|   10.344836|    8.804726|    8.855896|    6.061532|
+|         143|   10.344836|    8.804726|    8.855897|    6.061528|
+|         144|   10.344836|    8.804726|    8.855897|    6.061524|
+|         145|   10.344836|    8.804725|    8.855897|    6.061520|
+|         146|   10.344836|    8.804725|    8.855897|    6.061516|
+|         147|   10.344836|    8.804725|    8.855897|    6.061511|
+|         148|   10.344837|    8.804725|    8.855897|    6.061507|
+|         149|   10.344837|    8.804725|    8.855898|    6.061503|
+|         150|   10.344837|    8.804724|    8.855898|    6.061500|
+|         151|   10.344837|    8.804724|    8.855898|    6.061496|
+|         152|   10.344837|    8.804724|    8.855898|    6.061492|
+|         153|   10.344837|    8.804724|    8.855898|    6.061488|
+|         154|   10.344837|    8.804724|    8.855898|    6.061484|
+|         155|   10.344837|    8.804723|    8.855899|    6.061480|
+|         156|   10.344837|    8.804723|    8.855899|    6.061477|
+|         157|   10.344838|    8.804723|    8.855899|    6.061473|
+|         158|   10.344838|    8.804723|    8.855899|    6.061469|
+|         159|   10.344838|    8.804723|    8.855899|    6.061466|
+|         160|   10.344838|    8.804722|    8.855899|    6.061462|
+|         161|   10.344838|    8.804722|    8.855900|    6.061459|
+|         162|   10.344838|    8.804722|    8.855900|    6.061455|
+|         163|   10.344838|    8.804722|    8.855900|    6.061452|
+|         164|   10.344838|    8.804722|    8.855900|    6.061448|
+|         165|   10.344838|    8.804721|    8.855900|    6.061445|
+|         166|   10.344838|    8.804721|    8.855900|    6.061442|
+|         167|   10.344838|    8.804721|    8.855900|    6.061438|
+|         168|   10.344839|    8.804721|    8.855901|    6.061435|
+|         169|   10.344839|    8.804721|    8.855901|    6.061432|
+|         170|   10.344839|    8.804721|    8.855901|    6.061428|
+|         171|   10.344839|    8.804720|    8.855901|    6.061425|
+|         172|   10.344839|    8.804720|    8.855901|    6.061422|
+|         173|   10.344839|    8.804720|    8.855901|    6.061419|
+|         174|   10.344839|    8.804720|    8.855901|    6.061416|
+|         175|   10.344839|    8.804720|    8.855901|    6.061412|
+|         176|   10.344839|    8.804720|    8.855902|    6.061409|
+|         177|   10.344839|    8.804719|    8.855902|    6.061406|
+|         178|   10.344839|    8.804719|    8.855902|    6.061403|
+|         179|   10.344839|    8.804719|    8.855902|    6.061400|
+|         180|   10.344839|    8.804719|    8.855902|    6.061397|
+|         181|   10.344839|    8.804719|    8.855902|    6.061394|
+|         182|   10.344840|    8.804719|    8.855902|    6.061391|
+|         183|   10.344840|    8.804718|    8.855903|    6.061388|
+|         184|   10.344840|    8.804718|    8.855903|    6.061385|
+|         185|   10.344840|    8.804718|    8.855903|    6.061382|
+|         186|   10.344840|    8.804718|    8.855903|    6.061380|
+|         187|   10.344840|    8.804718|    8.855903|    6.061377|
+|         188|   10.344840|    8.804718|    8.855903|    6.061374|
+|         189|   10.344840|    8.804718|    8.855903|    6.061371|
+|         190|   10.344840|    8.804717|    8.855903|    6.061368|
+|         191|   10.344840|    8.804717|    8.855903|    6.061366|
+|         192|   10.344840|    8.804717|    8.855904|    6.061363|
+|         193|   10.344840|    8.804717|    8.855904|    6.061360|
+|         194|   10.344840|    8.804717|    8.855904|    6.061357|
+|         195|   10.344841|    8.804717|    8.855904|    6.061354|
+|         196|   10.344841|    8.804717|    8.855904|    6.061351|
+|         197|   10.344841|    8.804716|    8.855904|    6.061349|
+|         198|   10.344841|    8.804716|    8.855904|    6.061346|
+|         199|   10.344841|    8.804716|    8.855904|    6.061344|
+
+----------------------------- Solver Exit -------------------------------
+
+Maximum number of iterations reached (ITER = 200) before convergence.
++-----------------------------------------------------------------------+
+|      Convergence Field     |     Value    |   Criterion  |  Converged |
++-----------------------------------------------------------------------+
+|                  rms[A_Rho]|       10.3448|         < -14|          No|
++-----------------------------------------------------------------------+
+-------------------------------------------------------------------------
++-----------------------------------------------------------------------+
+|        File Writing Summary       |              Filename             |
++-----------------------------------------------------------------------+
+|SU2 binary restart                 |restart_adj_cd.dat                 |
+|CSV file                           |surface_adjoint.csv                |
++-----------------------------------------------------------------------+
+Warning: there are 187 non-physical points in the solution.
+
+--------------------------- Finalizing Solver ---------------------------
+Deleted CNumerics container.
+Deleted CIntegration container.
+Deleted CSolver container.
+Deleted CIteration container.
+Deleted CInterface container.
+Deleted CGeometry container.
+Deleted CFreeFormDefBox class.
+Deleted CSurfaceMovement class.
+Deleted CVolumetricMovement class.
+Deleted CConfig container.
+Deleted nInst container.
+Deleted COutput class.
+-------------------------------------------------------------------------
+
+------------------------- Exit Success (SU2_CFD) ------------------------
+

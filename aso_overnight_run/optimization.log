@@ -1,0 +1,1084 @@
+2026-07-31 22:55:51 [INFO] aso_pde_optimizer: ============================================================
+2026-07-31 22:55:51 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-07-31 22:55:51 [INFO] aso_pde_optimizer: Method: mma
+2026-07-31 22:55:51 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-07-31 22:55:51 [INFO] aso_pde_optimizer: Max iterations: 50
+2026-07-31 22:55:51 [INFO] aso_pde_optimizer: ============================================================
+2026-07-31 22:55:51 [INFO] aso_pde_optimizer: SU2_CFD: bin/SU2_CFD.exe
+2026-07-31 22:55:51 [INFO] aso_pde_optimizer: SU2_DEF: bin/SU2_DEF.exe
+2026-07-31 22:55:51 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\mesh_fixed.su2
+2026-07-31 22:55:56 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/50 ===
+2026-07-31 22:55:56 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:55:56 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518756444800400
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 2.0s (rc=0)
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546541417
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902420892
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.561e-04
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546541, CD=0.590242, converged=True
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518756444800400
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:55:58 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.038492, min=-0.028970, max=0.008396
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:55:58 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518758886064900
+2026-07-31 22:55:59 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.9s (rc=0)
+2026-07-31 22:55:59 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 0.000000e+00). Rejecting deformation.
+2026-07-31 22:55:59 [INFO] airfoil_discovery.aso.optimizer: Cd=0.590242, |grad Cd|=0.038492, t/c=0.1480, accepted=True, rho=0.2000
+2026-07-31 22:55:59 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 2/50 ===
+2026-07-31 22:55:59 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:55:59 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518759866594900
+2026-07-31 22:56:01 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:01 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:01 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546541417
+2026-07-31 22:56:01 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902420892
+2026-07-31 22:56:01 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.561e-04
+2026-07-31 22:56:01 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546541, CD=0.590242, converged=True
+2026-07-31 22:56:01 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:01 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:01 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518759866594900
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:02 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.038492, min=-0.028970, max=0.008396
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.189916e-02
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518762049340000
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_overnight_run\cfd_cases\def_1785518762049340000\mesh_deformed.su2 (max node displacement=2.230645e-01)
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.optimizer: Cd=0.590242, |grad Cd|=0.038492, t/c=0.1306, accepted=True, rho=0.2000
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.189916e-02
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_iter_2_1785518762223864700
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_overnight_run\cfd_cases\def_iter_2_1785518762223864700\mesh_deformed.su2 (max node displacement=2.410484e-01)
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 3/50 ===
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:02 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518762394648600
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.7683125
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.3066189819
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.768312, CD=0.306619, converged=True
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518762394648600
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:04 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.092276, min=-0.084778, max=0.016490
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=9.211618e-03
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518764633837100
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_overnight_run\cfd_cases\def_1785518764633837100\mesh_deformed.su2 (max node displacement=2.634332e-01)
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.optimizer: Cd=0.306619, |grad Cd|=0.092276, t/c=0.1144, accepted=True, rho=0.4000
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=9.211618e-03
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_iter_3_1785518764795421900
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_overnight_run\cfd_cases\def_iter_3_1785518764795421900\mesh_deformed.su2 (max node displacement=2.958576e-01)
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 4/50 ===
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:04 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518764964737100
+2026-07-31 22:56:06 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-07-31 22:56:06 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:06 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.938175616
+2026-07-31 22:56:06 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4209118718
+2026-07-31 22:56:06 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.938176, CD=0.420912, converged=True
+2026-07-31 22:56:06 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:06 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:06 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518764964737100
+2026-07-31 22:56:07 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:07 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:07 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:07 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:07 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.183387, min=-0.176960, max=0.031968
+2026-07-31 22:56:07 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=9.211618e-03
+2026-07-31 22:56:07 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518767234073800
+2026-07-31 22:56:07 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:07 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_overnight_run\cfd_cases\def_1785518767234073800\mesh_deformed.su2 (max node displacement=3.468719e-01)
+2026-07-31 22:56:07 [INFO] airfoil_discovery.aso.optimizer: Cd=0.420912, |grad Cd|=0.183387, t/c=0.1018, accepted=False, rho=0.1000
+2026-07-31 22:56:07 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 5/50 ===
+2026-07-31 22:56:07 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:07 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518767399647700
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518767399647700
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:09 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518769580220200
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:09 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0250
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 6/50 ===
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:09 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518769723749100
+2026-07-31 22:56:11 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:11 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:11 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:11 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:11 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:11 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:11 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:11 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518769723749100
+2026-07-31 22:56:11 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.3s (rc=0)
+2026-07-31 22:56:11 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:11 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:11 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:11 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:11 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:11 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518771915967500
+2026-07-31 22:56:12 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:12 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:12 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0063
+2026-07-31 22:56:12 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 7/50 ===
+2026-07-31 22:56:12 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:12 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518772059632700
+2026-07-31 22:56:13 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:13 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:13 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:13 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:13 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:13 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:13 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:13 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518772059632700
+2026-07-31 22:56:14 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.3s (rc=0)
+2026-07-31 22:56:14 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:14 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:14 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:14 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:14 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:14 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518774250689900
+2026-07-31 22:56:14 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:14 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:14 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0016
+2026-07-31 22:56:14 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 8/50 ===
+2026-07-31 22:56:14 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:14 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518774403710400
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518774403710400
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:16 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518776613218500
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:16 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0004
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 9/50 ===
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:16 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518776757394300
+2026-07-31 22:56:18 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:18 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:18 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:18 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:18 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:18 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:18 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:18 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518776757394300
+2026-07-31 22:56:18 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:18 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:18 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:18 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:18 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:18 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:18 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518778975123600
+2026-07-31 22:56:19 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:19 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:19 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0001
+2026-07-31 22:56:19 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 10/50 ===
+2026-07-31 22:56:19 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:19 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518779134181400
+2026-07-31 22:56:20 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:20 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:20 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:20 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:20 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:20 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:20 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:20 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518779134181400
+2026-07-31 22:56:21 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.3s (rc=0)
+2026-07-31 22:56:21 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:21 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:21 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:21 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:21 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:21 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518781325704700
+2026-07-31 22:56:21 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:21 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:21 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0000
+2026-07-31 22:56:21 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 11/50 ===
+2026-07-31 22:56:21 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:21 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518781463404200
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518781463404200
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.3s (rc=0)
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:23 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518783653045400
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:23 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.2500
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 12/50 ===
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:23 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518783793966300
+2026-07-31 22:56:25 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:25 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:25 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:25 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:25 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:25 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:25 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:25 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518783793966300
+2026-07-31 22:56:25 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:25 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:25 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:25 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:25 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:26 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:26 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518785992051100
+2026-07-31 22:56:26 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:26 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:26 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0625
+2026-07-31 22:56:26 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 13/50 ===
+2026-07-31 22:56:26 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:26 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518786133768200
+2026-07-31 22:56:27 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:27 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:27 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:27 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:27 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:27 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:27 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:27 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518786133768200
+2026-07-31 22:56:28 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:28 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:28 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:28 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:28 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:28 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:28 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518788362847700
+2026-07-31 22:56:28 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:28 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:28 [WARNING] airfoil_discovery.optimization.mma_engine: MMA stagnation detected (10 rejections)
+2026-07-31 22:56:28 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0156
+2026-07-31 22:56:28 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 14/50 ===
+2026-07-31 22:56:28 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:28 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518788502498200
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518788502498200
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:30 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518790664022900
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:30 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0039
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 15/50 ===
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:30 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518790804207300
+2026-07-31 22:56:32 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:32 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:32 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:32 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:32 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:32 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:32 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:32 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518790804207300
+2026-07-31 22:56:33 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:33 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:33 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:33 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:33 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:33 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:33 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518793022157300
+2026-07-31 22:56:33 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:33 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:33 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0010
+2026-07-31 22:56:33 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 16/50 ===
+2026-07-31 22:56:33 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:33 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518793175658900
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518793175658900
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:35 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518795398528900
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:35 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0002
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 17/50 ===
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:35 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518795529474800
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518795529474800
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:37 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518797833023000
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:37 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0001
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 18/50 ===
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:37 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518797966718500
+2026-07-31 22:56:39 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:39 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:39 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:39 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:39 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:39 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:39 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:39 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518797966718500
+2026-07-31 22:56:40 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:40 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:40 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:40 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:40 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:40 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:40 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518800208988800
+2026-07-31 22:56:40 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:40 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:40 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0000
+2026-07-31 22:56:40 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 19/50 ===
+2026-07-31 22:56:40 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:40 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518800355991900
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518800355991900
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:42 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518802522961800
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:42 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.2500
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 20/50 ===
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:42 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518802657620500
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518802657620500
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.3s (rc=0)
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:44 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518804854039000
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:44 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0625
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 21/50 ===
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:44 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518804994922700
+2026-07-31 22:56:46 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:46 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:46 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:46 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:46 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:46 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:46 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:46 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518804994922700
+2026-07-31 22:56:47 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:47 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:47 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:47 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:47 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:47 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:47 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518807192158600
+2026-07-31 22:56:47 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:47 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:47 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0156
+2026-07-31 22:56:47 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 22/50 ===
+2026-07-31 22:56:47 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:47 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518807333623500
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518807333623500
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:49 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518809563274000
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:49 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0039
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 23/50 ===
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:49 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518809709197600
+2026-07-31 22:56:51 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:51 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:51 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:51 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:51 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:51 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:51 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:51 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518809709197600
+2026-07-31 22:56:51 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:51 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:51 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:51 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:51 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:51 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:51 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518811921833000
+2026-07-31 22:56:52 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:52 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:52 [WARNING] airfoil_discovery.optimization.mma_engine: MMA stagnation detected (10 rejections)
+2026-07-31 22:56:52 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0010
+2026-07-31 22:56:52 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 24/50 ===
+2026-07-31 22:56:52 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:52 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518812055522200
+2026-07-31 22:56:53 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:53 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:53 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:53 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:53 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:53 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:53 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:53 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518812055522200
+2026-07-31 22:56:54 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:54 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:54 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:54 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:54 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:54 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:54 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518814271894500
+2026-07-31 22:56:54 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:54 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:54 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0002
+2026-07-31 22:56:54 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 25/50 ===
+2026-07-31 22:56:54 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:54 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518814415399300
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518814415399300
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:56 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518816602544800
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:56 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0001
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 26/50 ===
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:56 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518816744669000
+2026-07-31 22:56:58 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:56:58 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:56:58 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:56:58 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:56:58 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:56:58 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:56:58 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:56:58 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518816744669000
+2026-07-31 22:56:58 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.3s (rc=0)
+2026-07-31 22:56:58 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:56:58 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:56:58 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:56:58 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:56:58 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:56:58 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518818944736900
+2026-07-31 22:56:59 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:56:59 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:56:59 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0000
+2026-07-31 22:56:59 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 27/50 ===
+2026-07-31 22:56:59 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:56:59 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518819084747600
+2026-07-31 22:57:00 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-07-31 22:57:00 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:00 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:00 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:00 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:00 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:00 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:00 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518819084747600
+2026-07-31 22:57:01 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:01 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:01 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:01 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:01 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:01 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:01 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518821339418700
+2026-07-31 22:57:01 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:01 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:01 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.2500
+2026-07-31 22:57:01 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 28/50 ===
+2026-07-31 22:57:01 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:01 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518821484242000
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518821484242000
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:03 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518823721106800
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:03 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0625
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 29/50 ===
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:03 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518823849915300
+2026-07-31 22:57:05 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:05 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:05 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:05 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:05 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:05 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:05 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:05 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518823849915300
+2026-07-31 22:57:06 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:06 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:06 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:06 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:06 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:06 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:06 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518826033984300
+2026-07-31 22:57:06 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:06 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:06 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0156
+2026-07-31 22:57:06 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 30/50 ===
+2026-07-31 22:57:06 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:06 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518826172415500
+2026-07-31 22:57:07 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:07 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:07 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:07 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:07 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:07 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:07 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:07 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518826172415500
+2026-07-31 22:57:08 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:08 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:08 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:08 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:08 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:08 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:08 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518828385399800
+2026-07-31 22:57:08 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:08 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:08 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0039
+2026-07-31 22:57:08 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 31/50 ===
+2026-07-31 22:57:08 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:08 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518828530140700
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518828530140700
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:10 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518830745019500
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:10 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0010
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 32/50 ===
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:10 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518830891742300
+2026-07-31 22:57:12 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:12 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:12 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:12 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:12 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:12 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:12 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:12 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518830891742300
+2026-07-31 22:57:13 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:13 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:13 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:13 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:13 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:13 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:13 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518833069234800
+2026-07-31 22:57:13 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:13 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:13 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0002
+2026-07-31 22:57:13 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 33/50 ===
+2026-07-31 22:57:13 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:13 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518833225336200
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518833225336200
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:15 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518835499120200
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:15 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:15 [WARNING] airfoil_discovery.optimization.mma_engine: MMA stagnation detected (10 rejections)
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0001
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 34/50 ===
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:15 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518835639138800
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518835639138800
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:17 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518837864602000
+2026-07-31 22:57:17 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:18 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:18 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0000
+2026-07-31 22:57:18 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 35/50 ===
+2026-07-31 22:57:18 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:18 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518838012193800
+2026-07-31 22:57:19 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:19 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:19 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:19 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:19 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:19 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:19 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:19 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518838012193800
+2026-07-31 22:57:20 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.3s (rc=0)
+2026-07-31 22:57:20 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:20 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:20 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:20 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:20 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:20 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518840212140100
+2026-07-31 22:57:20 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:20 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:20 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.2500
+2026-07-31 22:57:20 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 36/50 ===
+2026-07-31 22:57:20 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:20 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518840352025300
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518840352025300
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:22 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518842594932300
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:22 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0625
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 37/50 ===
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:22 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518842735338800
+2026-07-31 22:57:24 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-07-31 22:57:24 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:24 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:24 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:24 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:24 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:24 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:24 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518842735338800
+2026-07-31 22:57:24 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:24 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:24 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:24 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:24 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:25 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:25 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518844992770500
+2026-07-31 22:57:25 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:25 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:25 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0156
+2026-07-31 22:57:25 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 38/50 ===
+2026-07-31 22:57:25 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:25 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518845129960300
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518845129960300
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:27 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518847392119800
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:27 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0039
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 39/50 ===
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:27 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518847525334700
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518847525334700
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:29 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518849731293400
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:29 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0010
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 40/50 ===
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:29 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518849866295400
+2026-07-31 22:57:31 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:31 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:31 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:31 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:31 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:31 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:31 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:31 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518849866295400
+2026-07-31 22:57:32 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.3s (rc=0)
+2026-07-31 22:57:32 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:32 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:32 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:32 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:32 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:32 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518852059113900
+2026-07-31 22:57:32 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:32 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:32 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0002
+2026-07-31 22:57:32 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 41/50 ===
+2026-07-31 22:57:32 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:32 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518852194861100
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518852194861100
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:34 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518854406498500
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:34 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0001
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 42/50 ===
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:34 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518854544892800
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518854544892800
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:36 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518856721732500
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:36 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0000
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 43/50 ===
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:36 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518856853200000
+2026-07-31 22:57:38 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:38 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:38 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:38 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:38 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:38 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:38 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:38 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518856853200000
+2026-07-31 22:57:39 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:39 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:39 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:39 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:39 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:39 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:39 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518859069394600
+2026-07-31 22:57:39 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:39 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:39 [WARNING] airfoil_discovery.optimization.mma_engine: MMA stagnation detected (10 rejections)
+2026-07-31 22:57:39 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.2500
+2026-07-31 22:57:39 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 44/50 ===
+2026-07-31 22:57:39 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:39 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518859213261600
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518859213261600
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.3s (rc=0)
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:41 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518861416032100
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:41 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0625
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 45/50 ===
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:41 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518861548805400
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518861548805400
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:43 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518863783125400
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:43 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0156
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 46/50 ===
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:43 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518863950599700
+2026-07-31 22:57:45 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-07-31 22:57:45 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:45 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:45 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:45 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:45 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:45 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:45 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518863950599700
+2026-07-31 22:57:46 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:46 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:46 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:46 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:46 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:46 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:46 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518866238951500
+2026-07-31 22:57:46 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:46 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:46 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0039
+2026-07-31 22:57:46 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 47/50 ===
+2026-07-31 22:57:46 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:46 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518866404460200
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518866404460200
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:48 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518868644818800
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:48 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0010
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 48/50 ===
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:48 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518868803100900
+2026-07-31 22:57:50 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-07-31 22:57:50 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:50 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:50 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:50 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:50 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:50 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:50 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518868803100900
+2026-07-31 22:57:51 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:51 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:51 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:51 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:51 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:51 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:51 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518871071456800
+2026-07-31 22:57:51 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:51 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:51 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0002
+2026-07-31 22:57:51 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 49/50 ===
+2026-07-31 22:57:51 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:51 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518871235127000
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518871235127000
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:53 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518873570969600
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:53 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0001
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 50/50 ===
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-07-31 22:57:53 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_overnight_run\cfd_cases\eval_1785518873724950800
+2026-07-31 22:57:55 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.8s (rc=0)
+2026-07-31 22:57:55 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-07-31 22:57:55 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.93063118
+2026-07-31 22:57:55 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4978374728
+2026-07-31 22:57:55 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.930631, CD=0.497837, converged=True
+2026-07-31 22:57:55 [INFO] airfoil_discovery.aso.optimizer: Copied primal restart to adjoint restart: solution_adj_cd.dat
+2026-07-31 22:57:55 [INFO] airfoil_discovery.aso.optimizer: Running adjoint CFD: bin/SU2_CFD.exe
+2026-07-31 22:57:55 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Executing: bin/SU2_CFD.exe config_adjoint.cfg in aso_overnight_run\cfd_cases\eval_1785518873724950800
+2026-07-31 22:57:55 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD adjoint] Completed in 0.4s (rc=0)
+2026-07-31 22:57:55 [INFO] airfoil_discovery.aso.adjoint: Reading adjoint sensitivities from: surface_adjoint.csv
+2026-07-31 22:57:55 [WARNING] airfoil_discovery.aso.adjoint: Individual sensitivities are zero, using Surface_Sensitivity column
+2026-07-31 22:57:55 [INFO] airfoil_discovery.aso.adjoint: Surface nodes: total=159, upper=80, lower=79
+2026-07-31 22:57:55 [INFO] airfoil_discovery.aso.adjoint: Adjoint gradient extracted: norm=0.174604, min=-0.168194, max=0.032285
+2026-07-31 22:57:55 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-07-31 22:57:55 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_overnight_run\cfd_cases\def_1785518875958937000
+2026-07-31 22:57:56 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-07-31 22:57:56 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 1.738193e-15). Rejecting deformation.
+2026-07-31 22:57:56 [INFO] airfoil_discovery.aso.optimizer: Cd=0.497837, |grad Cd|=0.174604, t/c=0.1018, accepted=False, rho=0.0000
+2026-07-31 22:57:56 [INFO] airfoil_discovery.aso.optimizer: Results saved to aso_overnight_run
+2026-07-31 22:57:56 [INFO] aso_pde_optimizer: ============================================================
+2026-07-31 22:57:56 [INFO] aso_pde_optimizer: Optimization Complete
+2026-07-31 22:57:56 [INFO] aso_pde_optimizer: Time elapsed: 125.0 seconds (2.1 minutes)
+2026-07-31 22:57:56 [INFO] aso_pde_optimizer: Total iterations: 50
+2026-07-31 22:57:56 [INFO] aso_pde_optimizer: Converged: False
+2026-07-31 22:57:56 [INFO] aso_pde_optimizer: Initial Cd: 0.590242, Final Cd: 0.497837 (delta: -0.092405)
+2026-07-31 22:57:56 [INFO] aso_pde_optimizer: Initial Cl: 1.546541, Final Cl: 1.930631 (delta: +0.384090)
+2026-07-31 22:57:56 [INFO] aso_pde_optimizer: Initial |grad Cd|: 0.038492, Final |grad Cd|: 0.174604
+2026-07-31 22:57:56 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\aso_overnight_run
+2026-07-31 22:57:56 [INFO] aso_pde_optimizer: ============================================================
