@@ -1,0 +1,68 @@
+2026-08-01 08:43:20 [INFO] aso_pde_optimizer: ============================================================
+2026-08-01 08:43:20 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-08-01 08:43:20 [INFO] aso_pde_optimizer: Method: mma
+2026-08-01 08:43:20 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-08-01 08:43:20 [INFO] aso_pde_optimizer: Max iterations: 3
+2026-08-01 08:43:20 [INFO] aso_pde_optimizer: ============================================================
+2026-08-01 08:43:20 [INFO] aso_pde_optimizer: SU2_CFD: bin/SU2_CFD.exe
+2026-08-01 08:43:20 [INFO] aso_pde_optimizer: SU2_DEF: bin/SU2_DEF.exe
+2026-08-01 08:43:20 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\mesh_highres_fixed.su2
+2026-08-01 08:43:23 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/3 ===
+2026-08-01 08:43:23 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 08:43:23 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_test_lsb_run2\cfd_cases\eval_1785554003058355000
+2026-08-01 08:43:24 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.2s (rc=1)
+2026-08-01 08:43:24 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1)
+2026-08-01 08:43:24 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 08:43:24 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_test_lsb_run2\cfd_cases\eval_1785554004262913700
+2026-08-01 08:43:25 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.1s (rc=1)
+2026-08-01 08:43:25 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1)
+2026-08-01 08:43:25 [WARNING] airfoil_discovery.aso.optimizer: Baseline CFD did not converge cleanly for finite differences; returning a zero gradient to avoid contaminating the optimizer.
+2026-08-01 08:43:25 [WARNING] airfoil_discovery.aso.optimizer: Iter 1: adjoint gradient zero or unavailable (norm=0.000e+00). Computing via finite differences.
+2026-08-01 08:43:25 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 08:43:25 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_test_lsb_run2\cfd_cases\eval_1785554005395021700
+2026-08-01 08:43:26 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.1s (rc=1)
+2026-08-01 08:43:26 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1)
+2026-08-01 08:43:26 [WARNING] airfoil_discovery.aso.optimizer: Baseline CFD did not converge cleanly for finite differences; returning a zero gradient to avoid contaminating the optimizer.
+2026-08-01 08:43:26 [WARNING] airfoil_discovery.aso.optimizer: Iter 1: gradient still zero after FD fallback. Backtracking and reducing move limit.
+2026-08-01 08:43:26 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 2/3 ===
+2026-08-01 08:43:26 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 08:43:26 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_test_lsb_run2\cfd_cases\eval_1785554006542045200
+2026-08-01 08:43:27 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.2s (rc=1)
+2026-08-01 08:43:27 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1)
+2026-08-01 08:43:27 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 08:43:27 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_test_lsb_run2\cfd_cases\eval_1785554007779674400
+2026-08-01 08:43:28 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.2s (rc=1)
+2026-08-01 08:43:28 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1)
+2026-08-01 08:43:28 [WARNING] airfoil_discovery.aso.optimizer: Baseline CFD did not converge cleanly for finite differences; returning a zero gradient to avoid contaminating the optimizer.
+2026-08-01 08:43:28 [WARNING] airfoil_discovery.aso.optimizer: Iter 2: adjoint gradient zero or unavailable (norm=0.000e+00). Computing via finite differences.
+2026-08-01 08:43:28 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 08:43:28 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_test_lsb_run2\cfd_cases\eval_1785554008964482600
+2026-08-01 08:43:30 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.2s (rc=1)
+2026-08-01 08:43:30 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1)
+2026-08-01 08:43:30 [WARNING] airfoil_discovery.aso.optimizer: Baseline CFD did not converge cleanly for finite differences; returning a zero gradient to avoid contaminating the optimizer.
+2026-08-01 08:43:30 [WARNING] airfoil_discovery.aso.optimizer: Iter 2: gradient still zero after FD fallback. Backtracking and reducing move limit.
+2026-08-01 08:43:30 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 3/3 ===
+2026-08-01 08:43:30 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 08:43:30 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_test_lsb_run2\cfd_cases\eval_1785554010136387800
+2026-08-01 08:43:31 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.1s (rc=1)
+2026-08-01 08:43:31 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1)
+2026-08-01 08:43:31 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 08:43:31 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_test_lsb_run2\cfd_cases\eval_1785554011281506900
+2026-08-01 08:43:32 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.2s (rc=1)
+2026-08-01 08:43:32 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1)
+2026-08-01 08:43:32 [WARNING] airfoil_discovery.aso.optimizer: Baseline CFD did not converge cleanly for finite differences; returning a zero gradient to avoid contaminating the optimizer.
+2026-08-01 08:43:32 [WARNING] airfoil_discovery.aso.optimizer: Iter 3: adjoint gradient zero or unavailable (norm=0.000e+00). Computing via finite differences.
+2026-08-01 08:43:32 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 08:43:32 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_test_lsb_run2\cfd_cases\eval_1785554012444646000
+2026-08-01 08:43:33 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.1s (rc=1)
+2026-08-01 08:43:33 [WARNING] airfoil_discovery.aso.optimizer: CFD not converged: Primal CFD failed (rc=1)
+2026-08-01 08:43:33 [WARNING] airfoil_discovery.aso.optimizer: Baseline CFD did not converge cleanly for finite differences; returning a zero gradient to avoid contaminating the optimizer.
+2026-08-01 08:43:33 [WARNING] airfoil_discovery.aso.optimizer: Iter 3: gradient still zero after FD fallback. Backtracking and reducing move limit.
+2026-08-01 08:43:33 [INFO] airfoil_discovery.aso.optimizer: Results saved to aso_test_lsb_run2
+2026-08-01 08:43:33 [INFO] aso_pde_optimizer: ============================================================
+2026-08-01 08:43:33 [INFO] aso_pde_optimizer: Optimization Complete
+2026-08-01 08:43:33 [INFO] aso_pde_optimizer: Time elapsed: 11.8 seconds (0.2 minutes)
+2026-08-01 08:43:33 [INFO] aso_pde_optimizer: Total iterations: 0
+2026-08-01 08:43:33 [INFO] aso_pde_optimizer: Converged: False
+2026-08-01 08:43:33 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\aso_test_lsb_run2
+2026-08-01 08:43:33 [INFO] aso_pde_optimizer: ============================================================

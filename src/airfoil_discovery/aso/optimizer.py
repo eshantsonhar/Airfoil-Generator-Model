@@ -1444,6 +1444,13 @@ class PDEOptimizer:
                 self.history.finalize(converged=False)
                 return self.history
 
+            # Check for zero-displacement stagnation loop (mesh deformation failure)
+            if not step_accepted and trust_radius < 1e-4:
+                logger.error(f"Zero-displacement stagnation detected at iteration {iteration} (trust_radius={trust_radius:.6e})")
+                logger.error("Mesh deformation failing - optimizer cannot progress. Aborting.")
+                self.history.finalize(converged=False)
+                return self.history
+
         self.history.finalize(converged=False)
         return self.history
 

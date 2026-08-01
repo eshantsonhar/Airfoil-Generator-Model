@@ -131,7 +131,7 @@ def generate_adjoint_config(
         f"",
         f"% ------------ Turbulence Model ------------",
         f"KIND_TURB_MODEL= {turb_model}",
-        f"KIND_TRANS_MODEL= NONE",  # Adjoint solver doesn't support transition model
+        f"KIND_TRANS_MODEL= {trans_model if trans_model is not None else 'NONE'}",  # Use same transition model as primal for consistent physics
         f"",
         f"% ------------ Freestream / Flow Reference ------------",
         f"MACH_NUMBER= {adj_mach_number}",
@@ -140,6 +140,7 @@ def generate_adjoint_config(
         f"REYNOLDS_NUMBER= {adj_reynolds_number}",
         f"FREESTREAM_TEMPERATURE= {adj_freestream_temperature}",
         f"FREESTREAM_PRESSURE= {adj_freestream_pressure}",
+        f"FREESTREAM_DENSITY= 1.225",
         f"",
         f"% ------------ Adjoint Numerical Method ------------",
         "CONV_NUM_METHOD_FLOW= JST",

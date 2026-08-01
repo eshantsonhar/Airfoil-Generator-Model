@@ -150,15 +150,16 @@ def generate_mesh():
     # 6. Build elements
     print(f"\n6. Building elements...")
     
-    # Surface elements (line elements, type 3)
-    surface_elems = [(3, i, (i + 1) % n_af) for i in range(n_af)]
+    # Surface elements (line elements, type 3) - with element index
+    surface_elems = [(3, i, (i + 1) % n_af, i) for i in range(n_af)]
     
-    # Farfield elements
+    # Farfield elements - with element index
     ff_start_idx = n_nodes - N_FARFIELD
-    ff_elems = [(3, ff_start_idx + i, ff_start_idx + (i + 1) % N_FARFIELD) for i in range(N_FARFIELD)]
+    ff_elems = [(3, ff_start_idx + i, ff_start_idx + (i + 1) % N_FARFIELD, i) for i in range(N_FARFIELD)]
     
-    # Volume elements (triangles, type 5)
+    # Volume elements (triangles, type 5) - with element index
     vol_elems = []
+    elem_idx = 0
     
     # Boundary layer volume elements
     layer_start = n_af
@@ -167,8 +168,10 @@ def generate_mesh():
         for i in range(n_af):
             # Triangle connecting this layer to next layer
             i_next = (i + 1) % n_af
-            vol_elems.append((5, layer_start + i, layer_start + i_next, layer_end + i))
-            vol_elems.append((5, layer_start + i_next, layer_end + i_next, layer_end + i))
+            vol_elems.append((5, layer_start + i, layer_start + i_next, layer_end + i, elem_idx))
+            elem_idx += 1
+            vol_elems.append((5, layer_start + i_next, layer_end + i_next, layer_end + i, elem_idx))
+            elem_idx += 1
         layer_start = layer_end
     
     # Transition region elements
@@ -179,16 +182,20 @@ def generate_mesh():
         prev_layer_start = transition_start - N_FARFIELD if t > 0 else layer_start - N_FARFIELD
         for i in range(N_FARFIELD):
             i_next = (i + 1) % N_FARFIELD
-            vol_elems.append((5, prev_layer_start + i, prev_layer_start + i_next, transition_end + i))
-            vol_elems.append((5, prev_layer_start + i_next, transition_end + i_next, transition_end + i))
+            vol_elems.append((5, prev_layer_start + i, prev_layer_start + i_next, transition_end + i, elem_idx))
+            elem_idx += 1
+            vol_elems.append((5, prev_layer_start + i_next, transition_end + i_next, transition_end + i, elem_idx))
+            elem_idx += 1
         transition_start = transition_end
     
     # Connect last transition layer to farfield
     last_transition_start = transition_start
     for i in range(N_FARFIELD):
         i_next = (i + 1) % N_FARFIELD
-        vol_elems.append((5, last_transition_start + i, last_transition_start + i_next, ff_start_idx + i))
-        vol_elems.append((5, last_transition_start + i_next, ff_start_idx + i_next, ff_start_idx + i))
+        vol_elems.append((5, last_transition_start + i, last_transition_start + i_next, ff_start_idx + i, elem_idx))
+        elem_idx += 1
+        vol_elems.append((5, last_transition_start + i_next, ff_start_idx + i_next, ff_start_idx + i, elem_idx))
+        elem_idx += 1
     
     n_vol = len(vol_elems)
     n_total = len(surface_elems) + len(ff_elems) + n_vol
@@ -203,31 +210,33 @@ def generate_mesh():
     MESH_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     
     with open(MESH_OUTPUT, 'w') as f:
-        # SU2 format: NDIME, NELEM, elements, NPOIN, nodes, NMARK, markers (no header line)
+        # SU2 format: NDIME, NPOIN, nodes, NELEM, elements, NMARK, markers
         f.write("NDIME= 2\n")
-        f.write(f"NELEM= {n_vol}\n")
-        
-        # Volume elements
-        for elem in vol_elems:
-            f.write(f"{elem[0]} {elem[1]} {elem[2]} {elem[3]}\n")
-        
         f.write(f"NPOIN= {n_nodes}\n")
         
-        # Nodes
-        for x, y in nodes:
-            f.write(f"{x:.10f} {y:.10f}\n")
+        # Nodes (format: first node is "index x y" with index=1, rest are "x y index")
+        # This matches the exact format of mesh_fixed.su2
+        f.write(f"1 {nodes[0][0]:.10f} {nodes[0][1]:.10f}\n")
+        for i, (x, y) in enumerate(nodes[1:], start=1):
+            f.write(f"{x:.10f} {y:.10f} {i}\n")
+        
+        f.write(f"NELEM= {n_vol}\n")
+        
+        # Volume elements (format: type n0 n1 n2 elem_idx)
+        for elem in vol_elems:
+            f.write(f"{elem[0]} {elem[1]} {elem[2]} {elem[3]} {elem[4]}\n")
         
         # Markers
         f.write("NMARK= 2\n")
         f.write("MARKER_TAG= airfoil\n")
         f.write(f"MARKER_ELEMS= {len(surface_elems)}\n")
         for elem in surface_elems:
-            f.write(f"{elem[0]} {elem[1]} {elem[2]}\n")
+            f.write(f"{elem[0]} {elem[1]} {elem[2]} {elem[3]}\n")
         
         f.write("MARKER_TAG= farfield\n")
         f.write(f"MARKER_ELEMS= {len(ff_elems)}\n")
         for elem in ff_elems:
-            f.write(f"{elem[0]} {elem[1]} {elem[2]}\n")
+            f.write(f"{elem[0]} {elem[1]} {elem[2]} {elem[3]}\n")
     
     print(f"   Written: {MESH_OUTPUT}")
     print(f"   Size: {MESH_OUTPUT.stat().st_size / 1024:.1f} KB")
@@ -236,38 +245,43 @@ def generate_mesh():
     print(f"\n8. Validating mesh...")
     lines = MESH_OUTPUT.read_text().splitlines()
     
-    # Parse SU2 format: NDIME, NELEM, elements, NPOIN, nodes, NMARK, markers (no header line)
-    nelem_line = None
+    # Parse SU2 format: NDIME, NPOIN, nodes, NELEM, elements, NMARK, markers
     npoin_line = None
+    nelem_line = None
     for i, line in enumerate(lines):
-        if line.startswith('NELEM='):
-            nelem_line = i
-        elif line.startswith('NPOIN='):
+        if line.startswith('NPOIN='):
             npoin_line = i
+        elif line.startswith('NELEM='):
+            nelem_line = i
             break
     
-    nelem = int(lines[nelem_line].split('=')[1])
     npoin = int(lines[npoin_line].split('=')[1])
+    nelem = int(lines[nelem_line].split('=')[1])
     
-    # Node coordinates start after NPOIN line
+    # Node coordinates start after NPOIN line (format: first node "index x y", rest "x y index")
     node_start = npoin_line + 1
     node_coords = []
     for i in range(node_start, len(lines)):
         line = lines[i].strip()
-        if line.startswith('NMARK='):
+        if line.startswith('NELEM='):
             break
         if not line:
             continue
-        parts = line.split()[:2]
-        if len(parts) == 2:
+        parts = line.split()
+        if len(parts) >= 3:
             try:
-                node_coords.append([float(parts[0]), float(parts[1])])
+                # First node format: index x y, rest: x y index
+                if i == node_start:
+                    node_coords.append([float(parts[1]), float(parts[2])])
+                else:
+                    node_coords.append([float(parts[0]), float(parts[1])])
             except ValueError:
                 continue
         if len(node_coords) >= npoin:
             break
     
-    pts = np.array(node_coords[:npoin])
+    # Only check surface nodes (first n_af nodes) for chord calculation
+    pts = np.array(node_coords[:n_af])
     
     x_min, x_max = pts[:, 0].min(), pts[:, 0].max()
     y_min, y_max = pts[:, 1].min(), pts[:, 1].max()

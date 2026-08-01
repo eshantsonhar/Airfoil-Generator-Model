@@ -1,0 +1,16 @@
+
+
+Error in "void CConfig::SetConfig_Parsing(std::istream&)": 
+-------------------------------------------------------------------------
+Line 94 SURFACE_OUTPUT: invalid option name. Check current SU2 options in config_template.cfg.
+Did you mean SURFACE_MOVEMENT?
+
+------------------------------ Error Exit -------------------------------
+
+
+
+job aborted:
+[ranks] message
+
+[0] application aborted
+aborting MPI_COMM_WORLD (comm=0x44000000), error 1, comm rank 0

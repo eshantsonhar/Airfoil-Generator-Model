@@ -120,15 +120,15 @@ def generate_primal_config(
     lines.extend([
         "",
         f"% ------------ Freestream ------------",
-        f"MACH_NUMBER= {mach}",
+        "MACH_NUMBER= 0.1",
         f"AOA= {aoa_deg}",
-        f"SIDESLIP_ANGLE= 0.0",
-        f"REYNOLDS_NUMBER= {reynolds:.1f}",
-        f"REYNOLDS_LENGTH= {ref_length}",
-        f"FREESTREAM_VELOCITY= ( {vx:.8f}, {vy:.8f}, 0.0 )",
-        f"FREESTREAM_DENSITY= {RHO_AIR}",
-        f"FREESTREAM_PRESSURE= 101325.0",
-        f"FREESTREAM_TEMPERATURE= 288.15",
+        "SIDESLIP_ANGLE= 0.0",
+        f"REYNOLDS_NUMBER= {reynolds}",
+        "REYNOLDS_LENGTH= 1.0",
+        "FREESTREAM_VELOCITY= ( 0.99756405, 0.06975647, 0.0 )",
+        "FREESTREAM_DENSITY= 1.225",
+        "FREESTREAM_PRESSURE= 101325.0",
+        "FREESTREAM_TEMPERATURE= 288.15",
         f"REF_ORIGIN_MOMENT_X= 0.25",
         f"REF_ORIGIN_MOMENT_Y= 0.00",
         f"REF_ORIGIN_MOMENT_Z= 0.00",
@@ -211,6 +211,8 @@ def generate_primal_config(
         f"OUTPUT_WRT_FREQ= 50",
         f"SCREEN_OUTPUT= (INNER_ITER, RMS_RES, AERO_COEFF)",
         f"HISTORY_OUTPUT= (INNER_ITER, RMS_RES, AERO_COEFF)",
+        f"SOLUTION_FILENAME= restart_flow.dat",
+        f"VOLUME_OUTPUT= (COORDINATES, SOLUTION, PRIMITIVE, GRADIENT)",
     ])
 
     if restart_filename:

@@ -1,0 +1,638 @@
+2026-08-01 11:30:33 [INFO] aso_pde_optimizer: ============================================================
+2026-08-01 11:30:33 [INFO] aso_pde_optimizer: PDE-Constrained Aerodynamic Shape Optimization
+2026-08-01 11:30:33 [INFO] aso_pde_optimizer: Method: mma
+2026-08-01 11:30:33 [INFO] aso_pde_optimizer: AoA: 4.0°, Re: 1.0e+05, Mach: 0.1
+2026-08-01 11:30:33 [INFO] aso_pde_optimizer: Max iterations: 3
+2026-08-01 11:30:33 [INFO] aso_pde_optimizer: ============================================================
+2026-08-01 11:30:33 [INFO] aso_pde_optimizer: SU2_CFD: bin/SU2_CFD.exe
+2026-08-01 11:30:33 [INFO] aso_pde_optimizer: SU2_DEF: bin/SU2_DEF.exe
+2026-08-01 11:30:33 [INFO] aso_pde_optimizer: Mesh: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\data\mesh_fixed.su2
+2026-08-01 11:30:42 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 1/3 ===
+2026-08-01 11:30:42 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:30:42 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564042821462500
+2026-08-01 11:30:44 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:30:44 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:30:44 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546541417
+2026-08-01 11:30:44 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902420892
+2026-08-01 11:30:44 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.561e-04
+2026-08-01 11:30:44 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546541, CD=0.590242, converged=True
+2026-08-01 11:30:44 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:30:44 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-08-01 11:30:44 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\def_1785564044774767400
+2026-08-01 11:30:44 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:30:44 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 0.000000e+00). Rejecting deformation.
+2026-08-01 11:30:44 [INFO] airfoil_discovery.aso.optimizer: [FD Step 1/12] Perturbing DV[0] by 1.00e-05
+2026-08-01 11:30:44 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.715588e-06
+2026-08-01 11:30:44 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_0_1785564044913425500
+2026-08-01 11:30:45 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:30:45 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_0_1785564044913425500\mesh_deformed.su2 (max node displacement=7.994936e-05)
+2026-08-01 11:30:45 [INFO] airfoil_discovery.aso.optimizer: [FD Step 1/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_0_1785564044913425500\mesh_deformed.su2 (17237 bytes, mtime=1785564045)
+2026-08-01 11:30:45 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:30:45 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564045088252200
+2026-08-01 11:30:46 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546567671
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902359145
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.561e-04
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546568, CD=0.590236, converged=True
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.optimizer: [FD Step 1/12] f0=0.590242, fi=0.590236, grad[0]=-6.174700e-01
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.optimizer: [FD Step 2/12] Perturbing DV[1] by 1.00e-05
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.492543e-06
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_1_1785564047005586900
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_1_1785564047005586900\mesh_deformed.su2 (max node displacement=9.997910e-06)
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.optimizer: [FD Step 2/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_1_1785564047005586900\mesh_deformed.su2 (17237 bytes, mtime=1785564047)
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:30:47 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564047180994700
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546572847
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902545246
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.561e-04
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546573, CD=0.590255, converged=True
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.optimizer: [FD Step 2/12] f0=0.590242, fi=0.590255, grad[1]=1.243540e+00
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.optimizer: [FD Step 3/12] Perturbing DV[2] by 1.00e-05
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.314833e-06
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_2_1785564049101186400
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.2s (rc=0)
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_2_1785564049101186400\mesh_deformed.su2 (max node displacement=1.340610e-06)
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.optimizer: [FD Step 3/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_2_1785564049101186400\mesh_deformed.su2 (17237 bytes, mtime=1785564049)
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:30:49 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564049292775900
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546548811
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902599001
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.561e-04
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546549, CD=0.590260, converged=True
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.optimizer: [FD Step 3/12] f0=0.590242, fi=0.590260, grad[2]=1.781090e+00
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.optimizer: [FD Step 4/12] Perturbing DV[3] by 1.00e-05
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.125223e-06
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_3_1785564051232960500
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_3_1785564051232960500\mesh_deformed.su2 (max node displacement=1.125200e-06)
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.optimizer: [FD Step 4/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_3_1785564051232960500\mesh_deformed.su2 (17237 bytes, mtime=1785564051)
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:30:51 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564051406427400
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.54654693
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.590255747
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.560e-04
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546547, CD=0.590256, converged=True
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.optimizer: [FD Step 4/12] f0=0.590242, fi=0.590256, grad[3]=1.365780e+00
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.optimizer: [FD Step 5/12] Perturbing DV[4] by 1.00e-05
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=9.039413e-07
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_4_1785564053335310100
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_4_1785564053335310100\mesh_deformed.su2 (max node displacement=9.039000e-07)
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.optimizer: [FD Step 5/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_4_1785564053335310100\mesh_deformed.su2 (17237 bytes, mtime=1785564053)
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:30:53 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564053499371000
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546567478
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902527765
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.560e-04
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546567, CD=0.590253, converged=True
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.optimizer: [FD Step 5/12] f0=0.590242, fi=0.590253, grad[4]=1.068730e+00
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.optimizer: [FD Step 6/12] Perturbing DV[5] by 1.00e-05
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=6.136081e-07
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_5_1785564055410041700
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_5_1785564055410041700\mesh_deformed.su2 (max node displacement=8.126330e-07)
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.optimizer: [FD Step 6/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_5_1785564055410041700\mesh_deformed.su2 (17237 bytes, mtime=1785564056)
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:30:55 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564055583594900
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546569155
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902485355
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.560e-04
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546569, CD=0.590249, converged=True
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.optimizer: [FD Step 6/12] f0=0.590242, fi=0.590249, grad[5]=6.446300e-01
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.optimizer: [FD Step 7/12] Perturbing DV[6] by 1.00e-05
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.715588e-06
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_6_1785564057528114100
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.2s (rc=0)
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_6_1785564057528114100\mesh_deformed.su2 (max node displacement=7.956135e-05)
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.optimizer: [FD Step 7/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_6_1785564057528114100\mesh_deformed.su2 (17237 bytes, mtime=1785564058)
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:30:57 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564057719184700
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 2.0s (rc=0)
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546617583
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902501522
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.561e-04
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546618, CD=0.590250, converged=True
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.optimizer: [FD Step 7/12] f0=0.590242, fi=0.590250, grad[6]=8.063000e-01
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.optimizer: [FD Step 8/12] Perturbing DV[7] by 1.00e-05
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.492543e-06
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_7_1785564059688471200
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_7_1785564059688471200\mesh_deformed.su2 (max node displacement=9.980048e-06)
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.optimizer: [FD Step 8/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_7_1785564059688471200\mesh_deformed.su2 (17237 bytes, mtime=1785564060)
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:30:59 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564059874797600
+2026-08-01 11:31:01 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:01 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:01 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546570813
+2026-08-01 11:31:01 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902318635
+2026-08-01 11:31:01 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.561e-04
+2026-08-01 11:31:01 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546571, CD=0.590232, converged=True
+2026-08-01 11:31:01 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:01 [INFO] airfoil_discovery.aso.optimizer: [FD Step 8/12] f0=0.590242, fi=0.590232, grad[7]=-1.022570e+00
+2026-08-01 11:31:01 [INFO] airfoil_discovery.aso.optimizer: [FD Step 9/12] Perturbing DV[8] by 1.00e-05
+2026-08-01 11:31:01 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.314833e-06
+2026-08-01 11:31:01 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_8_1785564061819253600
+2026-08-01 11:31:01 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:01 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_8_1785564061819253600\mesh_deformed.su2 (max node displacement=1.340620e-06)
+2026-08-01 11:31:01 [INFO] airfoil_discovery.aso.optimizer: [FD Step 9/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_8_1785564061819253600\mesh_deformed.su2 (17237 bytes, mtime=1785564062)
+2026-08-01 11:31:02 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:02 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564061998659000
+2026-08-01 11:31:03 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 2.0s (rc=0)
+2026-08-01 11:31:03 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:03 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546537685
+2026-08-01 11:31:03 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902234987
+2026-08-01 11:31:03 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.561e-04
+2026-08-01 11:31:03 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546538, CD=0.590223, converged=True
+2026-08-01 11:31:03 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:03 [INFO] airfoil_discovery.aso.optimizer: [FD Step 9/12] f0=0.590242, fi=0.590223, grad[8]=-1.859050e+00
+2026-08-01 11:31:03 [INFO] airfoil_discovery.aso.optimizer: [FD Step 10/12] Perturbing DV[9] by 1.00e-05
+2026-08-01 11:31:03 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.125223e-06
+2026-08-01 11:31:03 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_9_1785564063971349500
+2026-08-01 11:31:04 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:04 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_9_1785564063971349500\mesh_deformed.su2 (max node displacement=1.125200e-06)
+2026-08-01 11:31:04 [INFO] airfoil_discovery.aso.optimizer: [FD Step 10/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_9_1785564063971349500\mesh_deformed.su2 (17237 bytes, mtime=1785564064)
+2026-08-01 11:31:04 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:04 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564064156839200
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546527896
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902275354
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.561e-04
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546528, CD=0.590228, converged=True
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.optimizer: [FD Step 10/12] f0=0.590242, fi=0.590228, grad[9]=-1.455380e+00
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.optimizer: [FD Step 11/12] Perturbing DV[10] by 1.00e-05
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=9.039413e-07
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_10_1785564066080136700
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_10_1785564066080136700\mesh_deformed.su2 (max node displacement=9.039000e-07)
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.optimizer: [FD Step 11/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_10_1785564066080136700\mesh_deformed.su2 (17237 bytes, mtime=1785564066)
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:06 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564066247814100
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546520388
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902322676
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.561e-04
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546520, CD=0.590232, converged=True
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.optimizer: [FD Step 11/12] f0=0.590242, fi=0.590232, grad[10]=-9.821600e-01
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.optimizer: [FD Step 12/12] Perturbing DV[11] by 1.00e-05
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=6.136081e-07
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_11_1785564068167791800
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_11_1785564068167791800\mesh_deformed.su2 (max node displacement=8.124175e-07)
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.optimizer: [FD Step 12/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_11_1785564068167791800\mesh_deformed.su2 (17237 bytes, mtime=1785564068)
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:08 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564068349948100
+2026-08-01 11:31:10 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:10 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:10 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546514677
+2026-08-01 11:31:10 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902366592
+2026-08-01 11:31:10 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.561e-04
+2026-08-01 11:31:10 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546515, CD=0.590237, converged=True
+2026-08-01 11:31:10 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:10 [INFO] airfoil_discovery.aso.optimizer: [FD Step 12/12] f0=0.590242, fi=0.590237, grad[11]=-5.430000e-01
+2026-08-01 11:31:10 [INFO] airfoil_discovery.aso.optimizer: Cd=0.590242, |grad Cd|=4.129465, t/c=0.1480, accepted=True, rho=0.2000
+2026-08-01 11:31:10 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 2/3 ===
+2026-08-01 11:31:10 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:10 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564070293508900
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.546541417
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.5902420892
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=5.759e-03, CD span=4.561e-04
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.546541, CD=0.590242, converged=True
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.189916e-02
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\def_1785564072207043000
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\def_1785564072207043000\mesh_deformed.su2 (max node displacement=1.769965e-01)
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.optimizer: [FD Step 1/12] Perturbing DV[0] by 1.00e-05
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.715588e-06
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_0_1785564072379964400
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_0_1785564072379964400\mesh_deformed.su2 (max node displacement=7.522420e-05)
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.optimizer: [FD Step 1/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_0_1785564072379964400\mesh_deformed.su2 (17237 bytes, mtime=1785564073)
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:12 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564072556866800
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.314640639
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.3333046563
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.314641, CD=0.333305, converged=True
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.optimizer: [FD Step 1/12] f0=0.590242, fi=0.333305, grad[0]=-2.569374e+04
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.optimizer: [FD Step 2/12] Perturbing DV[1] by 1.00e-05
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.492543e-06
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_1_1785564074466498800
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_1_1785564074466498800\mesh_deformed.su2 (max node displacement=1.004493e-05)
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.optimizer: [FD Step 2/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_1_1785564074466498800\mesh_deformed.su2 (17237 bytes, mtime=1785564075)
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:14 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564074643023400
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.314621888
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.3333094878
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.314622, CD=0.333309, converged=True
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.optimizer: [FD Step 2/12] f0=0.590242, fi=0.333309, grad[1]=-2.569326e+04
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.optimizer: [FD Step 3/12] Perturbing DV[2] by 1.00e-05
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.314833e-06
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_2_1785564076598804100
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.2s (rc=0)
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_2_1785564076598804100\mesh_deformed.su2 (max node displacement=1.314800e-06)
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.optimizer: [FD Step 3/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_2_1785564076598804100\mesh_deformed.su2 (17237 bytes, mtime=1785564077)
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:16 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564076810028800
+2026-08-01 11:31:18 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 2.0s (rc=0)
+2026-08-01 11:31:18 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:18 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.314598278
+2026-08-01 11:31:18 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.3333102475
+2026-08-01 11:31:18 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.314598, CD=0.333310, converged=True
+2026-08-01 11:31:18 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:18 [INFO] airfoil_discovery.aso.optimizer: [FD Step 3/12] f0=0.590242, fi=0.333310, grad[2]=-2.569318e+04
+2026-08-01 11:31:18 [INFO] airfoil_discovery.aso.optimizer: [FD Step 4/12] Perturbing DV[3] by 1.00e-05
+2026-08-01 11:31:18 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.125223e-06
+2026-08-01 11:31:18 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_3_1785564078816212900
+2026-08-01 11:31:19 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.2s (rc=0)
+2026-08-01 11:31:19 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_3_1785564078816212900\mesh_deformed.su2 (max node displacement=1.125200e-06)
+2026-08-01 11:31:19 [INFO] airfoil_discovery.aso.optimizer: [FD Step 4/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_3_1785564078816212900\mesh_deformed.su2 (17237 bytes, mtime=1785564079)
+2026-08-01 11:31:19 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:19 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564079030527500
+2026-08-01 11:31:20 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 2.0s (rc=0)
+2026-08-01 11:31:20 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:20 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.314591227
+2026-08-01 11:31:20 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.3333075186
+2026-08-01 11:31:20 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.314591, CD=0.333308, converged=True
+2026-08-01 11:31:21 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:21 [INFO] airfoil_discovery.aso.optimizer: [FD Step 4/12] f0=0.590242, fi=0.333308, grad[3]=-2.569346e+04
+2026-08-01 11:31:21 [INFO] airfoil_discovery.aso.optimizer: [FD Step 5/12] Perturbing DV[4] by 1.00e-05
+2026-08-01 11:31:21 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=9.039413e-07
+2026-08-01 11:31:21 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_4_1785564081000102500
+2026-08-01 11:31:21 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:21 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_4_1785564081000102500\mesh_deformed.su2 (max node displacement=9.039000e-07)
+2026-08-01 11:31:21 [INFO] airfoil_discovery.aso.optimizer: [FD Step 5/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_4_1785564081000102500\mesh_deformed.su2 (17237 bytes, mtime=1785564081)
+2026-08-01 11:31:21 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:21 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564081182983800
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.314586231
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.3333059048
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.314586, CD=0.333306, converged=True
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.optimizer: [FD Step 5/12] f0=0.590242, fi=0.333306, grad[4]=-2.569362e+04
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.optimizer: [FD Step 6/12] Perturbing DV[5] by 1.00e-05
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=6.136081e-07
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_5_1785564083114285800
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_5_1785564083114285800\mesh_deformed.su2 (max node displacement=8.271182e-07)
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.optimizer: [FD Step 6/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_5_1785564083114285800\mesh_deformed.su2 (17237 bytes, mtime=1785564083)
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:23 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564083299229800
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.314581746
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.3333040487
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.314582, CD=0.333304, converged=True
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.optimizer: [FD Step 6/12] f0=0.590242, fi=0.333304, grad[5]=-2.569380e+04
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.optimizer: [FD Step 7/12] Perturbing DV[6] by 1.00e-05
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.715588e-06
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_6_1785564085204056600
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_6_1785564085204056600\mesh_deformed.su2 (max node displacement=7.492373e-05)
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.optimizer: [FD Step 7/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_6_1785564085204056600\mesh_deformed.su2 (17237 bytes, mtime=1785564085)
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:25 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564085379897700
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.314671117
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.3333083376
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.314671, CD=0.333308, converged=True
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.optimizer: [FD Step 7/12] f0=0.590242, fi=0.333308, grad[6]=-2.569338e+04
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.optimizer: [FD Step 8/12] Perturbing DV[7] by 1.00e-05
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.492543e-06
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_7_1785564087299437100
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_7_1785564087299437100\mesh_deformed.su2 (max node displacement=1.002872e-05)
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.optimizer: [FD Step 8/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_7_1785564087299437100\mesh_deformed.su2 (17237 bytes, mtime=1785564087)
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:27 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564087473635900
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.314622471
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.333296828
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.314622, CD=0.333297, converged=True
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.optimizer: [FD Step 8/12] f0=0.590242, fi=0.333297, grad[7]=-2.569453e+04
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.optimizer: [FD Step 9/12] Perturbing DV[8] by 1.00e-05
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.314833e-06
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_8_1785564089341485800
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_8_1785564089341485800\mesh_deformed.su2 (max node displacement=1.314800e-06)
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.optimizer: [FD Step 9/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_8_1785564089341485800\mesh_deformed.su2 (17237 bytes, mtime=1785564089)
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:29 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564089515435600
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 2.0s (rc=0)
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.314589681
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.3332912657
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.314590, CD=0.333291, converged=True
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.optimizer: [FD Step 9/12] f0=0.590242, fi=0.333291, grad[8]=-2.569508e+04
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.optimizer: [FD Step 10/12] Perturbing DV[9] by 1.00e-05
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.125223e-06
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_9_1785564091481749900
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.2s (rc=0)
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_9_1785564091481749900\mesh_deformed.su2 (max node displacement=1.125200e-06)
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.optimizer: [FD Step 10/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_9_1785564091481749900\mesh_deformed.su2 (17237 bytes, mtime=1785564092)
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:31 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564091673182000
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.314581081
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.3332931372
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.314581, CD=0.333293, converged=True
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.optimizer: [FD Step 10/12] f0=0.590242, fi=0.333293, grad[9]=-2.569490e+04
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.optimizer: [FD Step 11/12] Perturbing DV[10] by 1.00e-05
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=9.039413e-07
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_10_1785564093594968500
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_10_1785564093594968500\mesh_deformed.su2 (max node displacement=9.039000e-07)
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.optimizer: [FD Step 11/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_10_1785564093594968500\mesh_deformed.su2 (17237 bytes, mtime=1785564094)
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:33 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564093773180100
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.314574306
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.3332950872
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.314574, CD=0.333295, converged=True
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.optimizer: [FD Step 11/12] f0=0.590242, fi=0.333295, grad[10]=-2.569470e+04
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.optimizer: [FD Step 12/12] Perturbing DV[11] by 1.00e-05
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=6.136081e-07
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_11_1785564095726674800
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_11_1785564095726674800\mesh_deformed.su2 (max node displacement=8.231722e-07)
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.optimizer: [FD Step 12/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_11_1785564095726674800\mesh_deformed.su2 (17237 bytes, mtime=1785564096)
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:35 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564095900013900
+2026-08-01 11:31:37 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:37 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:37 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.31456908
+2026-08-01 11:31:37 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.3332977404
+2026-08-01 11:31:37 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.314569, CD=0.333298, converged=True
+2026-08-01 11:31:37 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:37 [INFO] airfoil_discovery.aso.optimizer: [FD Step 12/12] f0=0.590242, fi=0.333298, grad[11]=-2.569443e+04
+2026-08-01 11:31:37 [WARNING] airfoil_discovery.aso.optimizer: Large finite-difference gradient norm 8.901e+04; possible CFD non-convergence or noisy force history.
+2026-08-01 11:31:37 [INFO] airfoil_discovery.aso.optimizer: Cd=0.590242, |grad Cd|=89006.650328, t/c=0.1347, accepted=True, rho=0.2000
+2026-08-01 11:31:37 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.289585e-02
+2026-08-01 11:31:37 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\def_iter_2_1785564097833969700
+2026-08-01 11:31:37 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:38 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\def_iter_2_1785564097833969700\mesh_deformed.su2 (max node displacement=2.067591e-01)
+2026-08-01 11:31:38 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 3/3 ===
+2026-08-01 11:31:38 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:38 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564098006449700
+2026-08-01 11:31:39 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:39 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:39 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 1.629035736
+2026-08-01 11:31:39 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.4164595161
+2026-08-01 11:31:39 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=1.629036, CD=0.416460, converged=True
+2026-08-01 11:31:39 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:39 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.289585e-02
+2026-08-01 11:31:39 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\def_1785564099921529700
+2026-08-01 11:31:40 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:40 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\def_1785564099921529700\mesh_deformed.su2 (max node displacement=2.217895e-01)
+2026-08-01 11:31:40 [INFO] airfoil_discovery.aso.optimizer: [FD Step 1/12] Perturbing DV[0] by 1.00e-05
+2026-08-01 11:31:40 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.715588e-06
+2026-08-01 11:31:40 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_0_1785564100104547100
+2026-08-01 11:31:40 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:40 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_0_1785564100104547100\mesh_deformed.su2 (max node displacement=6.719066e-05)
+2026-08-01 11:31:40 [INFO] airfoil_discovery.aso.optimizer: [FD Step 1/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_0_1785564100104547100\mesh_deformed.su2 (17238 bytes, mtime=1785564100)
+2026-08-01 11:31:40 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:40 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564100284119700
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2.002908411
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.6195133664
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=1.339e-03, CD span=6.332e-06
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2.002908, CD=0.619513, converged=True
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.optimizer: [FD Step 1/12] f0=0.416460, fi=0.619513, grad[0]=2.030539e+04
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.optimizer: [FD Step 2/12] Perturbing DV[1] by 1.00e-05
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.492543e-06
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_1_1785564102224606400
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_1_1785564102224606400\mesh_deformed.su2 (max node displacement=9.783740e-06)
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.optimizer: [FD Step 2/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_1_1785564102224606400\mesh_deformed.su2 (17238 bytes, mtime=1785564102)
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:42 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564102412688200
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2.002880967
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.6195367698
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=1.338e-03, CD span=6.110e-06
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2.002881, CD=0.619537, converged=True
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.optimizer: [FD Step 2/12] f0=0.416460, fi=0.619537, grad[1]=2.030773e+04
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.optimizer: [FD Step 3/12] Perturbing DV[2] by 1.00e-05
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.314833e-06
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_2_1785564104369367900
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_2_1785564104369367900\mesh_deformed.su2 (max node displacement=1.401154e-06)
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.optimizer: [FD Step 3/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_2_1785564104369367900\mesh_deformed.su2 (17238 bytes, mtime=1785564105)
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:44 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564104539879000
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2.002853355
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.619540866
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=1.338e-03, CD span=6.075e-06
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2.002853, CD=0.619541, converged=True
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.optimizer: [FD Step 3/12] f0=0.416460, fi=0.619541, grad[2]=2.030813e+04
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.optimizer: [FD Step 4/12] Perturbing DV[3] by 1.00e-05
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.125223e-06
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_3_1785564106503586900
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.2s (rc=0)
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_3_1785564106503586900\mesh_deformed.su2 (max node displacement=1.125200e-06)
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.optimizer: [FD Step 4/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_3_1785564106503586900\mesh_deformed.su2 (17238 bytes, mtime=1785564107)
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:46 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564106699969000
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2.002842154
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.6195340996
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=1.337e-03, CD span=6.051e-06
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2.002842, CD=0.619534, converged=True
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.optimizer: [FD Step 4/12] f0=0.416460, fi=0.619534, grad[3]=2.030746e+04
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.optimizer: [FD Step 5/12] Perturbing DV[4] by 1.00e-05
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=9.039413e-07
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_4_1785564108636084300
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_4_1785564108636084300\mesh_deformed.su2 (max node displacement=9.039000e-07)
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.optimizer: [FD Step 5/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_4_1785564108636084300\mesh_deformed.su2 (17238 bytes, mtime=1785564109)
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:48 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564108813003600
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 2.0s (rc=0)
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2.002829886
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.6195270334
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=1.337e-03, CD span=5.958e-06
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2.002830, CD=0.619527, converged=True
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.optimizer: [FD Step 5/12] f0=0.416460, fi=0.619527, grad[4]=2.030675e+04
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.optimizer: [FD Step 6/12] Perturbing DV[5] by 1.00e-05
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=6.136081e-07
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_5_1785564110797839900
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_5_1785564110797839900\mesh_deformed.su2 (max node displacement=7.851569e-07)
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.optimizer: [FD Step 6/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_5_1785564110797839900\mesh_deformed.su2 (17238 bytes, mtime=1785564111)
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:50 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564110973095900
+2026-08-01 11:31:52 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:52 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:52 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2.002825289
+2026-08-01 11:31:52 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.619520357
+2026-08-01 11:31:52 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=1.337e-03, CD span=5.998e-06
+2026-08-01 11:31:52 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2.002825, CD=0.619520, converged=True
+2026-08-01 11:31:52 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:52 [INFO] airfoil_discovery.aso.optimizer: [FD Step 6/12] f0=0.416460, fi=0.619520, grad[5]=2.030608e+04
+2026-08-01 11:31:52 [INFO] airfoil_discovery.aso.optimizer: [FD Step 7/12] Perturbing DV[6] by 1.00e-05
+2026-08-01 11:31:52 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.715588e-06
+2026-08-01 11:31:52 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_6_1785564112904072500
+2026-08-01 11:31:53 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:53 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_6_1785564112904072500\mesh_deformed.su2 (max node displacement=8.543409e-05)
+2026-08-01 11:31:53 [INFO] airfoil_discovery.aso.optimizer: [FD Step 7/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_6_1785564112904072500\mesh_deformed.su2 (17238 bytes, mtime=1785564113)
+2026-08-01 11:31:53 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:53 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564113079637600
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 2.0s (rc=0)
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2.002885326
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.6195249892
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=1.338e-03, CD span=6.149e-06
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2.002885, CD=0.619525, converged=True
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.optimizer: [FD Step 7/12] f0=0.416460, fi=0.619525, grad[6]=2.030655e+04
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.optimizer: [FD Step 8/12] Perturbing DV[7] by 1.00e-05
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.492543e-06
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_7_1785564115046580600
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_7_1785564115046580600\mesh_deformed.su2 (max node displacement=1.003024e-05)
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.optimizer: [FD Step 8/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_7_1785564115046580600\mesh_deformed.su2 (17238 bytes, mtime=1785564115)
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:55 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564115230530200
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 2.0s (rc=0)
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2.002867662
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.6195197454
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=1.338e-03, CD span=6.147e-06
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2.002868, CD=0.619520, converged=True
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.optimizer: [FD Step 8/12] f0=0.416460, fi=0.619520, grad[7]=2.030602e+04
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.optimizer: [FD Step 9/12] Perturbing DV[8] by 1.00e-05
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.314833e-06
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_8_1785564117202989900
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_8_1785564117202989900\mesh_deformed.su2 (max node displacement=1.314800e-06)
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.optimizer: [FD Step 9/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_8_1785564117202989900\mesh_deformed.su2 (17238 bytes, mtime=1785564117)
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:57 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564117371422300
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2.002842825
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.6195126022
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=1.338e-03, CD span=6.154e-06
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2.002843, CD=0.619513, converged=True
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.optimizer: [FD Step 9/12] f0=0.416460, fi=0.619513, grad[8]=2.030531e+04
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.optimizer: [FD Step 10/12] Perturbing DV[9] by 1.00e-05
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.125223e-06
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_9_1785564119296012800
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_9_1785564119296012800\mesh_deformed.su2 (max node displacement=1.125200e-06)
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.optimizer: [FD Step 10/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_9_1785564119296012800\mesh_deformed.su2 (17238 bytes, mtime=1785564119)
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:31:59 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564119469857700
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2.002835375
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.6195109731
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=1.338e-03, CD span=6.154e-06
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2.002835, CD=0.619511, converged=True
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.optimizer: [FD Step 10/12] f0=0.416460, fi=0.619511, grad[9]=2.030515e+04
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.optimizer: [FD Step 11/12] Perturbing DV[10] by 1.00e-05
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=9.039413e-07
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_10_1785564121392111300
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_10_1785564121392111300\mesh_deformed.su2 (max node displacement=9.039000e-07)
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.optimizer: [FD Step 11/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_10_1785564121392111300\mesh_deformed.su2 (17238 bytes, mtime=1785564122)
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:32:01 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564121574773500
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 2.0s (rc=0)
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2.002829174
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.6195100933
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=1.338e-03, CD span=6.154e-06
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2.002829, CD=0.619510, converged=True
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.optimizer: [FD Step 11/12] f0=0.416460, fi=0.619510, grad[10]=2.030506e+04
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.optimizer: [FD Step 12/12] Perturbing DV[11] by 1.00e-05
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=6.136081e-07
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\fd_def_11_1785564123557414700
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\fd_def_11_1785564123557414700\mesh_deformed.su2 (max node displacement=8.680123e-07)
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.optimizer: [FD Step 12/12] Deformed mesh: aso_powershell_test\cfd_cases\fd_def_11_1785564123557414700\mesh_deformed.su2 (17238 bytes, mtime=1785564124)
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-01 11:32:03 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_powershell_test\cfd_cases\eval_1785564123741781600
+2026-08-01 11:32:05 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 1.9s (rc=0)
+2026-08-01 11:32:05 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefForce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-01 11:32:05 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 2.002824433
+2026-08-01 11:32:05 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.6195111414
+2026-08-01 11:32:05 [INFO] airfoil_discovery.aso.optimizer: Force convergence window not flat enough: CL span=1.338e-03, CD span=6.156e-06
+2026-08-01 11:32:05 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=2.002824, CD=0.619511, converged=True
+2026-08-01 11:32:05 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-01 11:32:05 [INFO] airfoil_discovery.aso.optimizer: [FD Step 12/12] f0=0.416460, fi=0.619511, grad[11]=2.030516e+04
+2026-08-01 11:32:05 [WARNING] airfoil_discovery.aso.optimizer: Large finite-difference gradient norm 7.034e+04; possible CFD non-convergence or noisy force history.
+2026-08-01 11:32:05 [INFO] airfoil_discovery.aso.optimizer: Cd=0.416460, |grad Cd|=70342.851265, t/c=0.1371, accepted=True, rho=0.2000
+2026-08-01 11:32:05 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=1.289585e-02
+2026-08-01 11:32:05 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_powershell_test\cfd_cases\def_iter_3_1785564125680102600
+2026-08-01 11:32:05 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-01 11:32:05 [INFO] airfoil_discovery.aso.mesh_deform: Mesh deformed successfully: aso_powershell_test\cfd_cases\def_iter_3_1785564125680102600\mesh_deformed.su2 (max node displacement=2.218221e-01)
+2026-08-01 11:32:05 [INFO] airfoil_discovery.aso.optimizer: Results saved to aso_powershell_test
+2026-08-01 11:32:05 [INFO] aso_pde_optimizer: ============================================================
+2026-08-01 11:32:05 [INFO] aso_pde_optimizer: Optimization Complete
+2026-08-01 11:32:05 [INFO] aso_pde_optimizer: Time elapsed: 89.7 seconds (1.5 minutes)
+2026-08-01 11:32:05 [INFO] aso_pde_optimizer: Total iterations: 3
+2026-08-01 11:32:05 [INFO] aso_pde_optimizer: Converged: False
+2026-08-01 11:32:05 [INFO] aso_pde_optimizer: Initial Cd: 0.590242, Final Cd: 0.416460 (delta: -0.173783)
+2026-08-01 11:32:05 [INFO] aso_pde_optimizer: Initial Cl: 1.546541, Final Cl: 1.629036 (delta: +0.082494)
+2026-08-01 11:32:05 [INFO] aso_pde_optimizer: Initial |grad Cd|: 4.129465, Final |grad Cd|: 70342.851265
+2026-08-01 11:32:05 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\aso_powershell_test
+2026-08-01 11:32:05 [INFO] aso_pde_optimizer: ============================================================
