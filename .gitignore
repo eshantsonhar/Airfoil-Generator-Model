@@ -16,3 +16,5 @@ bin/bin/**/*.exe
 bin/bin/**/*.dll
 *.su2
 .DS_Store
+aso_*/
+aso_results/

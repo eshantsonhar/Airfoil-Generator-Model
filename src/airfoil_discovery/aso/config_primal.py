@@ -75,7 +75,7 @@ def generate_primal_config(
         venkat_coeff = 0.03  # Lower coefficient for transition stability
         conv_scheme_turb = "SCALAR_UPWIND"
         muscl_turb = False
-        n_iter = 1500  # More iterations for transition convergence
+        n_iter = 3000  # Increased iterations for better force convergence stability
     else:
         # Conservative settings for SST-only
         conv_scheme = "ROE"
@@ -197,8 +197,8 @@ def generate_primal_config(
         "",
         f"% ------------ Convergence Criteria ------------",
         f"CONV_FIELD= {conv_field}",
-        "CONV_STARTITER= 10",
-        "CONV_CAUCHY_ELEMS= 50",
+        "CONV_STARTITER= 500",
+        "CONV_CAUCHY_ELEMS= 300",
         "CONV_CAUCHY_EPS= 1e-6",
         "",
         f"% ------------ Output ------------",

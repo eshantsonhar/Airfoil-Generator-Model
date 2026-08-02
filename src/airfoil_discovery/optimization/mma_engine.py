@@ -194,6 +194,43 @@ class SvanbergMMA:
                 s.L[j] = s.x[j] - min_dist / 2
                 s.U[j] = s.x[j] + min_dist / 2
     
+    def reset_asymptotes(self, expansion_factor: float = 0.5) -> None:
+        """
+        Explicitly reset and expand asymptotes around current design point.
+        
+        This is called when zero displacement or stagnation is detected to break
+        the asymptote compression trap. Without this, MMA's internal L and U
+        asymptotes can collapse to zero width, making further progress impossible
+        even when outer move limits are increased.
+        
+        Args:
+            expansion_factor: Fraction of variable range to use for asymptote expansion
+                            (default 0.5 = 50% of variable range)
+        """
+        if self.state is None:
+            return
+            
+        s = self.state
+        offset = expansion_factor * (self.x_max - self.x_min)
+        
+        # Re-expand asymptotes around current design point
+        s.L = s.x - offset
+        s.U = s.x + offset
+        
+        # Ensure asymptotes respect variable bounds
+        s.L = np.maximum(s.L, self.x_min - 5 * offset)
+        s.U = np.minimum(s.U, self.x_max + 5 * offset)
+        
+        # Ensure asymptotes don't cross the current point
+        eps_j = np.maximum(1e-6, 0.1 * (self.x_max - self.x_min))
+        s.L = np.minimum(s.L, s.U - eps_j)
+        
+        # Reset previous asymptotes to avoid contraction on next update
+        s.L_prev = s.L.copy()
+        s.U_prev = s.U.copy()
+        
+        logger.info(f"MMA asymptotes reset: L range expanded by factor {expansion_factor}")
+    
     def solve_subproblem(
         self, 
         x: np.ndarray,
@@ -312,7 +349,7 @@ class SvanbergMMA:
         f_new: float,
         f_pred: float,
         g_new: Optional[np.ndarray] = None,
-    ) -> Tuple[np.ndarray, bool]:
+    ) -> Tuple[np.ndarray, bool, bool]:
         """
         Perform MMA step with trust-region acceptance logic.
         
@@ -325,7 +362,7 @@ class SvanbergMMA:
             g_new: Constraint values at x_new (optional)
             
         Returns:
-            (x_accepted, accepted): Accepted design and acceptance flag
+            (x_accepted, accepted, stagnated): Accepted design, acceptance flag, and stagnation flag
         """
         if self.state is None:
             raise RuntimeError("MMA not initialized.")
@@ -342,6 +379,7 @@ class SvanbergMMA:
         
         # Acceptance decision
         accepted = False
+        stagnated = False
         if rho > 0.0:
             # Step improves objective - accept
             accepted = True
@@ -369,7 +407,7 @@ class SvanbergMMA:
                 s.g_vals = g_new.copy()
             s.iteration += 1
             s.step_accepted = True
-            return s.x.copy(), True
+            return s.x.copy(), True, False
         else:
             # Step rejected - try smaller move
             s.move_limit_factor = max(0.1, s.move_limit_factor * 0.5)
@@ -385,9 +423,9 @@ class SvanbergMMA:
                 perturbation = 0.01 * (self.x_max - self.x_min) * np.random.randn(self.n_vars)
                 x_recovery = np.clip(s.x + perturbation, self.x_min, self.x_max)
                 s.stagnated_counter = 0
-                return x_recovery, False
+                return x_recovery, False, True  # Return stagnated=True
             
-            return s.x.copy(), False
+            return s.x.copy(), False, False
     
     def run_optimization_step(
         self,
@@ -395,7 +433,7 @@ class SvanbergMMA:
         df: np.ndarray,
         g: Optional[np.ndarray] = None,
         dg: Optional[np.ndarray] = None,
-    ) -> Tuple[np.ndarray, bool, MMAState]:
+    ) -> Tuple[np.ndarray, bool, bool, MMAState]:
         """
         Run one complete MMA optimization iteration.
         
@@ -406,7 +444,7 @@ class SvanbergMMA:
             dg: Current constraint Jacobian
             
         Returns:
-            (x_next, accepted, state): New design, acceptance flag, current state
+            (x_next, accepted, stagnated, state): New design, acceptance flag, stagnation flag, current state
         """
         if self.state is None:
             raise RuntimeError("MMA not initialized. Call initialize() first.")
@@ -432,12 +470,12 @@ class SvanbergMMA:
         f_pred = f_current + np.dot(df, dx)
         
         # Apply step acceptance logic
-        x_accepted, accepted = self.step(x_candidate, f, f_pred, g)
+        x_accepted, accepted, stagnated = self.step(x_candidate, f, f_pred, g)
         
         # Update Lagrange multipliers
         s.lambd = lambd_next
         
-        return x_accepted, accepted, s
+        return x_accepted, accepted, stagnated, s
 
 
 class TrustRegionGovernor:

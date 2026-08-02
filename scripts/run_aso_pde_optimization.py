@@ -131,6 +131,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--turb-intensity", type=float, default=0.001, help="Freestream turbulence intensity")
     parser.add_argument("--turb-viscosity-ratio", type=float, default=5.0, help="Freestream μ_t/μ")
     parser.add_argument("--no-adjoint", action="store_true", help="Skip adjoint solves and use finite-difference gradients")
+    
+    # Lift constraint
+    parser.add_argument("--min-cl", type=float, default=None, help="Minimum lift coefficient constraint (e.g., 1.0)")
+    parser.add_argument("--cl-penalty-weight", type=float, default=1.0, help="Penalty weight for CL constraint violation")
 
     # Smoke test and preflight
     parser.add_argument("--smoke-test", action="store_true",
@@ -215,6 +219,8 @@ def main() -> None:
         max_iterations=args.max_iter,
         convergence_tolerance=args.tol,
         use_adjoint=not args.no_adjoint,
+        min_cl=args.min_cl,
+        cl_penalty_weight=args.cl_penalty_weight,
     )
 
     # Run pre-flight checks (unless skipped)
@@ -268,6 +274,8 @@ def main() -> None:
         max_iterations=args.max_iter,
         convergence_tolerance=args.tol,
         use_adjoint=not args.no_adjoint,
+        min_cl=args.min_cl,
+        cl_penalty_weight=args.cl_penalty_weight,
     )
 
     # Run optimization

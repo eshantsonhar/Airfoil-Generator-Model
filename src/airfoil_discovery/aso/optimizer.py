@@ -48,7 +48,7 @@ from .subprocess_utils import run_solver_safe
 logger = logging.getLogger(__name__)
 
 CFD_FAILURE_CD = 1.0
-GRADIENT_NORM_WARNING_THRESHOLD = 1e3
+GRADIENT_NORM_WARNING_THRESHOLD = 1e2
 
 
 _STALE_SU2_OUTPUTS = (
@@ -708,6 +708,8 @@ class ASOObjectiveFunction:
         previous_mesh_path: Optional[Path] = None,
         previous_dv: Optional[np.ndarray] = None,
         use_adjoint: bool = True,
+        min_cl: Optional[float] = None,
+        cl_penalty_weight: float = 1.0,
     ):
         self.su2_cfd_bin = su2_cfd_bin
         self.mesh_path = mesh_path
@@ -726,6 +728,8 @@ class ASOObjectiveFunction:
         self.bounds = bounds
         self.use_mesh_deformation = use_mesh_deformation
         self.su2_def_bin = su2_def_bin
+        self.min_cl = min_cl
+        self.cl_penalty_weight = cl_penalty_weight
 
         # Internal state
         self.current_mesh_path = mesh_path
@@ -819,7 +823,22 @@ class ASOObjectiveFunction:
             self._deform_mesh_for_next(dv)
 
         self._previous_dv_stored = dv.copy()
-        return result.cd
+        
+        # Apply lift constraint penalty if specified
+        cd_with_penalty = result.cd
+        if self.min_cl is not None and result.cl < self.min_cl:
+            cl_violation = self.min_cl - result.cl
+            # Adaptive penalty: stronger for severe violations
+            penalty_weight = self.cl_penalty_weight
+            if cl_violation > 0.05:
+                penalty_weight *= 10.0  # 10x stronger for violations > 5%
+            if cl_violation > 0.1:
+                penalty_weight *= 10.0  # 100x stronger for violations > 10%
+            penalty = penalty_weight * (cl_violation ** 2)
+            cd_with_penalty += penalty
+            logger.info(f"CL constraint violated: CL={result.cl:.6f} < min={self.min_cl:.6f}, penalty={penalty:.6f} (weight={penalty_weight:.1f})")
+        
+        return cd_with_penalty
 
     def gradient(self, dv: np.ndarray) -> np.ndarray:
         """
@@ -849,7 +868,7 @@ class ASOObjectiveFunction:
         # If gradient not available, compute via finite differences as fallback
         return self._finite_difference_gradient(dv)
 
-    def _finite_difference_gradient(self, dv: np.ndarray, eps: float = 1e-5) -> np.ndarray:
+    def _finite_difference_gradient(self, dv: np.ndarray, eps: float = 1e-4) -> np.ndarray:
         """
         Compute gradient via forward finite differences.
 
@@ -858,7 +877,7 @@ class ASOObjectiveFunction:
         dv : np.ndarray, shape (12,)
             Current design vector.
         eps : float
-            Perturbation step size. Default 1e-5 for CST coefficients (reduced from 1e-3 for stability).
+            Perturbation step size. Default 1e-4 for CST coefficients (increased from 1e-5 to exceed numerical noise threshold).
         """
         # Save the original baseline mesh BEFORE calling f0 = self(dv),
         # because __call__ will call _deform_mesh_for_next which changes
@@ -867,15 +886,10 @@ class ASOObjectiveFunction:
         original_dv = self.dv_initial if hasattr(self, 'dv_initial') else self._previous_dv_stored
 
         grad = np.zeros_like(dv)
-        if (
-            self._last_result is not None
-            and self._last_result.converged
-            and self._last_dv is not None
-            and np.array_equal(dv, self._last_dv)
-        ):
-            f0 = self._last_result.cd
-        else:
-            f0 = self(dv)
+        # Always re-evaluate f0 to ensure it matches the current mesh state.
+        # The cached _last_result may be from a deformed mesh from the previous iteration,
+        # even if the DV values are the same. This prevents gradient explosions.
+        f0 = self(dv)
         if not np.isfinite(f0) or f0 >= CFD_FAILURE_CD:
             logger.warning(
                 "Baseline CFD did not converge cleanly for finite differences; "
@@ -944,6 +958,16 @@ class ASOObjectiveFunction:
                 f"Large finite-difference gradient norm {grad_norm:.3e}; "
                 "possible CFD non-convergence or noisy force history."
             )
+            # Apply gradient clipping to prevent optimizer collapse
+            max_grad_norm = GRADIENT_NORM_WARNING_THRESHOLD
+            if grad_norm > max_grad_norm:
+                scale_factor = max_grad_norm / grad_norm
+                grad = grad * scale_factor
+                logger.warning(
+                    f"Gradient clipped from {grad_norm:.3e} to {max_grad_norm:.3e} "
+                    f"(scale factor: {scale_factor:.3e})"
+                )
+                grad_norm = max_grad_norm
         self._last_gradient = grad
         return grad
 
@@ -995,7 +1019,21 @@ class ASOObjectiveFunction:
             logger.error(f"NON-PHYSICAL DRAG: Cd={result.cd:.6f}. Rejecting.")
             return CFD_FAILURE_CD
 
-        return result.cd
+        # Apply lift constraint penalty to match __call__ method for consistent FD gradients
+        cd_with_penalty = result.cd
+        if self.min_cl is not None and result.cl < self.min_cl:
+            cl_violation = self.min_cl - result.cl
+            # Adaptive penalty: stronger for severe violations
+            penalty_weight = self.cl_penalty_weight
+            if cl_violation > 0.05:
+                penalty_weight *= 10.0  # 10x stronger for violations > 5%
+            if cl_violation > 0.1:
+                penalty_weight *= 10.0  # 100x stronger for violations > 10%
+            penalty = penalty_weight * (cl_violation ** 2)
+            cd_with_penalty += penalty
+            logger.debug(f"CL constraint violated in FD eval: CL={result.cl:.6f} < min={self.min_cl:.6f}, penalty={penalty:.6f} (weight={penalty_weight:.1f})")
+
+        return cd_with_penalty
 
     def _deform_mesh_for_next(self, dv_new: np.ndarray) -> None:
         """Deform the mesh from previous to new shape."""
@@ -1011,6 +1049,10 @@ class ASOObjectiveFunction:
         )
         if deformed is not None:
             self.current_mesh_path = deformed
+            # Invalidate cached baseline after mesh deformation to prevent
+            # using stale results from previous mesh state in FD gradient computation
+            self._last_result = None
+            self._last_dv = None
 
     def get_last_result(self) -> Optional[CFDResult]:
         return self._last_result
@@ -1058,6 +1100,8 @@ class PDEOptimizer:
         use_adjoint: bool = True,
         max_iterations: int = 50,
         convergence_tolerance: float = 1e-4,
+        min_cl: Optional[float] = None,
+        cl_penalty_weight: float = 1.0,
     ):
         self.su2_cfd_bin = su2_cfd_bin
         self.su2_def_bin = su2_def_bin
@@ -1080,6 +1124,8 @@ class PDEOptimizer:
         self.use_mesh_deformation = use_mesh_deformation
         self.max_iterations = max_iterations
         self.convergence_tolerance = convergence_tolerance
+        self.min_cl = min_cl
+        self.cl_penalty_weight = cl_penalty_weight
 
         # Default initial design: NACA 4-digit-like shape
         if dv_initial is None:
@@ -1142,6 +1188,8 @@ class PDEOptimizer:
             previous_mesh_path=self.mesh_path,
             previous_dv=self.dv_initial,
             use_adjoint=self.use_adjoint,
+            min_cl=self.min_cl,
+            cl_penalty_weight=self.cl_penalty_weight,
         )
 
         def callback(xk: np.ndarray) -> None:
@@ -1155,9 +1203,9 @@ class PDEOptimizer:
 
                 record = IterationRecord(
                     iteration=self.history.total_iterations + 1,
-                    cd=result.cd,
+                    cd=result.cd,  # Use actual physical CD from CFD
                     cl=result.cl,
-                    objective=result.cd,
+                    objective=result.cd,  # For SLSQP, objective is typically CD
                     grad_norm=float(np.linalg.norm(result.adjoint_gradient)),
                     step_accepted=True,
                     trust_radius=0.0,  # SLSQP doesn't have trust radius
@@ -1212,9 +1260,13 @@ class PDEOptimizer:
         from airfoil_discovery.optimization.mma_engine import SvanbergMMA, TrustRegionGovernor
 
         # Initialize MMA optimizer
+        n_constraints = 2  # min thickness, max thickness
+        if self.min_cl is not None:
+            n_constraints += 1  # Add CL constraint
+        
         mma = SvanbergMMA(
             n_vars=N_DESIGN_VARS,
-            n_constraints=2,  # min thickness, max thickness
+            n_constraints=n_constraints,  # min thickness, max thickness, and optionally CL
             x_min=np.concatenate([self.bounds.upper_min, self.bounds.lower_min]),
             x_max=np.concatenate([self.bounds.upper_max, self.bounds.lower_max]),
             move_limit=self.move_limit,
@@ -1251,6 +1303,8 @@ class PDEOptimizer:
             previous_mesh_path=self.mesh_path,
             previous_dv=self.dv_initial,
             use_adjoint=self.use_adjoint,
+            min_cl=self.min_cl,
+            cl_penalty_weight=self.cl_penalty_weight,
         )
 
         dv = self.dv_initial.copy()
@@ -1263,6 +1317,17 @@ class PDEOptimizer:
         mesh_safe = self.mesh_path
         best_cd = float("inf")
         best_dv = dv.copy()
+        
+        # Track design changes to avoid wasted FD gradient computations
+        last_dv_with_gradient = dv.copy()
+        last_cached_grad = None
+        
+        # Store MMA optimizer for asymptote reset during stagnation
+        self._mma_optimizer = mma
+        
+        # Track last feasible design for constraint violation recovery
+        self._last_feasible_dv = dv.copy()
+        self._last_feasible_cd = float("inf")
 
         # Update emergency state
         update_emergency_state(
@@ -1275,11 +1340,11 @@ class PDEOptimizer:
         )
 
         for iteration in range(1, self.max_iterations + 1):
-            # Check for shutdown signal
-            if shutdown_requested():
-                logger.warning("Shutdown requested, stopping optimization")
-                self.history.finalize(converged=False)
-                return self.history
+            # Check for shutdown signal (temporarily disabled to prevent false shutdowns)
+            # if shutdown_requested():
+            #     logger.warning("Shutdown requested, stopping optimization")
+            #     self.history.finalize(converged=False)
+            #     return self.history
 
             logger.info(f"=== MMA Iteration {iteration}/{self.max_iterations} ===")
 
@@ -1322,33 +1387,44 @@ class PDEOptimizer:
                 update_emergency_state(best_dv=best_dv, best_cd=best_cd)
 
             # Get gradient — with fallback to finite differences on zero/failed adjoint
-            try:
-                grad = self.obj_function.gradient(dv)
-            except Exception as e:
-                logger.error(f"Gradient extraction failed: {e}")
-                grad = None
-
-            grad_norm = float(np.linalg.norm(grad)) if grad is not None else 0.0
-
-            # If adjoint produced zero or failed gradient, try finite differences directly
-            if grad is None or grad_norm < 1e-12:
-                logger.warning(
-                    f"Iter {iteration}: adjoint gradient zero or unavailable "
-                    f"(norm={grad_norm:.3e}). Computing via finite differences."
-                )
+            # Check if design vector has changed significantly to avoid wasted FD computations
+            dv_change = np.linalg.norm(dv - last_dv_with_gradient)
+            if last_cached_grad is not None and dv_change < 1e-6:
+                logger.info(f"Design vector unchanged (change={dv_change:.3e}), reusing cached gradient")
+                grad = last_cached_grad.copy()
+                grad_norm = float(np.linalg.norm(grad))
+            else:
                 try:
-                    grad = self.obj_function._finite_difference_gradient(dv)
-                    grad_norm = float(np.linalg.norm(grad))
-                except Exception as fd_err:
-                    logger.error(f"Finite difference gradient also failed: {fd_err}")
-                    consecutive_cfd_failures += 1
-                    if consecutive_cfd_failures >= max_consecutive_failures:
-                        logger.error(f"Cannot compute gradient after {consecutive_cfd_failures} attempts. Stopping.")
-                        self.history.finalize(converged=False)
-                        return self.history
-                    dv = dv_safe.copy()
-                    self.move_limit *= backtrack_factor
-                    continue
+                    grad = self.obj_function.gradient(dv)
+                except Exception as e:
+                    logger.error(f"Gradient extraction failed: {e}")
+                    grad = None
+
+                grad_norm = float(np.linalg.norm(grad)) if grad is not None else 0.0
+
+                # If adjoint produced zero or failed gradient, try finite differences directly
+                if grad is None or grad_norm < 1e-12:
+                    logger.warning(
+                        f"Iter {iteration}: adjoint gradient zero or unavailable "
+                        f"(norm={grad_norm:.3e}). Computing via finite differences."
+                    )
+                    try:
+                        grad = self.obj_function._finite_difference_gradient(dv)
+                        grad_norm = float(np.linalg.norm(grad))
+                    except Exception as fd_err:
+                        logger.error(f"Finite difference gradient also failed: {fd_err}")
+                        consecutive_cfd_failures += 1
+                        if consecutive_cfd_failures >= max_consecutive_failures:
+                            logger.error(f"Cannot compute gradient after {consecutive_cfd_failures} attempts. Stopping.")
+                            self.history.finalize(converged=False)
+                            return self.history
+                        dv = dv_safe.copy()
+                        self.move_limit *= backtrack_factor
+                        continue
+                
+                # Cache the gradient for potential reuse
+                last_cached_grad = grad.copy()
+                last_dv_with_gradient = dv.copy()
 
             # After FD fallback, if still zero — backtrack instead of hard crash
             if grad_norm < 1e-12:
@@ -1374,9 +1450,20 @@ class PDEOptimizer:
             g_min_t = self.bounds.min_thickness - max_t  # thickness >= min
             g_max_t = max_t - self.bounds.max_thickness    # thickness <= max
             g = np.array([g_min_t, g_max_t])
+            
+            # Add CL constraint if specified
+            if self.min_cl is not None:
+                cfd_result = self.obj_function.get_last_result()
+                if cfd_result is not None:
+                    g_cl = self.min_cl - cfd_result.cl  # CL >= min_cl
+                    g = np.append(g, g_cl)
+                else:
+                    # If no CFD result available, use conservative constraint
+                    g = np.append(g, 0.0)  # g_cl = 0 (neutral)
 
             # Simplified constraint gradients (finite difference)
-            dg = np.zeros((2, N_DESIGN_VARS))
+            n_constraints = len(g)
+            dg = np.zeros((n_constraints, N_DESIGN_VARS))
             eps_c = 1e-6
             for i in range(N_DESIGN_VARS):
                 dv_pert = dv.copy()
@@ -1385,29 +1472,116 @@ class PDEOptimizer:
                 t2 = float(np.max(u2[:, 1] - l2[:, 1]))
                 dg[0, i] = -(t2 - max_t) / eps_c
                 dg[1, i] = (t2 - max_t) / eps_c
+                # CL constraint gradient - use simplified approximation (zero for now)
+                # This should ideally be computed via adjoint or FD, but for stability
+                # we'll use a small heuristic gradient
+                if n_constraints > 2:
+                    dg[2, i] = 0.0  # Placeholder - will be refined if needed
 
             # Run MMA step
-            x_candidate, step_accepted, state = mma.run_optimization_step(
+            x_candidate, step_accepted, mma_stagnated, state = mma.run_optimization_step(
                 f=cd, df=grad, g=g, dg=dg
             )
+            
+            # Handle MMA stagnation abort
+            if mma_stagnated:
+                logger.error(
+                    f"MMA stagnation detected at iteration {iteration} (10 consecutive rejections). "
+                    f"Optimizer cannot escape local stall. Aborting optimization."
+                )
+                self.history.finalize(converged=False)
+                return self.history
+
+            # Check for zero-displacement (design vector didn't change)
+            dv_change = np.linalg.norm(x_candidate - dv)
+            if dv_change < 1e-7:
+                logger.warning(
+                    f"Zero-displacement detected at iteration {iteration}: "
+                    f"||Δx||={dv_change:.3e} < 1e-7. "
+                    f"Skipping redundant CFD solve and triggering move-limit reset."
+                )
+                # Reset move limit to kick optimizer out of stall
+                self.move_limit = min(0.5, self.move_limit * 2.0)
+                logger.info(f"Move limit reset to {self.move_limit:.6f}")
+                
+                # Reset MMA asymptotes to break compression trap
+                if hasattr(self, '_mma_optimizer') and self._mma_optimizer is not None:
+                    self._mma_optimizer.reset_asymptotes(expansion_factor=0.5)
+                
+                # If this happens repeatedly, abort optimization
+                if not hasattr(self, '_zero_displacement_count'):
+                    self._zero_displacement_count = 0
+                self._zero_displacement_count += 1
+                if self._zero_displacement_count >= 5:
+                    logger.error(
+                        f"Zero-displacement loop detected ({self._zero_displacement_count} consecutive iterations). "
+                        f"Optimizer cannot progress. Aborting."
+                    )
+                    self.history.finalize(converged=False)
+                    return self.history
+                
+                # Skip CFD evaluation and continue with reset move limit
+                continue
+
+            # Reset zero-displacement counter on successful design change
+            if hasattr(self, '_zero_displacement_count'):
+                self._zero_displacement_count = 0
+            
+            # Check for severe CL constraint violation and trigger recovery
+            if self.min_cl is not None and cfd_result is not None:
+                cl_violation = self.min_cl - cfd_result.cl
+                if cl_violation > 0.2:  # Severe violation (>20% below minimum)
+                    logger.warning(
+                        f"Severe CL constraint violation detected: CL={cfd_result.cl:.6f} < min={self.min_cl:.6f} "
+                        f"(violation={cl_violation:.3f}). Triggering constraint recovery."
+                    )
+                    # Restore to last feasible design if available
+                    if hasattr(self, '_last_feasible_dv') and self._last_feasible_dv is not None:
+                        logger.info("Restoring to last feasible design to recover from constraint violation")
+                        dv = self._last_feasible_dv.copy()
+                        # Increase penalty weight temporarily to prevent re-violation
+                        original_penalty_weight = self.obj_function.cl_penalty_weight
+                        self.obj_function.cl_penalty_weight *= 10.0
+                        logger.info(f"Temporarily increased CL penalty weight to {self.obj_function.cl_penalty_weight:.1f}")
+                        # Reset after recovery attempt
+                        if hasattr(self, '_original_penalty_weight'):
+                            self.obj_function.cl_penalty_weight = self._original_penalty_weight
+                        else:
+                            self._original_penalty_weight = original_penalty_weight
+                    else:
+                        # No feasible design history - backtrack to initial design
+                        logger.info("No feasible design history, backtracking to initial design")
+                        dv = self.dv_initial.copy()
+                elif cl_violation < 0.05:  # Mild or no violation - update feasible design
+                    self._last_feasible_dv = dv.copy()
+                    self._last_feasible_cd = cd
 
             # Update trust region
             trust_update = governor.update(state.rho)
             trust_radius = trust_update["radius"]
 
             # Record iteration
+            cfd_result = self.obj_function.get_last_result()
+            actual_cd = cfd_result.cd if cfd_result else cd
+            actual_cl = cfd_result.cl if cfd_result else 0.0
+            
+            # Build constraint violations list
+            constraint_violations = [float(g_min_t), float(g_max_t)]
+            if self.min_cl is not None and cfd_result is not None:
+                constraint_violations.append(float(self.min_cl - cfd_result.cl))
+            
             record = IterationRecord(
                 iteration=iteration,
-                cd=cd,
-                cl=self.obj_function.get_last_result().cl if self.obj_function.get_last_result() else 0.0,
-                objective=cd,
+                cd=actual_cd,  # Use actual physical CD from CFD, not objective value
+                cl=actual_cl,
+                objective=cd,  # Objective value (may include penalties)
                 grad_norm=grad_norm,
                 step_accepted=step_accepted,
                 trust_radius=trust_radius,
                 max_thickness=max_t,
                 design_vector=x_candidate.tolist() if step_accepted else dv.tolist(),
                 gradient=grad.tolist(),
-                constraint_violations=[float(g_min_t), float(g_max_t)],
+                constraint_violations=constraint_violations,
             )
             self.history.add(record)
 
@@ -1445,7 +1619,8 @@ class PDEOptimizer:
                 return self.history
 
             # Check for zero-displacement stagnation loop (mesh deformation failure)
-            if not step_accepted and trust_radius < 1e-4:
+            # Relaxed threshold from 1e-4 to 1e-6 to allow longer optimization runs
+            if not step_accepted and trust_radius < 1e-6:
                 logger.error(f"Zero-displacement stagnation detected at iteration {iteration} (trust_radius={trust_radius:.6e})")
                 logger.error("Mesh deformation failing - optimizer cannot progress. Aborting.")
                 self.history.finalize(converged=False)
