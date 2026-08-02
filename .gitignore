@@ -18,3 +18,4 @@ bin/bin/**/*.dll
 .DS_Store
 aso_*/
 aso_results/
+latex_until_methodology.txt
