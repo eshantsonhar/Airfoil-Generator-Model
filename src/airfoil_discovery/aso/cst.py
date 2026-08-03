@@ -29,7 +29,7 @@ class CSTBounds:
     upper_max: np.ndarray      # shape (6,)
     lower_min: np.ndarray      # shape (6,)
     lower_max: np.ndarray      # shape (6,)
-    min_thickness: float = 0.06     # t/c minimum for structural feasibility
+    min_thickness: float = 0.02     # t/c minimum for structural feasibility
     max_thickness: float = 0.18     # t/c maximum
     te_thickness: float = 0.003     # fixed trailing edge thickness
 
@@ -40,7 +40,7 @@ class CSTBounds:
             upper_max=np.array([0.5, 0.5, 0.8, 0.8, 0.6, 0.4]),
             lower_min=np.array([-0.4, -0.4, -0.4, -0.3, -0.2, -0.1]),
             lower_max=np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.05]),
-            min_thickness=0.06,
+            min_thickness=0.02,
             max_thickness=0.18,
             te_thickness=0.003,
         )

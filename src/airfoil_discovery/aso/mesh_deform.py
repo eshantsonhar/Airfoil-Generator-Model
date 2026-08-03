@@ -23,6 +23,130 @@ from .subprocess_utils import run_solver_safe
 
 logger = logging.getLogger(__name__)
 
+STRUCTURAL_INTERIOR_X_MIN = 0.15
+STRUCTURAL_INTERIOR_X_MAX = 0.80
+
+
+def validate_geometric_integrity(
+    dv: np.ndarray,
+    te_thickness: float = 0.003,
+    min_thickness_fraction: float = 0.02,  # 2% chord minimum thickness — HARD FLOOR, NEVER DISABLE
+    n_pts: int = 200,
+) -> tuple[bool, str]:
+    """
+    Validate geometric integrity of a design vector before CFD execution.
+
+    *** v8 HARDENED VERSION — ALL 7 CHECKS ACTIVE. NEVER DISABLE OR BYPASS. ***
+
+    This pre-CFD gate prevents non-physical geometries from reaching SU2_DEF or
+    SU2_CFD. If any check fails, the proposed design vector MUST be rejected
+    without calling any solver.
+
+    Parameters
+    ----------
+    dv : np.ndarray, shape (12,)
+        Design variable vector (CST coefficients)
+    te_thickness : float
+        Trailing edge thickness (non-dimensional, chord=1)
+    min_thickness_fraction : float
+        Minimum t/c as fraction of chord. Default 0.02 = 2% chord.
+        DO NOT PASS 0.0 TO DISABLE THIS CHECK.
+    n_pts : int
+        Number of points for surface discretization
+
+    Returns
+    -------
+    is_valid : bool
+        True if geometry passes all checks, False otherwise
+    reason : str
+        Human-readable explanation of failure if is_valid=False
+    """
+    upper, lower = compute_surface_coordinates(dv, n_pts=n_pts, te_thickness=te_thickness)
+    chord = 1.0  # Normalized chord length
+
+    # ── Check 1: Self-intersection (upper must be strictly above lower) ────────
+    thickness = upper[:, 1] - lower[:, 1]
+    min_thickness = float(np.min(thickness))
+    if min_thickness <= 0:
+        return False, (
+            f"[Check 1] Self-intersection: minimum thickness = {min_thickness:.6e} <= 0"
+        )
+
+    # ── Check 2: Structural interior minimum thickness (2% chord floor) ─────
+    x_coords = upper[:, 0]
+    interior_mask = (x_coords >= STRUCTURAL_INTERIOR_X_MIN) & (x_coords <= STRUCTURAL_INTERIOR_X_MAX)
+    if np.any(interior_mask):
+        interior_thickness = thickness[interior_mask]
+        min_interior_thickness = float(np.min(interior_thickness))
+        min_required = min_thickness_fraction * chord
+        if min_interior_thickness < min_required:
+            return False, (
+                f"[Check 2] Minimum thickness violation: structural interior t/c={min_interior_thickness:.6f} "
+                f"< required {min_required:.6f} (min_fraction={min_thickness_fraction:.4f})"
+            )
+
+    # ── Check 3: Must have positive maximum thickness ─────────────────────────
+    max_thickness = float(np.max(thickness))
+    min_max_required = 0.001 * chord  # 0.1% chord floor on max thickness
+    if max_thickness < min_max_required:
+        return False, (
+            f"[Check 3] Max thickness too small: max t/c={max_thickness:.6f} "
+            f"< {min_max_required:.6f}"
+        )
+
+    # ── Check 4: Trailing-edge thickness ──────────────────────────────────────
+    te_mask = x_coords >= 0.98
+    if np.any(te_mask):
+        te_region_thickness = thickness[te_mask]
+        avg_te_thickness = float(np.mean(te_region_thickness))
+        min_te_required = 0.001 * chord  # 0.1% chord TE floor
+        if avg_te_thickness < min_te_required:
+            return False, (
+                f"[Check 4] Trailing-edge thickness violation: avg TE t/c={avg_te_thickness:.6f} "
+                f"< {min_te_required:.6f}"
+            )
+
+    # ── Check 5: Surface curvature / high-frequency spikes ────────────────────
+    upper_y = upper[:, 1]
+    lower_y = lower[:, 1]
+    upper_curvature = np.abs(np.diff(upper_y, n=2))
+    lower_curvature = np.abs(np.diff(lower_y, n=2))
+    max_curvature = max(
+        float(np.max(upper_curvature)),
+        float(np.max(lower_curvature)),
+    )
+    curvature_threshold = 0.05
+    if max_curvature > curvature_threshold:
+        return False, (
+            f"[Check 5] Excessive surface curvature/spike: max={max_curvature:.6f} "
+            f"> threshold={curvature_threshold:.6f}"
+        )
+
+    # ── Check 6: Leading-edge curvature ───────────────────────────────────────
+    le_mask = x_coords <= 0.10
+    if np.any(le_mask):
+        # curvature arrays are 2 shorter than x_coords due to np.diff(n=2)
+        le_curv_mask = le_mask[:-2]
+        if np.any(le_curv_mask):
+            le_upper_curv = upper_curvature[le_curv_mask]
+            le_lower_curv = lower_curvature[le_curv_mask]
+            max_le_curv = max(
+                float(np.max(le_upper_curv)) if len(le_upper_curv) > 0 else 0.0,
+                float(np.max(le_lower_curv)) if len(le_lower_curv) > 0 else 0.0,
+            )
+            le_threshold = 0.04  # Stricter for leading edge
+            if max_le_curv > le_threshold:
+                return False, (
+                    f"[Check 6] Excessive leading-edge curvature: {max_le_curv:.6f} "
+                    f"> {le_threshold:.6f}"
+                )
+
+    # ── Check 7: Monotonic x-coordinates (no loops) ───────────────────────────
+    if not np.all(np.diff(x_coords) > 0):
+        return False, "[Check 7] Non-monotonic x-coordinates: surface loop detected"
+
+    return True, "Geometry validation passed (all 7 checks active)"
+
 
 def generate_su2_def_config(
     mesh_input: str,
@@ -267,7 +391,7 @@ def run_su2_def(
     config_path: Path,
     work_dir: Path,
     timeout: float = 60.0,
-) -> bool:
+) -> tuple[bool, int, str]:
     """
     Run SU2_DEF for mesh deformation with hardened execution safety.
 
@@ -285,6 +409,11 @@ def run_su2_def(
     Returns
     -------
     success : bool
+        True if SU2_DEF executed successfully
+    return_code : int
+        Process return code
+    error_message : str
+        Detailed error message if failed
     """
     cmd = [su2_def_bin, config_path.name]
     success, rc, stdout, stderr = run_solver_safe(
@@ -296,13 +425,11 @@ def run_su2_def(
     (work_dir / "su2_def_stderr.log").write_text(stderr, encoding="utf-8", errors="ignore")
 
     if not success:
-        logger.error(
-            f"SU2_DEF failed (rc={rc}): "
-            f"{stderr[:500] if stderr else '(no output)'}"
-        )
-        return False
+        error_msg = f"SU2_DEF failed (rc={rc}): {stderr[:500] if stderr else '(no output)'}"
+        logger.error(error_msg)
+        return False, rc, error_msg
 
-    return True
+    return True, rc, ""
 
 
 def deform_mesh(
@@ -408,46 +535,69 @@ def deform_mesh(
     )
     def_config.write_text(config_text, encoding="utf-8")
 
-    # Run SU2_DEF
-    success = run_su2_def(su2_def_bin, def_config, work_dir)
-
-    # Check if output file exists
-    if success:
-        if mesh_output.exists():
-            try:
-                mesh_delta = float(np.max(np.abs(_parse_su2_nodes(mesh_output) - _parse_su2_nodes(mesh_input))))
-            except Exception as e:
-                logger.error(f"Could not verify deformed mesh displacement: {e}")
-                return None
-            if mesh_delta <= 1e-12:
-                logger.error(
-                    "SU2_DEF produced an unchanged mesh for marker %s "
-                    "(max node displacement %.6e). Rejecting deformation.",
-                    marker,
-                    mesh_delta,
-                )
-                return None
-            logger.info(f"Mesh deformed successfully: {mesh_output} (max node displacement={mesh_delta:.6e})")
-            return mesh_output
-        else:
-            # Check for alternative output names that SU2_DEF might use
-            possible_outputs = [
-                mesh_output,
-                work_dir / f"{mesh_input.stem}_deformed.su2",
-                work_dir / f"{mesh_input.stem}_def.su2",
-                work_dir / "mesh_out.su2"
-            ]
-            for alt_output in possible_outputs:
-                if alt_output.exists():
-                    logger.info(f"Mesh deformed successfully (found as {alt_output.name}): {alt_output}")
-                    return alt_output
+    # Run SU2_DEF with hardened failure detection
+    success, rc, error_msg = run_su2_def(su2_def_bin, def_config, work_dir)
+    
+    # Additional hardened failure checks
+    if not success:
+        logger.error(f"Mesh deformation failed: {error_msg}")
+        return None
+    
+    if rc != 0:
+        logger.error(f"SU2_DEF returned non-zero exit code: {rc}")
+        return None
+    
+    # Check if output file exists and validate mesh integrity
+    if mesh_output.exists():
+        try:
+            # Parse mesh to detect corruption
+            output_nodes = _parse_su2_nodes(mesh_output)
+            input_nodes = _parse_su2_nodes(mesh_input)
             
-            # List files to help debug
-            files_in_dir = list(work_dir.glob("*.su2"))
-            logger.error(f"SU2_DEF succeeded but no output mesh found. Files in {work_dir}: {[f.name for f in files_in_dir]}")
-            logger.error("Mesh deformation failed")
+            if len(output_nodes) == 0 or len(input_nodes) == 0:
+                logger.error("Mesh parsing failed: empty node arrays detected")
+                return None
+            
+            if len(output_nodes) != len(input_nodes):
+                logger.warning(f"Mesh node count changed: {len(input_nodes)} -> {len(output_nodes)}")
+            
+            mesh_delta = float(np.max(np.abs(output_nodes - input_nodes)))
+        except Exception as e:
+            logger.error(f"Could not verify deformed mesh displacement or mesh is corrupted: {e}")
             return None
+        
+        if mesh_delta <= 1e-12:
+            logger.error(
+                "SU2_DEF produced an unchanged mesh for marker %s "
+                "(max node displacement %.6e). Rejecting deformation.",
+                marker,
+                mesh_delta,
+            )
+            return None
+        
+        # Check for mesh corruption (NaN or Inf coordinates)
+        if np.any(np.isnan(output_nodes)) or np.any(np.isinf(output_nodes)):
+            logger.error("Deformed mesh contains NaN or Inf coordinates - mesh corruption detected")
+            return None
+        
+        logger.info(f"Mesh deformed successfully: {mesh_output} (max node displacement={mesh_delta:.6e})")
+        return mesh_output
     else:
+        # Check for alternative output names that SU2_DEF might use
+        possible_outputs = [
+            mesh_output,
+            work_dir / f"{mesh_input.stem}_deformed.su2",
+            work_dir / f"{mesh_input.stem}_def.su2",
+            work_dir / "mesh_out.su2"
+        ]
+        for alt_output in possible_outputs:
+            if alt_output.exists():
+                logger.info(f"Mesh deformed successfully (found as {alt_output.name}): {alt_output}")
+                return alt_output
+        
+        # List files to help debug
+        files_in_dir = list(work_dir.glob("*.su2"))
+        logger.error(f"SU2_DEF succeeded but no output mesh found. Files in {work_dir}: {[f.name for f in files_in_dir]}")
         logger.error("Mesh deformation failed")
         return None
 

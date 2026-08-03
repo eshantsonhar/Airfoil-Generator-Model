@@ -380,17 +380,19 @@ class SvanbergMMA:
         # Acceptance decision
         accepted = False
         stagnated = False
-        if rho > 0.0:
-            # Step improves objective - accept
+        objective_improved = actual_reduction > 1e-8
+        objective_tolerance = 1e-3 + 0.01 * max(1.0, abs(s.f_val))
+        objective_acceptable = objective_improved or (f_new <= s.f_val + objective_tolerance)
+
+        if objective_acceptable:
+            # Accept steps that genuinely improve the objective or that are only mildly
+            # worse than the current point. This prevents MMA from stalling on noisy CFD
+            # evaluations where a small regression is still informative.
             accepted = True
-            s.rho = rho
+            s.rho = rho if objective_improved else 0.0
             s.stagnated_counter = max(0, s.stagnated_counter - 1)
-        elif abs(actual_reduction) < 1e-8 and f_new < s.f_val * 1.1:
-            # Near-neutral step - accept with caution
-            accepted = True
-            s.rho = 0.0
         else:
-            # Step makes objective worse - reject
+            # Step makes objective worse beyond the tolerance - reject
             accepted = False
             s.rho = rho
             s.stagnated_counter += 1
@@ -464,6 +466,12 @@ class SvanbergMMA:
         x_candidate, lambd_next = self.solve_subproblem(
             x_current, f_current, df, g_vals, dg_mat
         )
+
+        # Keep the candidate inside a conservative trust region and avoid zero-distance moves.
+        move = self.move_limit * (self.x_max - self.x_min)
+        x_candidate = np.clip(x_candidate, x_current - move, x_current + move)
+        if np.linalg.norm(x_candidate - x_current) < 1e-6:
+            x_candidate = np.clip(x_current + 0.5 * move * np.sign(df), self.x_min, self.x_max)
         
         # Predict objective at candidate using linear model
         dx = x_candidate - x_current

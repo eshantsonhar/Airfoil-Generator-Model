@@ -1,0 +1,68 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20260803072257
+Username: ESHANT-PC\eshan
+RunAs User: ESHANT-PC\eshan
+Configuration Name: 
+Machine: ESHANT-PC (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe
+Process ID: 41432
+PSVersion: 5.1.26100.8972
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.8972
+BuildVersion: 10.0.26100.8972
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is aso_2hr_run_v7\full_transcript.log
+PS C:\Eshant_Sonhar\airfoil research paper\airfoil generator model> python scripts/run_aso_pde_optimization.py `
+  --mesh data/mesh_fixed.su2 `
+  --output aso_2hr_run_v7 `
+  --method mma `
+  --max-iter 250 `
+  --min-cl 1.0 `
+  --cl-penalty-weight 1.0 `
+  --no-adjoint `
+  --aoa 4.0 `
+  --reynolds 1.0e5 `
+  --mach 0.1 `
+  --no-preflight `
+  --su2-cfd bin/SU2_CFD.exe `
+  --su2-def bin/SU2_DEF.exe
+2026-08-03 07:41:15 [INFO] airfoil_discovery.aso.optimizer: === MMA Iteration 250/250 ===
+2026-08-03 07:41:15 [INFO] airfoil_discovery.aso.optimizer: Running primal CFD: bin/SU2_CFD.exe, AoA=4.0°, Re=1.0e+05
+2026-08-03 07:41:15 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Executing: bin/SU2_CFD.exe config_primal.cfg in aso_2hr_run_v7\cfd_cases\eval_1785723075627089400
+2026-08-03 07:41:19 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_CFD primal] Completed in 3.8s (rc=0)
+2026-08-03 07:41:19 [INFO] airfoil_discovery.aso.optimizer: SU2 history headers detected: ['Inner_Iter', 'rms[Rho]', 'rms[RhoU]', 'rms[RhoV]', 'rms[RhoE]', 'rms[k]', 'rms[w]', 'rms[LM_1]', 'rms[LM_2]', 'RefFor
+ce', 'CD', 'CL', 'CSF', 'CMx', 'CMy', 'CMz', 'CFx', 'CFy', 'CFz', 'CEff', 'Buffet']
+2026-08-03 07:41:19 [INFO] airfoil_discovery.aso.optimizer: Found CL column: 'CL' = 0.8861517261
+2026-08-03 07:41:19 [INFO] airfoil_discovery.aso.optimizer: Found CD column: 'CD' = 0.3185245283
+2026-08-03 07:41:19 [INFO] airfoil_discovery.aso.optimizer: Primal CFD: CL=0.886152, CD=0.318525, converged=True
+2026-08-03 07:41:19 [INFO] airfoil_discovery.aso.optimizer: Skipping adjoint solve; using finite-difference gradient fallback.
+2026-08-03 07:41:19 [INFO] airfoil_discovery.aso.mesh_deform: Prepared SU2 surface positions for marker airfoil: max target displacement=0.000000e+00
+2026-08-03 07:41:19 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Executing: bin/SU2_DEF.exe config_deform.cfg in aso_2hr_run_v7\cfd_cases\def_1785723079400453300
+2026-08-03 07:41:19 [INFO] airfoil_discovery.aso.subprocess_utils: [SU2_DEF] Completed in 0.1s (rc=0)
+2026-08-03 07:41:19 [ERROR] airfoil_discovery.aso.mesh_deform: SU2_DEF produced an unchanged mesh for marker airfoil (max node displacement 8.690965e-16). Rejecting deformation.
+2026-08-03 07:41:19 [INFO] airfoil_discovery.aso.optimizer: CL constraint violated: CL=0.886152 < min=1.000000, penalty=1.296143 (weight=100.0)
+2026-08-03 07:41:19 [WARNING] airfoil_discovery.aso.optimizer: CFD produced non-physical Cd=1.614667 (outside [0.001, 1.0]). Rejecting step.
+2026-08-03 07:41:19 [INFO] airfoil_discovery.optimization.mma_engine: MMA asymptotes reset: L range expanded by factor 0.5
+2026-08-03 07:41:19 [INFO] airfoil_discovery.aso.optimizer: Backtracked to best design, move limit reduced to 0.000000
+2026-08-03 07:41:19 [INFO] airfoil_discovery.aso.optimizer: Exported best design to aso_2hr_run_v7\best_airfoil_shape.dat and aso_2hr_run_v7\best_results.json
+2026-08-03 07:41:19 [INFO] airfoil_discovery.aso.optimizer: Results saved to aso_2hr_run_v7
+2026-08-03 07:41:19 [INFO] aso_pde_optimizer: ============================================================
+2026-08-03 07:41:19 [INFO] aso_pde_optimizer: Optimization Complete
+2026-08-03 07:41:19 [INFO] aso_pde_optimizer: Time elapsed: 1098.0 seconds (18.3 minutes)
+2026-08-03 07:41:19 [INFO] aso_pde_optimizer: Total iterations: 2
+2026-08-03 07:41:19 [INFO] aso_pde_optimizer: Converged: False
+2026-08-03 07:41:19 [INFO] aso_pde_optimizer: Initial Cd: 0.585713, Final Cd: 0.333283 (delta: -0.252430)
+2026-08-03 07:41:19 [INFO] aso_pde_optimizer: Initial Cl: 1.496874, Final Cl: 1.314166 (delta: -0.182708)
+2026-08-03 07:41:19 [INFO] aso_pde_optimizer: Initial |grad Cd|: 4.111798, Final |grad Cd|: 2.260267
+2026-08-03 07:41:19 [INFO] aso_pde_optimizer: Results saved to: C:\Eshant_Sonhar\airfoil research paper\airfoil generator model\aso_2hr_run_v7
+2026-08-03 07:41:19 [INFO] aso_pde_optimizer: ============================================================
+PS C:\Eshant_Sonhar\airfoil research paper\airfoil generator model> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20260803074119
+**********************

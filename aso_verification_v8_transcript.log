@@ -1,0 +1,24 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20260803192600
+Username: ESHANT-PC\eshan
+RunAs User: ESHANT-PC\eshan
+Configuration Name: 
+Machine: ESHANT-PC (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -Command Start-Transcript -Path 'aso_verification_v8_transcript.log'; python scripts/run_aso_pde_optimization.py --mesh data/mesh_fixed.su2 --output aso_verification_v8 --method mma --max-iter 15 --min-cl 1.0 --cl-penalty-weight 1.0 --no-adjoint --aoa 4.0 --reynolds 1.0e5 --mach 0.1 --no-preflight --su2-cfd bin/SU2_CFD.exe --su2-def bin/SU2_DEF.exe; Stop-Transcript
+Process ID: 18716
+PSVersion: 5.1.26100.8972
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.8972
+BuildVersion: 10.0.26100.8972
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is aso_verification_v8_transcript.log
+
+**********************
+Windows PowerShell transcript end
+End time: 20260803193001
+**********************
