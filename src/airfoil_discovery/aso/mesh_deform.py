@@ -273,13 +273,19 @@ def _parse_marker_node_ids(mesh_path: Path, marker: str) -> List[int]:
                     parts = elem_line.split()
                     if len(parts) < 3:
                         continue
-                    # SU2 line boundary elements use VTK type 3 followed by two node IDs.
-                    for token in parts[1:3]:
-                        node_id = int(token)
+                    # SU2 boundary elements may be encoded as VTK type + node IDs.
+                    # Some files include only the node IDs directly, so we collect them
+                    # from the trailing tokens as long as they can be parsed as integers.
+                    for token in parts[1:]:
+                        try:
+                            node_id = int(token)
+                        except ValueError:
+                            continue
                         if node_id not in seen:
                             node_ids.append(node_id)
                             seen.add(node_id)
-                return node_ids
+                if node_ids:
+                    return node_ids
         i += 1
 
     markers = _parse_marker_names(mesh_path)
@@ -319,6 +325,7 @@ def write_surface_positions_file(
     output_path: Path,
     marker: str = "airfoil",
     te_thickness: float = 0.003,
+    displacement_scale: float = 1.0,
 ) -> float:
     """
     Write SU2's SURFACE_FILE target positions for the deformable marker.
@@ -342,8 +349,9 @@ def write_surface_positions_file(
         old_lower_y = _surface_y_at(old_surface, x_current, "lower")
         side = "upper" if abs(y_current - old_upper_y) <= abs(y_current - old_lower_y) else "lower"
         delta_y = _surface_y_at(new_surface, x_current, side) - _surface_y_at(old_surface, x_current, side)
-        y_target = y_current + delta_y
-        max_target_displacement = max(max_target_displacement, abs(delta_y))
+        scaled_delta_y = delta_y * displacement_scale
+        y_target = y_current + scaled_delta_y
+        max_target_displacement = max(max_target_displacement, abs(scaled_delta_y))
         lines.append(f"{node_id}\t{x_current:.10f}\t{y_target:.10f}")
 
     if not lines:

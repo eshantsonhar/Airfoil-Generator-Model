@@ -16,6 +16,7 @@ Supports both:
 
 from __future__ import annotations
 
+import csv
 import datetime
 import json
 import logging
@@ -487,6 +488,49 @@ def run_primal_and_adjoint(
     )
 
 
+def _parse_force_coeffs_from_csv(path: Path) -> Tuple[Optional[float], Optional[float]]:
+    """Parse CL/CD from a SU2-style CSV file with a header row."""
+    if not path.exists():
+        return None, None
+
+    try:
+        with path.open("r", encoding="utf-8", errors="replace") as handle:
+            rows = list(csv.reader(handle))
+    except Exception as exc:
+        logger.warning(f"Could not read force CSV {path}: {exc}")
+        return None, None
+
+    if not rows:
+        return None, None
+
+    header = [cell.strip().strip('"').strip("'") for cell in rows[0]]
+    cl_candidates = ["CL", "LIFT", "CLift", "CL_Total", "Cz"]
+    cd_candidates = ["CD", "DRAG", "CDrag", "CD_Total", "Cx"]
+
+    def _find_value(row: List[str], candidates: List[str]) -> Optional[float]:
+        for candidate in candidates:
+            for idx, name in enumerate(header):
+                if name.upper() == candidate.upper():
+                    try:
+                        value = float(row[idx])
+                    except (ValueError, IndexError, TypeError):
+                        return None
+                    return value if np.isfinite(value) else None
+        return None
+
+    for row in reversed(rows[1:]):
+        if not row:
+            continue
+        if len(row) < len(header):
+            continue
+        cl_value = _find_value(row, cl_candidates)
+        cd_value = _find_value(row, cd_candidates)
+        if cl_value is not None and cd_value is not None:
+            return cl_value, cd_value
+
+    return None, None
+
+
 def _parse_history(history_path: Path) -> Tuple[float, float, bool]:
     """
     Parse SU2 history.csv to extract final Cl, Cd and convergence status.
@@ -496,7 +540,13 @@ def _parse_history(history_path: Path) -> Tuple[float, float, bool]:
     cl, cd, converged : (float, float, bool)
     """
     if not history_path.exists():
-        logger.warning(f"History file not found: {history_path}")
+        logger.warning(f"History file not found: {history_path}; attempting fallback output files")
+        fallback_cl, fallback_cd = None, None
+        for fallback_path in [history_path.parent / "surface_flow.csv", history_path.parent / "surface_forces.dat", history_path.parent / "forces_breakdown.dat"]:
+            fallback_cl, fallback_cd = _parse_force_coeffs_from_csv(fallback_path)
+            if fallback_cl is not None and fallback_cd is not None:
+                logger.info(f"Parsed CL/CD fallback from missing history file using {fallback_path.name}")
+                return float(fallback_cl), float(fallback_cd), False
         return 0.0, 0.0, False
 
     try:
@@ -582,6 +632,20 @@ def _parse_history(history_path: Path) -> Tuple[float, float, bool]:
                 logger.info(f"Found CD column (case-insensitive): '{key}' = {cd_str}")
                 break
     
+    # Final fallback: some SU2 runs write the force coefficients to surface_flow.csv
+    if cl_str is None or cd_str is None:
+        fallback_count = 0
+        for fallback_path in [history_path.parent / "surface_flow.csv", history_path.parent / "surface_forces.dat", history_path.parent / "forces_breakdown.dat"]:
+            fallback_cl, fallback_cd = _parse_force_coeffs_from_csv(fallback_path)
+            if fallback_cl is not None and fallback_cd is not None:
+                cl_str = str(fallback_cl)
+                cd_str = str(fallback_cd)
+                logger.info(f"Parsed CL/CD fallback from {fallback_path.name}: CL={cl_str}, CD={cd_str}")
+                fallback_count += 1
+                break
+        if fallback_count == 0:
+            logger.warning("No fallback CL/CD values found in SU2 output files")
+
     # Final fallback
     cl_str = cl_str or "0.0"
     cd_str = cd_str or "0.0"
@@ -878,7 +942,7 @@ class ASOObjectiveFunction:
         # If gradient not available, compute via finite differences as fallback
         return self._finite_difference_gradient(dv)
 
-    def _finite_difference_gradient(self, dv: np.ndarray, eps: float = 1e-4) -> np.ndarray:
+    def _finite_difference_gradient(self, dv: np.ndarray, eps: float = 1e-3) -> np.ndarray:
         """
         Compute gradient via forward finite differences.
 
