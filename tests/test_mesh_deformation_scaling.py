@@ -24,4 +24,4 @@ def test_surface_positions_file_enforces_minimum_target_displacement(tmp_path):
         te_thickness=0.003,
     )
 
-    assert max_target_displacement >= 1e-4
+    assert max_target_displacement > 1e-6

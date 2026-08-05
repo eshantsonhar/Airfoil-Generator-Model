@@ -63,8 +63,9 @@ class PhysicsBasedScorer:
     - Gradient of J w.r.t. design variables is well-conditioned
     """
     
-    def __init__(self, config: Optional[PhysicsScoreConfig] = None):
+    def __init__(self, config: Optional[Any] = None):
         self.config = config or PhysicsScoreConfig()
+
     
     def score_polar(self, polar: List[Dict[str, Any]]) -> Dict[str, float]:
         """
@@ -89,8 +90,16 @@ class PhysicsBasedScorer:
                 "is_valid": False,
             }
         
+        cl_target = getattr(self.config, "cl_target", 0.6)
+        cd_target = getattr(self.config, "cd_target", 0.01)
+        cl_violation_penalty = getattr(self.config, "cl_violation_penalty", getattr(self.config, "w3", 2.0))
+        thickness_violation_penalty = getattr(self.config, "thickness_violation_penalty", getattr(self.config, "w4", 5.0))
+        min_thickness = getattr(self.config, "min_thickness", 0.12)
+        cl_cd_weight = getattr(self.config, "cl_cd_weight", getattr(self.config, "w2", 0.2))
+        stall_weight = getattr(self.config, "stall_weight", 0.1)
+
         # Find design point near target Cl
-        polar_sorted = sorted(polar, key=lambda p: abs(p.get("cl", 0) - self.config.cl_target))
+        polar_sorted = sorted(polar, key=lambda p: abs(p.get("cl", 0) - cl_target))
         design_point = polar_sorted[0]
         
         cl = design_point.get("cl", 0.0)
@@ -101,24 +110,24 @@ class PhysicsBasedScorer:
         cl_cd = cl / max(cd, 1e-10)
         
         # Primary objective: normalized drag
-        cd_ratio = cd / max(self.config.cd_target, 1e-10)
+        cd_ratio = cd / max(cd_target, 1e-10)
         
         # Constraint violations
-        cl_deficit = max(self.config.cl_target - cl, 0.0)
-        thickness = design_point.get("thickness", self.config.min_thickness)
-        thickness_deficit = max(self.config.min_thickness - thickness, 0.0)
+        cl_deficit = max(cl_target - cl, 0.0)
+        thickness = design_point.get("thickness", min_thickness)
+        thickness_deficit = max(min_thickness - thickness, 0.0)
         
         # Penalties
-        cl_penalty = self.config.cl_violation_penalty * cl_deficit
-        thickness_penalty = self.config.thickness_violation_penalty * thickness_deficit
+        cl_penalty = cl_violation_penalty * cl_deficit
+        thickness_penalty = thickness_violation_penalty * thickness_deficit
         
         # Bonus for good Cl/Cd
-        efficiency_bonus = self.config.cl_cd_weight * (cl_cd / 100.0)
+        efficiency_bonus = cl_cd_weight * (cl_cd / 100.0)
         
         # Stall bonus (higher stall AoA is better)
         max_aoa = max(p.get("aoa_deg", 0.0) for p in polar)
         stall_score = max_aoa / 15.0  # Normalize to 15 deg reference
-        stall_bonus = self.config.stall_weight * stall_score
+        stall_bonus = stall_weight * stall_score
         
         # LSB penalty (from optional LSB report)
         lsb_report = design_point.get("lsb_report", {})
@@ -135,7 +144,8 @@ class PhysicsBasedScorer:
         )
         
         # Ensure positive score
-        total_score = max(total_score, self.config.cd_target / max(self.config.cd_target, 1e-10))
+        total_score = max(total_score, cd_target / max(cd_target, 1e-10))
+
         
         return {
             "score": max(0.001, total_score),
@@ -213,4 +223,23 @@ class AirfoilScorer(PhysicsBasedScorer):
     """
     Backward-compatible alias for PhysicsBasedScorer.
     """
-    pass
+    def score(self, polar: Any, surface: Any = None, verification: Any = None) -> Dict[str, Any]:
+        """Backward-compatible wrapper for score_polar."""
+        polar_list = []
+        for p in polar:
+            if isinstance(p, dict):
+                polar_list.append(p)
+            else:
+                polar_list.append({"aoa_deg": getattr(p, "aoa_deg", 0.0), "cl": getattr(p, "cl", 0.0), "cd": getattr(p, "cd", 0.0)})
+        score_dict = self.score_polar(polar_list)
+        if surface is not None:
+            bubble_len = getattr(surface, "bubble_length", 0.0) or 0.0
+            cp_min = getattr(surface, "cp_min", 0.0) or 0.0
+            score_dict["large_bubble_penalty"] = 0.5 * max(0.0, bubble_len - 0.1)
+            score_dict["suction_peak_penalty"] = 0.1 * max(0.0, abs(cp_min) - 3.0)
+            score_dict["score"] += score_dict["large_bubble_penalty"] + score_dict["suction_peak_penalty"]
+        if verification is not None:
+            phys_pen = getattr(verification, "physics_violation_penalty", 0.0) or 0.0
+            score_dict["physics_violation_penalty"] = phys_pen
+            score_dict["score"] += phys_pen
+        return score_dict

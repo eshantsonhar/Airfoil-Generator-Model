@@ -76,6 +76,55 @@ def _new_case_dir(case_root: Path, prefix: str) -> Path:
     return case_dir
 
 
+def _compute_thickness_constraint_gradient(
+    dv: np.ndarray,
+    te_thickness: float = 0.003,
+    min_thickness_fraction: float = 0.02,
+    n_pts: int = 200,
+    fd_eps: float = 1e-5,
+) -> np.ndarray:
+    """
+    Compute finite-difference gradient of minimum thickness constraint.
+
+    Args:
+        dv: Design vector (12 CST coefficients)
+        te_thickness: Trailing edge thickness
+        min_thickness_fraction: Minimum thickness as fraction of chord
+        n_pts: Number of points for surface discretization
+        fd_eps: Finite difference step size
+
+    Returns:
+        Gradient of minimum thickness constraint w.r.t. design variables
+    """
+    from .mesh_deform import compute_surface_coordinates
+
+    # Compute baseline minimum thickness
+    upper, lower = compute_surface_coordinates(dv, n_pts=n_pts, te_thickness=te_thickness)
+    thickness = upper[:, 1] - lower[:, 1]
+    x_coords = upper[:, 0]
+    interior_mask = (x_coords >= STRUCTURAL_INTERIOR_X_MIN) & (x_coords <= STRUCTURAL_INTERIOR_X_MAX)
+    if np.any(interior_mask):
+        min_thickness = float(np.min(thickness[interior_mask]))
+    else:
+        min_thickness = float(np.min(thickness))
+
+    grad = np.zeros_like(dv)
+
+    # Finite difference gradient
+    for i in range(len(dv)):
+        dv_perturbed = dv.copy()
+        dv_perturbed[i] += fd_eps
+        upper_p, lower_p = compute_surface_coordinates(dv_perturbed, n_pts=n_pts, te_thickness=te_thickness)
+        thickness_p = upper_p[:, 1] - lower_p[:, 1]
+        if np.any(interior_mask):
+            min_thickness_p = float(np.min(thickness_p[interior_mask]))
+        else:
+            min_thickness_p = float(np.min(thickness_p))
+        grad[i] = (min_thickness_p - min_thickness) / fd_eps
+
+    return grad
+
+
 def _remove_stale_solver_outputs(case_dir: Path) -> None:
     """Remove SU2 outputs that could otherwise be mistaken for fresh results."""
     for name in _STALE_SU2_OUTPUTS:
@@ -1288,6 +1337,104 @@ class PDEOptimizer:
         except Exception as e:
             logger.error(f"Failed to export best design: {e}")
 
+    def _project_to_feasible_thickness(
+        self,
+        dv_invalid: np.ndarray,
+        dv_feasible: np.ndarray,
+        max_iter: int = 20,
+        step_size: float = 0.01,
+    ) -> np.ndarray:
+        """
+        Project an invalid design vector back to the feasible thickness region.
+
+        Uses gradient-based backtracking along the line from dv_invalid to dv_feasible
+        to find the boundary where thickness constraints are satisfied.
+
+        Args:
+            dv_invalid: Design vector that violates thickness constraints
+            dv_feasible: Known feasible design vector (e.g., x_best)
+            max_iter: Maximum projection iterations
+            step_size: Fractional step size for backtracking
+
+        Returns:
+            Projected design vector on the feasible boundary
+        """
+        dv_current = dv_invalid.copy()
+        direction = dv_feasible - dv_invalid
+        norm_dir = np.linalg.norm(direction)
+        
+        if norm_dir < 1e-10:
+            return dv_feasible.copy()
+        
+        direction = direction / norm_dir
+        
+        for i in range(max_iter):
+            # Check if current point is feasible
+            is_valid, reason = validate_geometric_integrity(
+                dv_current,
+                te_thickness=self.bounds.te_thickness,
+            )
+            
+            if is_valid:
+                # Found feasible point - return it
+                return dv_current
+            
+            # Move towards feasible point
+            alpha = step_size * (1.0 + i * 0.1)  # Gradually increase step
+            dv_current = dv_current + alpha * direction
+            
+            # Clip to bounds (concatenate upper and lower bounds for full 12-element vector)
+            dv_min_full = np.concatenate([self.bounds.lower_min, self.bounds.lower_max])
+            dv_max_full = np.concatenate([self.bounds.upper_min, self.bounds.upper_max])
+            dv_current = np.clip(dv_current, dv_min_full, dv_max_full)
+
+        
+        # If projection failed, return the known feasible point
+        return dv_feasible.copy()
+
+    def _apply_mma_recovery(
+        self,
+        mma: SvanbergMMA,
+        best_dv: np.ndarray,
+        best_merit_f: float,
+        best_g: np.ndarray,
+        mesh_safe: Path,
+        move_limit: float,
+        backtrack_factor: float = 0.5,
+        dv_invalid: Optional[np.ndarray] = None,
+    ) -> float:
+        """
+        Apply MMA recovery after a rejected step.
+
+        Reduces move_limit and resyncs MMA state to best feasible design.
+        If dv_invalid is provided, projects it to feasible boundary to teach MMA
+        about the thickness constraint.
+        """
+        # Reduce move limit with floor enforcement
+        new_limit = max(0.005, move_limit * backtrack_factor)
+        
+        # If an invalid design was provided, project it to feasible boundary
+        # and use it to update MMA's constraint awareness
+        if dv_invalid is not None and not np.allclose(dv_invalid, best_dv):
+            dv_projected = self._project_to_feasible_thickness(
+                dv_invalid, best_dv, max_iter=10, step_size=0.02
+            )
+            
+            # If projection found a different feasible point, use it to update MMA
+            if not np.allclose(dv_projected, best_dv):
+                logger.info(
+                    f"[BOUNDARY PROJECTION] Projected invalid design to feasible boundary. "
+                    f"Distance from x_best: {np.linalg.norm(dv_projected - best_dv):.6f}"
+                )
+                # Use projected point to help MMA learn constraint boundary
+                mma.sync_state(dv_projected, best_merit_f, best_g)
+                return new_limit
+        
+        # Resync MMA state to best feasible design
+        mma.sync_state(best_dv, best_merit_f, best_g)
+        
+        return new_limit
+
     def run_slsqp(self) -> ConvergenceHistory:
         """
         Run optimization using scipy.optimize.minimize with SLSQP.
@@ -1455,11 +1602,13 @@ class PDEOptimizer:
 
         # Fault-tolerant state
         consecutive_cfd_failures = 0
-        max_consecutive_failures = 3
+        max_consecutive_failures = 10  # Increased from 3 to allow more recovery attempts
         backtrack_factor = 0.5
         dv_safe = dv.copy()
         mesh_safe = self.mesh_path
         best_cd = float("inf")
+        best_merit_f = float("inf")
+        best_g: Optional[np.ndarray] = None
         best_dv = dv.copy()
         
         # Track design changes to avoid wasted FD gradient computations
@@ -1516,22 +1665,51 @@ class PDEOptimizer:
                     f"[GEOM GATE] Iter {iteration}: Rejected BEFORE SU2. Reason: {geom_reason}. "
                     f"Backtracking to x_best, reducing move_limit."
                 )
-                # Do NOT burn outer iteration counter — do not call `continue` that increments it
-                # Instead: revert state and redo the same iteration slot with x_best
-                dv = best_dv.copy()  # True backtrack to best valid design
-                self.move_limit = max(0.005, self.move_limit * backtrack_factor)
-                mma.move_limit = self.move_limit  # sync MMA internal move limit
-                # Flush gradient cache and force fresh FD gradient on next step
+                dv_invalid = dv.copy()
+                dv = best_dv.copy()
+                self.obj_function.current_mesh_path = mesh_safe
+                self.move_limit = self._apply_mma_recovery(
+                    mma, best_dv, best_merit_f, best_g, mesh_safe, self.move_limit, backtrack_factor, dv_invalid
+                )
                 last_cached_grad = None
-                last_dv_with_gradient = best_dv.copy() - 1.0  # stale sentinel: force cache miss
+                last_dv_with_gradient = best_dv.copy() - 1.0
                 force_fd_gradient = True
-                # Reset MMA asymptotes to break compression trap
-                mma.reset_asymptotes(expansion_factor=0.5)
                 logger.info(
                     f"[GEOM GATE] move_limit={self.move_limit:.6f} (floor=0.005 enforced), "
-                    f"MMA asymptotes reset, gradient cache flushed, force_fd_gradient set."
+                    f"MMA resynced to x_best (merit={best_merit_f:.6f}), force_fd_gradient set."
                 )
                 consecutive_cfd_failures += 1
+                
+                # Record rejected iteration in history before continuing
+                cfd_result = self.obj_function.get_last_result()
+                actual_cd = cfd_result.cd if cfd_result else best_cd
+                actual_cl = cfd_result.cl if cfd_result else 0.0
+                # Compute thickness for current design
+                upper, lower = compute_surface_coordinates(dv, te_thickness=self.bounds.te_thickness)
+                thickness = upper[:, 1] - lower[:, 1]
+                max_t = float(np.max(thickness))
+                constraint_violations = [float(0.02 - max_t), float(max_t - self.bounds.max_thickness)]
+                if self.min_cl is not None:
+                    constraint_violations.append(float(self.min_cl - actual_cl))
+                
+                record = IterationRecord(
+                    iteration=iteration,
+                    cd=actual_cd,
+                    cl=actual_cl,
+                    objective=best_cd,
+                    grad_norm=0.0,  # No gradient computed yet
+                    step_accepted=False,  # Mark as rejected
+                    trust_radius=self.move_limit,
+                    max_thickness=max_t,
+                    design_vector=dv.tolist(),
+                    gradient=[0.0] * N_DESIGN_VARS,
+                    constraint_violations=constraint_violations,
+                )
+                self.history.add(record)
+                logger.info(
+                    f"Iter {iteration}: Cd={actual_cd:.6f}, Cl={actual_cl:.6f}, |grad|=0.000000, "
+                    f"t/c={max_t:.4f}, step_accepted=False (PRE-CFD GEOM GATE REJECTION)"
+                )
                 continue
 
             # Evaluate objective and gradient with fault tolerance
@@ -1553,6 +1731,36 @@ class PDEOptimizer:
                 # Reduce move limit with floor enforcement
                 self.move_limit = max(0.005, self.move_limit * backtrack_factor)
                 logger.info(f"Move limit reduced to {self.move_limit:.6f} (floor enforced)")
+                
+                # Record rejected iteration in history before continuing
+                cfd_result = self.obj_function.get_last_result()
+                actual_cd = cfd_result.cd if cfd_result else best_cd
+                actual_cl = cfd_result.cl if cfd_result else 0.0
+                upper, lower = compute_surface_coordinates(dv, te_thickness=self.bounds.te_thickness)
+                thickness = upper[:, 1] - lower[:, 1]
+                max_t = float(np.max(thickness))
+                constraint_violations = [float(0.02 - max_t), float(max_t - self.bounds.max_thickness)]
+                if self.min_cl is not None:
+                    constraint_violations.append(float(self.min_cl - actual_cl))
+                
+                record = IterationRecord(
+                    iteration=iteration,
+                    cd=actual_cd,
+                    cl=actual_cl,
+                    objective=best_cd,
+                    grad_norm=0.0,
+                    step_accepted=False,
+                    trust_radius=self.move_limit,
+                    max_thickness=max_t,
+                    design_vector=dv.tolist(),
+                    gradient=[0.0] * N_DESIGN_VARS,
+                    constraint_violations=constraint_violations,
+                )
+                self.history.add(record)
+                logger.info(
+                    f"Iter {iteration}: Cd={actual_cd:.6f}, Cl={actual_cl:.6f}, |grad|=0.000000, "
+                    f"t/c={max_t:.4f}, step_accepted=False (CFD EVALUATION FAILURE)"
+                )
                 continue
 
             # Reset failure counter on success
@@ -1572,6 +1780,36 @@ class PDEOptimizer:
                 last_dv_with_gradient = best_dv.copy() - 1.0  # stale sentinel: force cache miss
                 force_fd_gradient = True
                 logger.info(f"[CFD FAIL] move_limit={self.move_limit:.6f}, MMA reset, cache flushed, force_fd_gradient set.")
+                
+                # Record rejected iteration in history before continuing
+                cfd_result = self.obj_function.get_last_result()
+                actual_cd = cfd_result.cd if cfd_result else best_cd
+                actual_cl = cfd_result.cl if cfd_result else 0.0
+                upper, lower = compute_surface_coordinates(dv, te_thickness=self.bounds.te_thickness)
+                thickness = upper[:, 1] - lower[:, 1]
+                max_t = float(np.max(thickness))
+                constraint_violations = [float(0.02 - max_t), float(max_t - self.bounds.max_thickness)]
+                if self.min_cl is not None:
+                    constraint_violations.append(float(self.min_cl - actual_cl))
+                
+                record = IterationRecord(
+                    iteration=iteration,
+                    cd=actual_cd,
+                    cl=actual_cl,
+                    objective=best_cd,
+                    grad_norm=0.0,
+                    step_accepted=False,
+                    trust_radius=self.move_limit,
+                    max_thickness=max_t,
+                    design_vector=dv.tolist(),
+                    gradient=[0.0] * N_DESIGN_VARS,
+                    constraint_violations=constraint_violations,
+                )
+                self.history.add(record)
+                logger.info(
+                    f"Iter {iteration}: Cd={actual_cd:.6f}, Cl={actual_cl:.6f}, |grad|=0.000000, "
+                    f"t/c={max_t:.4f}, step_accepted=False (NaN/INF Cd REJECTION)"
+                )
                 continue
 
             # Check for non-physical Cd values (outside physical bounds)
@@ -1590,6 +1828,36 @@ class PDEOptimizer:
                 self.cl_penalty_weight = max(0.1, self.cl_penalty_weight * 1.05)
                 self.obj_function.cl_penalty_weight = self.cl_penalty_weight
                 logger.info(f"[CFD FAIL] move_limit={self.move_limit:.6f}, MMA reset, cache flushed, force_fd_gradient set, cl_penalty_weight={self.cl_penalty_weight:.2f}.")
+                
+                # Record rejected iteration in history before continuing
+                cfd_result = self.obj_function.get_last_result()
+                actual_cd = cfd_result.cd if cfd_result else best_cd
+                actual_cl = cfd_result.cl if cfd_result else 0.0
+                upper, lower = compute_surface_coordinates(dv, te_thickness=self.bounds.te_thickness)
+                thickness = upper[:, 1] - lower[:, 1]
+                max_t = float(np.max(thickness))
+                constraint_violations = [float(0.02 - max_t), float(max_t - self.bounds.max_thickness)]
+                if self.min_cl is not None:
+                    constraint_violations.append(float(self.min_cl - actual_cl))
+                
+                record = IterationRecord(
+                    iteration=iteration,
+                    cd=actual_cd,
+                    cl=actual_cl,
+                    objective=best_cd,
+                    grad_norm=0.0,
+                    step_accepted=False,
+                    trust_radius=self.move_limit,
+                    max_thickness=max_t,
+                    design_vector=dv.tolist(),
+                    gradient=[0.0] * N_DESIGN_VARS,
+                    constraint_violations=constraint_violations,
+                )
+                self.history.add(record)
+                logger.info(
+                    f"Iter {iteration}: Cd={actual_cd:.6f}, Cl={actual_cl:.6f}, |grad|=0.000000, "
+                    f"t/c={max_t:.4f}, step_accepted=False (NON-PHYSICAL Cd REJECTION)"
+                )
                 continue
 
             # Check for non-physical CL values (negative lift is unphysical for this AoA range)
@@ -1609,6 +1877,35 @@ class PDEOptimizer:
                 self.cl_penalty_weight = max(0.1, self.cl_penalty_weight * 1.05)
                 self.obj_function.cl_penalty_weight = self.cl_penalty_weight
                 logger.info(f"[CFD FAIL] move_limit={self.move_limit:.6f}, MMA reset, cache flushed, cl_penalty_weight={self.cl_penalty_weight:.2f}.")
+                
+                # Record rejected iteration in history before continuing
+                actual_cd = cfd_result.cd if cfd_result else best_cd
+                actual_cl = cfd_result.cl if cfd_result else 0.0
+                upper, lower = compute_surface_coordinates(dv, te_thickness=self.bounds.te_thickness)
+                thickness = upper[:, 1] - lower[:, 1]
+                max_t = float(np.max(thickness))
+                constraint_violations = [float(0.02 - max_t), float(max_t - self.bounds.max_thickness)]
+                if self.min_cl is not None:
+                    constraint_violations.append(float(self.min_cl - actual_cl))
+                
+                record = IterationRecord(
+                    iteration=iteration,
+                    cd=actual_cd,
+                    cl=actual_cl,
+                    objective=best_cd,
+                    grad_norm=0.0,
+                    step_accepted=False,
+                    trust_radius=self.move_limit,
+                    max_thickness=max_t,
+                    design_vector=dv.tolist(),
+                    gradient=[0.0] * N_DESIGN_VARS,
+                    constraint_violations=constraint_violations,
+                )
+                self.history.add(record)
+                logger.info(
+                    f"Iter {iteration}: Cd={actual_cd:.6f}, Cl={actual_cl:.6f}, |grad|=0.000000, "
+                    f"t/c={max_t:.4f}, step_accepted=False (NON-PHYSICAL CL REJECTION)"
+                )
                 continue
 
             # Track best design
@@ -1618,12 +1915,12 @@ class PDEOptimizer:
             
             if cd < best_cd and is_feasible:
                 best_cd = cd
+                best_merit_f = cd
                 best_dv = dv.copy()
                 dv_safe = dv.copy()
                 mesh_safe = self.obj_function.current_mesh_path
                 update_emergency_state(best_dv=best_dv, best_cd=best_cd)
-                # Export best design immediately
-                self._export_best_design(best_dv, cd, cfd_result.cl if cfd_result else 0.0, iteration)
+                self._export_best_design(best_dv, cfd_result.cd if cfd_result else cd, cfd_result.cl if cfd_result else 0.0, iteration)
             elif cd < best_cd and cfd_result is not None and iteration == 1:
                 # Preserve the initial CFD-evaluated point as the baseline even if it
                 # does not satisfy the requested lift target at this AoA.
@@ -1669,6 +1966,36 @@ class PDEOptimizer:
                             return self.history
                         dv = dv_safe.copy()
                         self.move_limit = max(0.005, self.move_limit * backtrack_factor)
+                        
+                        # Record rejected iteration in history before continuing
+                        cfd_result = self.obj_function.get_last_result()
+                        actual_cd = cfd_result.cd if cfd_result else cd
+                        actual_cl = cfd_result.cl if cfd_result else 0.0
+                        upper, lower = compute_surface_coordinates(dv, te_thickness=self.bounds.te_thickness)
+                        thickness = upper[:, 1] - lower[:, 1]
+                        max_t = float(np.max(thickness))
+                        constraint_violations = [float(0.02 - max_t), float(max_t - self.bounds.max_thickness)]
+                        if self.min_cl is not None:
+                            constraint_violations.append(float(self.min_cl - actual_cl))
+                        
+                        record = IterationRecord(
+                            iteration=iteration,
+                            cd=actual_cd,
+                            cl=actual_cl,
+                            objective=cd,
+                            grad_norm=0.0,
+                            step_accepted=False,
+                            trust_radius=self.move_limit,
+                            max_thickness=max_t,
+                            design_vector=dv.tolist(),
+                            gradient=[0.0] * N_DESIGN_VARS,
+                            constraint_violations=constraint_violations,
+                        )
+                        self.history.add(record)
+                        logger.info(
+                            f"Iter {iteration}: Cd={actual_cd:.6f}, Cl={actual_cl:.6f}, |grad|=0.000000, "
+                            f"t/c={max_t:.4f}, step_accepted=False (GRADIENT FAILURE)"
+                        )
                         continue
                 
                 # Cache the gradient for potential reuse
@@ -1689,6 +2016,36 @@ class PDEOptimizer:
                     return self.history
                 dv = dv_safe.copy()
                 self.move_limit = max(0.005, self.move_limit * backtrack_factor)
+                
+                # Record rejected iteration in history before continuing
+                cfd_result = self.obj_function.get_last_result()
+                actual_cd = cfd_result.cd if cfd_result else cd
+                actual_cl = cfd_result.cl if cfd_result else 0.0
+                upper, lower = compute_surface_coordinates(dv, te_thickness=self.bounds.te_thickness)
+                thickness = upper[:, 1] - lower[:, 1]
+                max_t = float(np.max(thickness))
+                constraint_violations = [float(0.02 - max_t), float(max_t - self.bounds.max_thickness)]
+                if self.min_cl is not None:
+                    constraint_violations.append(float(self.min_cl - actual_cl))
+                
+                record = IterationRecord(
+                    iteration=iteration,
+                    cd=actual_cd,
+                    cl=actual_cl,
+                    objective=cd,
+                    grad_norm=0.0,
+                    step_accepted=False,
+                    trust_radius=self.move_limit,
+                    max_thickness=max_t,
+                    design_vector=dv.tolist(),
+                    gradient=[0.0] * N_DESIGN_VARS,
+                    constraint_violations=constraint_violations,
+                )
+                self.history.add(record)
+                logger.info(
+                    f"Iter {iteration}: Cd={actual_cd:.6f}, Cl={actual_cl:.6f}, |grad|=0.000000, "
+                    f"t/c={max_t:.4f}, step_accepted=False (ZERO GRADIENT REJECTION)"
+                )
                 continue
 
             # Compute thickness constraints using the same structural interior band as the geometry gate
@@ -1705,6 +2062,11 @@ class PDEOptimizer:
             g_min_t = min_required - min_t   # structural interior thickness >= min_required
             g_max_t = max_t - self.bounds.max_thickness    # thickness <= max
             g = np.array([g_min_t, g_max_t])
+
+            # Add thickness violation penalty to objective to discourage MMA from proposing invalid designs
+            thickness_penalty_weight = 100.0  # High penalty for thickness violations
+            thickness_violation = max(0.0, g_min_t)  # Only penalize minimum thickness violations
+            cd_with_penalty = cd + thickness_penalty_weight * thickness_violation
             
             # Add CL constraint if specified
             if self.min_cl is not None:
@@ -1735,38 +2097,211 @@ class PDEOptimizer:
                 # Heuristic CL constraint gradient approximation:
                 # Increasing upper CST parameters generally increases camber/lift; decreasing lower increases thickness/camber.
                 if n_constraints > 2:
-                    # g_cl = min_cl - CL. So d(g_cl)/d(upper_dv) should be negative (as upper DV increases lift)
                     if i < 6:
-                        dg[2, i] = -1.0  # pushing upper surface up increases lift -> decreases g_cl
+                        dg[2, i] = -1.0
                     else:
-                        dg[2, i] = 0.5   # pushing lower surface up decreases lift -> increases g_cl
+                        dg[2, i] = 0.5
 
-            # Run MMA step
-            x_candidate, step_accepted, mma_stagnated, state = mma.run_optimization_step(
-                f=cd, df=grad, g=g, dg=dg
+            # Add thickness penalty gradient to objective gradient when violated
+            if thickness_violation > 0:
+                grad = grad + thickness_penalty_weight * dg[0, :]  # Add scaled min thickness gradient
+
+            # Adaptive move limit based on constraint proximity
+            # If close to minimum thickness constraint, reduce move limit to prevent violations
+            constraint_margin = -g_min_t  # Positive when feasible, negative when violated
+            constraint_safety_margin = 0.01  # 1% chord safety margin (increased from 0.5%)
+            if constraint_margin < constraint_safety_margin:
+                # Reduce move limit proportionally to how close we are to the boundary
+                # Use a less aggressive reduction: minimum 50% of current limit
+                proximity_factor = max(0.5, constraint_margin / constraint_safety_margin)
+                adaptive_move_limit = self.move_limit * proximity_factor
+                # Only apply if adaptive limit is smaller than current limit
+                if adaptive_move_limit < self.move_limit:
+                    logger.info(
+                        f"Adaptive move limit: {self.move_limit:.4f} -> {adaptive_move_limit:.4f} "
+                        f"(constraint margin={constraint_margin:.4f})"
+                    )
+                    self.move_limit = adaptive_move_limit
+
+            # Keep MMA internal state aligned with the evaluated iterate
+            mma.sync_state(dv, cd_with_penalty, g)
+
+            if cd <= best_cd and is_feasible:
+                best_g = g.copy()
+                best_merit_f = cd_with_penalty
+
+            # Propose MMA subproblem step (candidate validated before move)
+            x_candidate, f_pred, _lambd, state = mma.propose_step(
+                f=cd_with_penalty, df=grad, g=g, dg=dg
             )
-            
-            # ── MMA Stagnation: RECOVER, do not abort ────────────────────────────
-            if mma_stagnated:
-                logger.warning(
-                    f"[MMA STAGNATION] Iter {iteration}: 10 consecutive rejections. "
-                    f"Initiating recovery: move_limit expansion + asymptote reset + backtrack."
-                )
-                # Recovery: expand move limit, reset asymptotes, revert to x_best
-                self.move_limit = min(0.2, self.move_limit * 4.0)  # expand, capped at 20%
-                mma.move_limit = self.move_limit
-                mma.reset_asymptotes(expansion_factor=0.5)
-                dv = best_dv.copy()  # revert to best known feasible
-                last_cached_grad = None
-                last_dv_with_gradient = best_dv.copy() - 1.0  # force cache miss
-                force_fd_gradient = True
-                logger.info(
-                    f"[MMA STAGNATION] Recovery applied: move_limit={self.move_limit:.6f}, "
-                    f"reverted to x_best (cd={best_cd:.6f}), force_fd_gradient set."
-                )
-                continue  # Retry this iteration with recovered state
 
-            # ── Zero-displacement: RECOVER, do not abort ──────────────────────
+            # Project candidate to feasible thickness region if needed
+            # This prevents MMA from proposing invalid designs that would be rejected
+            cand_valid, cand_reason = validate_geometric_integrity(
+                x_candidate,
+                te_thickness=self.bounds.te_thickness,
+            )
+            if not cand_valid:
+                logger.info(
+                    f"MMA candidate violates geometry gate: {cand_reason}. "
+                    "Projecting to feasible region."
+                )
+                x_candidate = self._project_to_feasible_thickness(
+                    x_candidate, dv, max_iter=20, step_size=0.02
+                )
+                # Re-validate after projection
+                cand_valid, cand_reason = validate_geometric_integrity(
+                    x_candidate,
+                    te_thickness=self.bounds.te_thickness,
+                )
+                if cand_valid:
+                    logger.info("Projection successful: candidate now feasible.")
+
+            # Check if projected candidate causes zero displacement (stagnation)
+            displacement = np.linalg.norm(x_candidate - dv)
+            if displacement < 1e-7:
+                logger.warning(
+                    f"Projected candidate causes zero displacement (||Δx||={displacement:.2e}). "
+                    "Using thickness-increasing direction to move away from constraint boundary."
+                )
+                # Use a direction that increases thickness: modify upper surface to be more convex
+                # and lower surface to be less concave
+                thickness_direction = np.zeros_like(dv)
+                # Upper surface coefficients (0-5): increase to make upper surface more convex
+                thickness_direction[0:6] = 0.1  # Positive for upper surface
+                # Lower surface coefficients (6-11): decrease to make lower surface less concave
+                thickness_direction[6:12] = -0.1  # Negative for lower surface
+                # Normalize and scale by move limit
+                thickness_direction = thickness_direction / (np.linalg.norm(thickness_direction) + 1e-12)
+                step_size = self.move_limit * 0.5
+                x_candidate = dv + step_size * thickness_direction
+                # Clip to bounds
+                bounds_upper = np.concatenate([self.bounds.upper_max, self.bounds.lower_max])
+                bounds_lower = np.concatenate([self.bounds.upper_min, self.bounds.lower_min])
+                x_candidate = np.clip(x_candidate, bounds_lower, bounds_upper)
+                # Re-validate after thickness-increasing step
+                cand_valid, cand_reason = validate_geometric_integrity(
+                    x_candidate,
+                    te_thickness=self.bounds.te_thickness,
+                )
+                if not cand_valid:
+                    # If still invalid, project again
+                    x_candidate = self._project_to_feasible_thickness(
+                        x_candidate, dv, max_iter=20, step_size=0.02
+                    )
+                    cand_valid, cand_reason = validate_geometric_integrity(
+                        x_candidate,
+                        te_thickness=self.bounds.te_thickness,
+                    )
+                logger.info(
+                    f"Thickness-increasing fallback: ||Δx||={np.linalg.norm(x_candidate - dv):.4f}, "
+                    f"feasible={cand_valid}"
+                )
+
+            # Candidate geometry gate — reject infeasible shapes BEFORE mesh deformation
+            cand_valid, cand_reason = validate_geometric_integrity(
+                x_candidate,
+                te_thickness=self.bounds.te_thickness,
+            )
+            if not cand_valid:
+                logger.warning(
+                    f"[GEOM GATE] Iter {iteration}: Candidate rejected. Reason: {cand_reason}. "
+                    f"Reducing move_limit and resyncing to x_best."
+                )
+                _, mma_stagnated = mma.reject_step()
+                self.move_limit = self._apply_mma_recovery(
+                    mma, best_dv, best_merit_f, best_g, mesh_safe, self.move_limit, backtrack_factor, x_candidate
+                )
+                dv = best_dv.copy()
+                last_cached_grad = None
+                last_dv_with_gradient = best_dv.copy() - 1.0
+                force_fd_gradient = True
+                if mma_stagnated:
+                    logger.warning(
+                        f"[MMA STAGNATION] Iter {iteration}: 10 consecutive rejections during candidate screening."
+                    )
+                    self.move_limit = min(0.2, self.move_limit * 4.0)
+                    mma.move_limit = self.move_limit
+                
+                # Record rejected iteration in history before continuing
+                cfd_result = self.obj_function.get_last_result()
+                actual_cd = cfd_result.cd if cfd_result else cd
+                actual_cl = cfd_result.cl if cfd_result else 0.0
+                constraint_violations = [float(g_min_t), float(g_max_t)]
+                if self.min_cl is not None and cfd_result is not None:
+                    constraint_violations.append(float(self.min_cl - cfd_result.cl))
+                
+                record = IterationRecord(
+                    iteration=iteration,
+                    cd=actual_cd,
+                    cl=actual_cl,
+                    objective=cd,
+                    grad_norm=grad_norm,
+                    step_accepted=False,  # Mark as rejected
+                    trust_radius=trust_radius,
+                    max_thickness=max_t,
+                    design_vector=dv.tolist(),
+                    gradient=grad.tolist(),
+                    constraint_violations=constraint_violations,
+                )
+                self.history.add(record)
+                logger.info(
+                    f"Iter {iteration}: Cd={actual_cd:.6f}, Cl={actual_cl:.6f}, |grad|={grad_norm:.6f}, "
+                    f"t/c={max_t:.4f}, step_accepted=False (GEOM GATE REJECTION)"
+                )
+                continue
+
+            # Lift feasibility filter using linearized constraint prediction
+            if self.min_cl is not None and n_constraints > 2:
+                dx_cand = x_candidate - dv
+                g_cl_pred = float(g[-1] + np.dot(dg[2], dx_cand))
+                if g_cl_pred > 0.02:
+                    logger.warning(
+                        f"[LIFT FILTER] Iter {iteration}: Candidate predicted infeasible "
+                        f"(g_cl_pred={g_cl_pred:.4f}). Rejecting MMA move."
+                    )
+                    _, mma_stagnated = mma.reject_step()
+                    self.move_limit = self._apply_mma_recovery(
+                        mma, best_dv, best_merit_f, best_g, mesh_safe, self.move_limit, backtrack_factor, x_candidate
+                    )
+                    dv = best_dv.copy()
+                    last_cached_grad = None
+                    last_dv_with_gradient = best_dv.copy() - 1.0
+                    force_fd_gradient = True
+                    if mma_stagnated:
+                        self.move_limit = min(0.2, self.move_limit * 4.0)
+                        mma.move_limit = self.move_limit
+                    
+                    # Record rejected iteration in history before continuing
+                    cfd_result = self.obj_function.get_last_result()
+                    actual_cd = cfd_result.cd if cfd_result else cd
+                    actual_cl = cfd_result.cl if cfd_result else 0.0
+                    constraint_violations = [float(g_min_t), float(g_max_t)]
+                    if self.min_cl is not None and cfd_result is not None:
+                        constraint_violations.append(float(self.min_cl - cfd_result.cl))
+                    
+                    record = IterationRecord(
+                        iteration=iteration,
+                        cd=actual_cd,
+                        cl=actual_cl,
+                        objective=cd,
+                        grad_norm=grad_norm,
+                        step_accepted=False,  # Mark as rejected
+                        trust_radius=trust_radius,
+                        max_thickness=max_t,
+                        design_vector=dv.tolist(),
+                        gradient=grad.tolist(),
+                        constraint_violations=constraint_violations,
+                    )
+                    self.history.add(record)
+                    logger.info(
+                        f"Iter {iteration}: Cd={actual_cd:.6f}, Cl={actual_cl:.6f}, |grad|={grad_norm:.6f}, "
+                        f"t/c={max_t:.4f}, step_accepted=False (LIFT FILTER REJECTION)"
+                    )
+                    continue
+
+            step_accepted = False
+            mma_stagnated = False
             dv_change = np.linalg.norm(x_candidate - dv)
             if dv_change < 1e-7:
                 logger.warning(
@@ -1776,6 +2311,7 @@ class PDEOptimizer:
                 self.move_limit = min(0.3, self.move_limit * 2.0)
                 mma.move_limit = self.move_limit
                 mma.reset_asymptotes(expansion_factor=0.5)
+                _, mma_stagnated = mma.reject_step()
                 force_fd_gradient = True
                 logger.info(f"[ZERO-DISP] move_limit expanded to {self.move_limit:.6f}, force_fd_gradient set.")
 
@@ -1789,7 +2325,39 @@ class PDEOptimizer:
                     )
                     self.history.finalize(converged=False)
                     return self.history
+                
+                # Record rejected iteration in history before continuing
+                cfd_result = self.obj_function.get_last_result()
+                actual_cd = cfd_result.cd if cfd_result else cd
+                actual_cl = cfd_result.cl if cfd_result else 0.0
+                constraint_violations = [float(g_min_t), float(g_max_t)]
+                if self.min_cl is not None and cfd_result is not None:
+                    constraint_violations.append(float(self.min_cl - cfd_result.cl))
+                
+                record = IterationRecord(
+                    iteration=iteration,
+                    cd=actual_cd,
+                    cl=actual_cl,
+                    objective=cd,
+                    grad_norm=grad_norm,
+                    step_accepted=False,  # Mark as rejected
+                    trust_radius=trust_radius,
+                    max_thickness=max_t,
+                    design_vector=dv.tolist(),
+                    gradient=grad.tolist(),
+                    constraint_violations=constraint_violations,
+                )
+                self.history.add(record)
+                logger.info(
+                    f"Iter {iteration}: Cd={actual_cd:.6f}, Cl={actual_cl:.6f}, |grad|={grad_norm:.6f}, "
+                    f"t/c={max_t:.4f}, step_accepted=False (ZERO-DISP REJECTION)"
+                )
                 continue
+
+            # Accept geometry-valid MMA subproblem solution
+            step_accepted = True
+            dv_prev = dv.copy()
+            mma.advance_iterate(x_candidate)
 
             # Reset zero-displacement counter on successful design change
             if hasattr(self, '_zero_displacement_count'):
@@ -1860,13 +2428,12 @@ class PDEOptimizer:
 
             if step_accepted:
                 dv = x_candidate.copy()
-                # Deform mesh to new shape
-                if self.use_mesh_deformation and self.su2_def_bin and iteration > 1:
+                if self.use_mesh_deformation and self.su2_def_bin:
                     def_dir = _new_case_dir(self.case_root, f"def_iter_{iteration}")
                     deformed = deform_mesh(
                         su2_def_bin=self.su2_def_bin,
                         original_mesh_path=self.obj_function.current_mesh_path,
-                        dv_old=self._current_dv,
+                        dv_old=dv_prev,
                         dv_new=dv,
                         work_dir=def_dir,
                     )
@@ -1874,9 +2441,19 @@ class PDEOptimizer:
                         self.obj_function.current_mesh_path = deformed
                 self._current_dv = dv.copy()
 
-            # Check convergence
-            if grad_norm < self.convergence_tolerance and step_accepted:
-                logger.info(f"Converged at iteration {iteration}: |grad Cd|={grad_norm:.6e}")
+            # Check convergence: small gradient AND objective near best feasible design
+            rel_obj_change = abs(cd - best_cd) / max(abs(best_cd), 1e-6)
+            if (
+                step_accepted
+                and grad_norm < self.convergence_tolerance
+                and rel_obj_change < self.convergence_tolerance
+                and is_feasible
+            ):
+                logger.info(
+                    f"Converged at iteration {iteration}: |grad Cd|={grad_norm:.6e}, "
+                    f"rel_obj_change={rel_obj_change:.6e}"
+                )
+                self._current_dv = best_dv.copy()
                 self.history.finalize(converged=True)
                 return self.history
 
@@ -1898,6 +2475,7 @@ class PDEOptimizer:
                 return self.history
 
         self.history.finalize(converged=False)
+        self._current_dv = best_dv.copy()
         # Export best design at the end of optimization
         if 'best_dv' in locals() and 'best_cd' in locals():
             cfd_result = self.obj_function.get_last_result() if self.obj_function else None
@@ -2023,7 +2601,3 @@ class PDEOptimizer:
                 # ASCII-safe: avoid nabla U+2207 which crashes Windows cp1252 console
                 summary.append(f"  Iter {rec.iteration:3d}: Cd={rec.cd:.6f}, Cl={rec.cl:.6f}, |grad|={rec.grad_norm:.6f}")
 
-        summary_path = output_dir / "optimization_summary.txt"
-        summary_path.write_text("\n".join(summary), encoding="utf-8")
-
-        logger.info(f"Results saved to {output_dir}")

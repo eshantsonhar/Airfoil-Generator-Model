@@ -194,6 +194,36 @@ class SvanbergMMA:
                 s.L[j] = s.x[j] - min_dist / 2
                 s.U[j] = s.x[j] + min_dist / 2
     
+    def sync_state(
+        self,
+        x: np.ndarray,
+        f_val: float,
+        g_vals: Optional[np.ndarray] = None,
+    ) -> None:
+        """
+        Resynchronize MMA internal state with an outer-loop design point.
+
+        Called when the optimizer backtracks to x_best or reverts after a
+        geometry/CFD failure so that s.f_val and s.x match the evaluated point.
+        """
+        if self.state is None:
+            self.initialize(x)
+            return
+
+        s = self.state
+        x = np.clip(np.asarray(x, dtype=float), self.x_min, self.x_max)
+        s.x_pprev = s.x_prev.copy()
+        s.x_prev = s.x.copy()
+        s.x = x.copy()
+        s.f_prev = s.f_val
+        s.f_val = float(f_val)
+        if g_vals is not None:
+            g_vals = np.asarray(g_vals, dtype=float)
+            s.g_prev = s.g_vals.copy()
+            s.g_vals = g_vals.copy()
+        s.stagnated_counter = 0
+        s.step_accepted = True
+
     def reset_asymptotes(self, expansion_factor: float = 0.5) -> None:
         """
         Explicitly reset and expand asymptotes around current design point.
@@ -343,6 +373,108 @@ class SvanbergMMA:
         
         return x_next, lambd_next
     
+    def propose_step(
+        self,
+        f: float,
+        df: np.ndarray,
+        g: Optional[np.ndarray] = None,
+        dg: Optional[np.ndarray] = None,
+    ) -> Tuple[np.ndarray, float, np.ndarray, MMAState]:
+        """
+        Solve the MMA subproblem and return a candidate design.
+
+        Does not commit the step — the outer optimizer validates geometry,
+        evaluates CFD at the candidate if needed, then calls commit_step().
+        """
+        if self.state is None:
+            raise RuntimeError("MMA not initialized. Call initialize() first.")
+
+        s = self.state
+        self.update_asymptotes()
+
+        f_current = f
+        x_current = s.x.copy()
+        g_vals = g if g is not None else np.zeros(self.n_constraints)
+        dg_mat = dg if dg is not None else np.zeros((self.n_constraints, self.n_vars))
+        x_candidate, lambd_next = self.solve_subproblem(
+            x_current, f_current, df, g_vals, dg_mat
+        )
+
+        move = self.move_limit * (self.x_max - self.x_min)
+        x_candidate = np.clip(x_candidate, x_current - move, x_current + move)
+        if np.linalg.norm(x_candidate - x_current) < 1e-6:
+            grad_sign = np.sign(df)
+            grad_sign[grad_sign == 0.0] = 1.0
+            x_candidate = np.clip(
+                x_current + 0.5 * move * grad_sign,
+                self.x_min,
+                self.x_max,
+            )
+
+        dx = x_candidate - x_current
+        f_pred = f_current + float(np.dot(df, dx))
+        s.lambd = lambd_next
+        return x_candidate, f_pred, lambd_next, s
+
+    def commit_step(
+        self,
+        x_new: np.ndarray,
+        f_new: float,
+        g_new: Optional[np.ndarray] = None,
+    ) -> np.ndarray:
+        """Commit an accepted outer-loop step and advance MMA history."""
+        if self.state is None:
+            raise RuntimeError("MMA not initialized.")
+
+        s = self.state
+        s.x_pprev = s.x_prev.copy()
+        s.x_prev = s.x.copy()
+        s.x = np.asarray(x_new, dtype=float).copy()
+        s.f_prev = s.f_val
+        s.f_val = float(f_new)
+        if g_new is not None:
+            s.g_prev = s.g_vals.copy()
+            s.g_vals = np.asarray(g_new, dtype=float).copy()
+        s.iteration += 1
+        s.step_accepted = True
+        s.stagnated_counter = max(0, s.stagnated_counter - 1)
+        return s.x.copy()
+
+    def advance_iterate(self, x_new: np.ndarray) -> np.ndarray:
+        """Move the MMA iterate to x_new without changing f_val (updated on next CFD eval)."""
+        if self.state is None:
+            raise RuntimeError("MMA not initialized.")
+
+        s = self.state
+        x_new = np.clip(np.asarray(x_new, dtype=float), self.x_min, self.x_max)
+        s.x_pprev = s.x_prev.copy()
+        s.x_prev = s.x.copy()
+        s.x = x_new.copy()
+        s.iteration += 1
+        s.step_accepted = True
+        return s.x.copy()
+
+    def reject_step(self) -> Tuple[bool, bool]:
+        """
+        Record a rejected outer-loop step.
+
+        Returns (accepted=False, stagnated) where stagnated=True after 10 rejections.
+        """
+        if self.state is None:
+            raise RuntimeError("MMA not initialized.")
+
+        s = self.state
+        s.move_limit_factor = max(0.1, s.move_limit_factor * 0.5)
+        s.step_accepted = False
+        s.stagnated_counter += 1
+        stagnated = False
+        if s.stagnated_counter >= 10:
+            if s.stagnated_counter == 10:
+                logger.warning(f"MMA stagnation detected ({s.stagnated_counter} rejections)")
+            s.stagnated_counter = 0
+            stagnated = True
+        return False, stagnated
+
     def step(
         self,
         x_new: np.ndarray,
@@ -351,84 +483,32 @@ class SvanbergMMA:
         g_new: Optional[np.ndarray] = None,
     ) -> Tuple[np.ndarray, bool, bool]:
         """
-        Perform MMA step with trust-region acceptance logic.
-        
-        Computes gain ratio and decides whether to accept step.
-        
-        Args:
-            x_new: Proposed new design point
-            f_new: Objective value at x_new
-            f_pred: Predicted objective reduction
-            g_new: Constraint values at x_new (optional)
-            
-        Returns:
-            (x_accepted, accepted, stagnated): Accepted design, acceptance flag, and stagnation flag
+        Evaluate whether an outer-loop candidate should be accepted.
+
+        f_new must be the objective evaluated at x_new (not at the current iterate).
         """
         if self.state is None:
             raise RuntimeError("MMA not initialized.")
-        
+
         s = self.state
-        
-        # Compute actual reduction
         actual_reduction = s.f_val - f_new
-        
-        # Gain ratio (trust-region metric)
         pred_reduction = s.f_val - f_pred if f_pred < s.f_val else self._eps
         denom = max(abs(pred_reduction), self._eps)
         rho = actual_reduction / denom
-        
-        # Acceptance decision
-        accepted = False
-        stagnated = False
+
         objective_improved = actual_reduction > 1e-8
         objective_tolerance = 1e-3 + 0.01 * max(1.0, abs(s.f_val))
         objective_acceptable = objective_improved or (f_new <= s.f_val + objective_tolerance)
 
         if objective_acceptable:
-            # Accept steps that genuinely improve the objective or that are only mildly
-            # worse than the current point. This prevents MMA from stalling on noisy CFD
-            # evaluations where a small regression is still informative.
-            accepted = True
             s.rho = rho if objective_improved else 0.0
-            s.stagnated_counter = max(0, s.stagnated_counter - 1)
-        else:
-            # Step makes objective worse beyond the tolerance - reject
-            accepted = False
-            s.rho = rho
-            s.stagnated_counter += 1
-        
-        if accepted:
-            # Update state
-            s.x_pprev = s.x_prev.copy()
-            s.x_prev = s.x.copy()
-            s.x = x_new.copy()
-            s.f_prev = s.f_val
-            s.f_val = f_new
-            if g_new is not None:
-                s.g_prev = s.g_vals.copy()
-                s.g_vals = g_new.copy()
-            s.iteration += 1
-            s.step_accepted = True
-            return s.x.copy(), True, False
-        else:
-            # Step rejected - try smaller move
-            s.move_limit_factor = max(0.1, s.move_limit_factor * 0.5)
-            s.step_accepted = False
-            s.iteration += 1
-            
-            # If too many rejections, trigger recovery
-            if s.stagnated_counter >= 10:
-                # Only log warning first time, not every rejection
-                if s.stagnated_counter == 10:
-                    logger.warning(f"MMA stagnation detected ({s.stagnated_counter} rejections)")
-                # Apply perturbation to escape local issues
-                perturbation = 0.01 * (self.x_max - self.x_min) * np.random.randn(self.n_vars)
-                x_recovery = np.clip(s.x + perturbation, self.x_min, self.x_max)
-                s.stagnated_counter = 0
-                return x_recovery, False, True  # Return stagnated=True
-            
-            return s.x.copy(), False, False
-    
+            x_accepted = self.commit_step(x_new, f_new, g_new)
+            return x_accepted, True, False
+
+        s.rho = rho
+        _, stagnated = self.reject_step()
+        return s.x.copy(), False, stagnated
+
     def run_optimization_step(
         self,
         f: float,
@@ -437,53 +517,13 @@ class SvanbergMMA:
         dg: Optional[np.ndarray] = None,
     ) -> Tuple[np.ndarray, bool, bool, MMAState]:
         """
-        Run one complete MMA optimization iteration.
-        
-        Args:
-            f: Current objective value
-            df: Current objective gradient
-            g: Current constraint values
-            dg: Current constraint Jacobian
-            
-        Returns:
-            (x_next, accepted, stagnated, state): New design, acceptance flag, stagnation flag, current state
-        """
-        if self.state is None:
-            raise RuntimeError("MMA not initialized. Call initialize() first.")
-        
-        s = self.state
-        
-        # Update asymptotes
-        self.update_asymptotes()
-        
-        # Store current values for prediction
-        f_current = f
-        x_current = s.x.copy()
-        
-        # Solve subproblem
-        g_vals = g if g is not None else np.zeros(self.n_constraints)
-        dg_mat = dg if dg is not None else np.zeros((self.n_constraints, self.n_vars))
-        x_candidate, lambd_next = self.solve_subproblem(
-            x_current, f_current, df, g_vals, dg_mat
-        )
+        Propose an MMA subproblem step (legacy wrapper).
 
-        # Keep the candidate inside a conservative trust region and avoid zero-distance moves.
-        move = self.move_limit * (self.x_max - self.x_min)
-        x_candidate = np.clip(x_candidate, x_current - move, x_current + move)
-        if np.linalg.norm(x_candidate - x_current) < 1e-6:
-            x_candidate = np.clip(x_current + 0.5 * move * np.sign(df), self.x_min, self.x_max)
-        
-        # Predict objective at candidate using linear model
-        dx = x_candidate - x_current
-        f_pred = f_current + np.dot(df, dx)
-        
-        # Apply step acceptance logic
-        x_accepted, accepted, stagnated = self.step(x_candidate, f, f_pred, g)
-        
-        # Update Lagrange multipliers
-        s.lambd = lambd_next
-        
-        return x_accepted, accepted, stagnated, s
+        Returns the candidate design. Acceptance is decided by the outer loop
+        after geometry validation and optional CFD evaluation at x_candidate.
+        """
+        x_candidate, _f_pred, _lambd, s = self.propose_step(f, df, g, dg)
+        return x_candidate, True, False, s
 
 
 class TrustRegionGovernor:
