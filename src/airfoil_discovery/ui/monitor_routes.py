@@ -10,6 +10,7 @@ Endpoints:
 from __future__ import annotations
 
 import json
+import logging
 import math
 import os
 import re
@@ -18,6 +19,8 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/monitor", tags=["monitor"])
 
@@ -33,13 +36,15 @@ def _parse_history_csv(history_path: Path) -> dict[str, list]:
         return {}
     try:
         text = history_path.read_text(encoding="utf-8", errors="replace")
-    except OSError:
+    except OSError as e:
+        logger.warning("Cannot read history file %s: %s", history_path, e)
         return {}
     lines = [l for l in text.splitlines() if l.strip()]
     if len(lines) < 2:
         return {}
     headers = [h.strip().strip('"') for h in lines[0].split(",")]
     result: dict[str, list] = {h: [] for h in headers}
+    unparsed = 0
     for line in lines[1:]:
         parts = [p.strip() for p in line.split(",")]
         for i, h in enumerate(headers):
@@ -47,7 +52,9 @@ def _parse_history_csv(history_path: Path) -> dict[str, list]:
                 try:
                     result[h].append(float(parts[i]))
                 except (ValueError, TypeError):
-                    pass
+                    unparsed += 1
+    if unparsed:
+        logger.warning("Skipped %d non-numeric values in %s", unparsed, history_path)
     return result
 
 
@@ -174,7 +181,9 @@ def _convergence_flag(traces: dict[str, list], window: int = 50) -> str:
         last = abs(any_res[-1]) if any_res[-1] != 0 else 1e-30
         try:
             drop = math.log10(max(first, 1e-30) / max(last, 1e-30))
-        except Exception:
+        except ValueError as e:
+            logger.warning("Residual drop computation failed (first=%r, last=%r): %s",
+                           first, last, e)
             drop = 0.0
     else:
         drop = 0.0
@@ -199,7 +208,8 @@ def _parse_surface_csv(surface_path: Path) -> dict[str, Any]:
         return {}
     try:
         text = surface_path.read_text(encoding="utf-8", errors="replace")
-    except OSError:
+    except OSError as e:
+        logger.warning("Cannot read surface file %s: %s", surface_path, e)
         return {}
     lines = [l for l in text.splitlines() if l.strip()]
     if len(lines) < 2:
@@ -327,8 +337,8 @@ def list_monitor_cases() -> dict[str, Any]:
     if RUNTIME_PATH.exists():
         try:
             runtime = json.loads(RUNTIME_PATH.read_text(encoding="utf-8"))
-        except Exception:
-            pass
+        except (OSError, json.JSONDecodeError) as e:
+            logger.warning("Cannot read runtime file %s: %s", RUNTIME_PATH, e)
 
     running_ids = {c["case_id"] for c in runtime.get("running_cases", [])}
     completed_cases: list[dict[str, Any]] = []
@@ -489,10 +499,9 @@ def get_case_summary(case_id: str) -> dict[str, Any]:
             first = abs(series[0]) if series[0] != 0 else 1e-30
             last = abs(series[-1]) if series[-1] != 0 else 1e-30
             try:
-                drop = math.log10(max(first, 1e-30) / max(last, 1e-30))
-                residual_drop = round(drop, 2)
-            except Exception:
-                pass
+                residual_drop = round(math.log10(max(first, 1e-30) / max(last, 1e-30)), 2)
+            except ValueError as e:
+                logger.warning("Residual drop computation failed for channel %s: %s", key, e)
             break
 
     # ΔCl and ΔCd stability over last 50 iterations

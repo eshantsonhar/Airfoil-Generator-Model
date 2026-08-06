@@ -3,11 +3,12 @@ Finite Difference Optimization Engine + Web API Integration.
 Connects the MMA optimizer to CFD evaluations via finite difference gradients
 and streams status updates to the web UI.
 """
-import sys, os, time, json, threading, uuid
+import sys, os, time, json, logging, threading, uuid
+from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "src"))
 
 import numpy as np
-from pathlib import Path
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
@@ -22,6 +23,8 @@ from airfoil_discovery.schemas import CSTParameters
 # Configure fast mesh · 15-25k cells
 MeshFidelityManager.REGISTRY["L0"] = FidelityParams("L0", coarse_factor=8.0, y_plus_target=1.0)
 
+logger = logging.getLogger(__name__)
+
 router = APIRouter(prefix="/api/optimization", tags=["optimization"])
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
@@ -33,6 +36,10 @@ BOUNDS = {
     "x_max": np.array([ 0.5,  0.5,  0.5,  0.5,  0.3,  0.3,  0.3,  0.3, 0.020, 1.2]),
 }
 
+class MetricExtractionError(RuntimeError):
+    """Raised when Cl/Cd cannot be read from an SU2 case directory."""
+
+
 def extract_metrics(case_dir):
     cl, cd, lsb = 0.0, 0.0, None
     hist = case_dir / "history.csv"
@@ -43,8 +50,12 @@ def extract_metrics(case_dir):
             hdr = [h.strip().strip('"') for h in lines[0].split(',')]
             rows = [l.split(',') for l in lines[1:] if l.strip() and l.strip() != ',']
             if rows:
-                if "CL" in hdr: cl = float(rows[-1][hdr.index("CL")])
-                if "CD" in hdr: cd = float(rows[-1][hdr.index("CD")])
+                try:
+                    if "CL" in hdr: cl = float(rows[-1][hdr.index("CL")])
+                    if "CD" in hdr: cd = float(rows[-1][hdr.index("CD")])
+                except (ValueError, IndexError) as e:
+                    raise MetricExtractionError(
+                        f"Cannot parse CL/CD from {hist}: {e}") from e
     # LSB via Cf zero-crossing
     surf = list(case_dir.glob("*surface*.csv"))
     if surf and surf[0].stat().st_size > 100:
@@ -66,16 +77,24 @@ def extract_metrics(case_dir):
                         f = cf[i-1]/max(cf[i-1]-cf[i], 1e-30)
                         reatt = x[i-1]+f*(x[i]-x[i-1])
                 lsb = (reatt-sep) if (sep and reatt) else None
-        except Exception:
-            pass
+        except (OSError, ValueError, IndexError) as e:
+            # LSB is optional telemetry: report the failure but keep Cl/Cd.
+            logger.warning("LSB extraction failed for %s: %s", surf[0], e)
     return cl, cd, lsb
 
 def eval_design(design, tag, settings):
+    """Evaluate a design with CFD.
+
+    Raises MetricExtractionError if the CFD case failed or its metrics are
+    unreadable, so callers cannot mistake a failure for a valid design.
+    """
     case_dir = PROJECT_ROOT / "data" / "cache" / f"opt_{tag}"
     evaluator = SU2Evaluator(settings)
     r = evaluator.run_evaluation(design, case_dir, mesh_level="L0", aoa=4.0)
     if r.status.value in ("CONFIG_ERROR", "CRASHED"):
-        return None
+        raise MetricExtractionError(
+            f"CFD evaluation {tag} failed with status {r.status.value} "
+            f"at stage {r.failure_stage}: {r.failure_reason}")
     cl, cd, lsb = extract_metrics(case_dir)
     return {"cl": cl, "cd": cd, "lsb": lsb, "status": r.status.value}
 
@@ -89,6 +108,18 @@ class OptRequest(BaseModel):
     scale: float = Field(default=1.0, ge=0.8, le=1.2)
 
 def _run_opt(run_id: str, req: OptRequest):
+    """Thread entrypoint: surface failures on the run record instead of
+    letting the worker thread die with the run stuck in "running"."""
+    try:
+        _run_opt_inner(run_id, req)
+    except Exception as e:
+        logger.exception("Optimization run %s failed", run_id)
+        with _opt_lock:
+            _opt_runs[run_id]["status"] = "failed"
+            _opt_runs[run_id]["step"] = "Failed"
+            _opt_runs[run_id]["error"] = f"{type(e).__name__}: {e}"
+
+def _run_opt_inner(run_id: str, req: OptRequest):
     s = load_settings(PROJECT_ROOT / "config" / "default.yaml")
     s.solver.case_timeout_seconds = 1800
     s.solver.stage1_iter = 500
@@ -106,12 +137,15 @@ def _run_opt(run_id: str, req: OptRequest):
         with _opt_lock:
             _opt_runs[run_id]["step"] = f"CFD Evaluation {k+1}/{req.iterations+1}"
 
-        d = eval_design(x_cur, tag, s)
-        if d is None:
+        try:
+            d = eval_design(x_cur, tag, s)
+        except MetricExtractionError as e:
+            logger.error("Optimization %s aborted at iteration %d: %s", run_id, k, e)
             with _opt_lock:
                 _opt_runs[run_id]["step"] = f"Failed at iteration {k}"
                 _opt_runs[run_id]["status"] = "failed"
-            break
+                _opt_runs[run_id]["error"] = str(e)
+            return
 
         J = d["cd"] + req.lsb_weight * (d["lsb"] or 0.0)
         if k == 0:
@@ -137,10 +171,20 @@ def _run_opt(run_id: str, req: OptRequest):
             xp = x_cur.copy()
             dx = eps * (BOUNDS["x_max"][i] - BOUNDS["x_min"][i])
             xp[i] += dx
-            dp = eval_design(xp, f"{run_id}_{k}_sens{i}", s)
-            if dp:
-                Jp = dp["cd"] + req.lsb_weight * (dp["lsb"] or 0.0)
-                grad[i] = (Jp - J) / dx
+            try:
+                dp = eval_design(xp, f"{run_id}_{k}_sens{i}", s)
+            except MetricExtractionError as e:
+                # A missing component would silently bias the MMA step, so the
+                # run stops instead of optimizing on a truncated gradient.
+                logger.error("Optimization %s aborted: FD component %d failed: %s",
+                             run_id, i, e)
+                with _opt_lock:
+                    _opt_runs[run_id]["step"] = f"Failed FD sensitivity {i+1}/8 at iteration {k}"
+                    _opt_runs[run_id]["status"] = "failed"
+                    _opt_runs[run_id]["error"] = str(e)
+                return
+            Jp = dp["cd"] + req.lsb_weight * (dp["lsb"] or 0.0)
+            grad[i] = (Jp - J) / dx
 
         # MMA step
         df = np.zeros(10); df[:8] = grad
@@ -181,7 +225,8 @@ def opt_status(run_id: str):
     if not r:
         raise HTTPException(404, detail="Not found")
     return {"run_id": run_id, "status": r["status"],
-            "step": r.get("step",""), "results": r.get("results",[])}
+            "step": r.get("step",""), "results": r.get("results",[]),
+            "error": r.get("error")}
 
 @router.get("/result/{run_id}")
 def opt_result(run_id: str):
@@ -189,4 +234,5 @@ def opt_result(run_id: str):
         r = _opt_runs.get(run_id)
     if not r:
         raise HTTPException(404, detail="Not found")
-    return {"run_id": run_id, "results": r.get("results",[])}
+    return {"run_id": run_id, "results": r.get("results",[]),
+            "status": r["status"], "error": r.get("error")}

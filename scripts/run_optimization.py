@@ -33,7 +33,10 @@ def main() -> None:
 
     print("Initializing Aerospace-Grade ASO Campaign...")
     pipeline = AirfoilDiscoveryPipeline.from_config(args.config)
-    pipeline.run(iterations=args.iterations, batch_size=args.batch_size)
+    status = pipeline.run(iterations=args.iterations, batch_size=args.batch_size)
+    if status != "completed":
+        print(f"ASO Optimization campaign terminated with status: {status}")
+        raise SystemExit(1)
     print("ASO Optimization campaign finished successfully.")
 
 if __name__ == "__main__":

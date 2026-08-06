@@ -672,8 +672,9 @@ class CFDExecutionStateMachine:
                 try:
                     self._parse_history_file(history_file)
                     last_heartbeat = time.time()
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.warning(f"[{self.case_id}] Could not read solver heartbeat "
+                                   f"from {history_file}: {e}")
             
             # Check for heartbeat timeout
             if time.time() - last_heartbeat > self.heartbeat_timeout:
@@ -755,10 +756,14 @@ class CFDExecutionStateMachine:
             try:
                 if os.name == "nt":
                     # Windows: use taskkill for process tree termination
-                    subprocess.run(
+                    killed = subprocess.run(
                         ["taskkill", "/PID", str(self._subprocess_pid), "/T", "/F"],
-                        capture_output=True,
+                        capture_output=True, text=True,
                     )
+                    if killed.returncode != 0:
+                        logger.error(f"[{self.case_id}] taskkill for PID {self._subprocess_pid} "
+                                     f"returned rc={killed.returncode}: "
+                                     f"{(killed.stderr or '').strip()[:300]}")
                 else:
                     # Unix: send SIGTERM, then SIGKILL
                     try:

@@ -433,8 +433,8 @@ class GeometryGovernor:
             le_radius_fit = float(coeffs[0] / 2.0)
             if le_radius_fit > 0:
                 le_radius = le_radius_fit
-        except:
-            pass
+        except (np.linalg.LinAlgError, ValueError) as e:
+            warnings.warn(f"LE radius quadratic fit failed, using y^2/(2x) estimate: {e}")
         
         # LE curvature (inverse of radius for circular approximation)
         le_curvature = 1.0 / (le_radius + 1e-15)

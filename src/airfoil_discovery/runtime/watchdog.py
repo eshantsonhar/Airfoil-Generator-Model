@@ -52,6 +52,7 @@ class WatchdogResult:
     timeout_seconds: float
     result: Any = None
     error: Optional[str] = None
+    exception: Optional[BaseException] = None
     events: List[WatchdogEvent] = field(default_factory=list)
     
     @property
@@ -109,6 +110,7 @@ class WatchdogTimer:
         self._events: List[WatchdogEvent] = []
         self._result: Any = None
         self._error: Optional[str] = None
+        self._exception: Optional[BaseException] = None
         self._cancel_flag = threading.Event()
         self._monitor_thread: Optional[threading.Thread] = None
         
@@ -162,10 +164,11 @@ class WatchdogTimer:
         
         logger.info(f"Watchdog completed for '{self.operation}' ({self.duration:.1f}s)")
     
-    def error(self, error_msg: str):
+    def error(self, error_msg: str, exception: Optional[BaseException] = None):
         """Mark the operation as failed with an error."""
         self._end_time = time.time()
         self._error = error_msg
+        self._exception = exception
         self._status = WatchdogStatus.ERROR
         self._record_event("error", {"error": error_msg})
         self._cancel_flag.set()
@@ -200,6 +203,7 @@ class WatchdogTimer:
             timeout_seconds=self.timeout_seconds,
             result=self._result,
             error=self._error,
+            exception=self._exception,
             events=self._events,
         )
     
@@ -507,13 +511,16 @@ class SystemWatchdog:
             timeout_seconds=timeout,
         )
         
-        result_container = {"result": None, "error": None}
+        result_container: Dict[str, Any] = {"result": None, "error": None, "exception": None}
         
         def target():
             try:
                 result_container["result"] = func(*args, **kwargs)
             except Exception as e:
+                logger.error(f"Operation '{operation}' raised {type(e).__name__}: {e}",
+                             exc_info=True)
                 result_container["error"] = f"{type(e).__name__}: {e}"
+                result_container["exception"] = e
         
         thread = threading.Thread(target=target, daemon=True)
         thread.start()
@@ -528,7 +535,7 @@ class SystemWatchdog:
         if thread.is_alive():
             watchdog.error("Operation timed out")
         elif result_container["error"]:
-            watchdog.error(result_container["error"])
+            watchdog.error(result_container["error"], result_container["exception"])
         else:
             watchdog.complete(result_container["result"])
         

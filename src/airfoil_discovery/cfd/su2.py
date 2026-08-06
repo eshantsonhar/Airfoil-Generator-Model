@@ -234,6 +234,7 @@ class SU2Runner:
             return {}
         headers = [item.strip().strip('"') for item in lines[0].split(",")]
         traces: Dict[str, List[float]] = {h: [] for h in headers}
+        unparsed = 0
         for line in lines[1:]:
             if not line.strip() or line.strip() == ',':
                 continue
@@ -243,28 +244,49 @@ class SU2Runner:
                     try:
                         traces[h].append(float(vals[i]))
                     except (ValueError, TypeError):
-                        pass
+                        unparsed += 1
+        if unparsed:
+            logger.warning(f"[su2] Skipped {unparsed} non-numeric values while "
+                           f"parsing {history_path.name}")
         return traces
 
-    def _extract_adjoint_gradients(self, case_dir: Path, n_vars: int = 10) -> Tuple[np.ndarray, np.ndarray]:
+    def _extract_adjoint_gradients(self, case_dir: Path,
+                                   n_vars: int = 10) -> Tuple[np.ndarray, np.ndarray, Optional[str]]:
+        """Extract design-variable gradients from SU2 surface adjoint output.
+
+        Returns (grad_cd, grad_cl, diagnostic) where diagnostic is None on
+        success and otherwise explains why the gradients are zero. Malformed
+        or unreadable adjoint output raises SU2ExecutionError rather than
+        returning partially filled gradients.
+        """
         grad_cd = np.zeros(n_vars)
         grad_cl = np.zeros(n_vars)
         adj_files = list(case_dir.glob("*surface_adjoint*"))
         if not adj_files:
-            logger.warning(f"No adjoint files in {case_dir}")
-            return grad_cd, grad_cl
+            reason = f"No adjoint files in {case_dir}"
+            logger.warning(reason)
+            return grad_cd, grad_cl, reason
         adj_file = adj_files[0]
         logger.info(f"Adjoint gradients from {adj_file.name}")
         try:
-            data = np.loadtxt(adj_file, skiprows=1) if adj_file.suffix == '.csv' else np.loadtxt(adj_file)
+            data = (np.loadtxt(adj_file, skiprows=1, delimiter=',')
+                    if adj_file.suffix == '.csv' else np.loadtxt(adj_file))
+        except (OSError, ValueError) as e:
+            raise SU2ExecutionError("ADJOINT_EXTRACTION",
+                                    f"Cannot read adjoint file {adj_file}: {e}")
+        try:
             if data.ndim != 2 or data.shape[1] < 4:
-                return grad_cd, grad_cl
+                raise SU2ExecutionError(
+                    "ADJOINT_EXTRACTION",
+                    f"Unexpected adjoint file shape {data.shape} in {adj_file.name}")
             x_surf = data[:, 0]
             dJ_dx = data[:, 2]
             dJ_dy = data[:, 3]
             sens_mag = np.sqrt(dJ_dx**2 + dJ_dy**2)
             if np.max(sens_mag) < 1e-15:
-                return grad_cd, grad_cl
+                return grad_cd, grad_cl, (
+                    f"Surface sensitivities are degenerate "
+                    f"(max |dJ/dx| = {float(np.max(sens_mag)):.3e}) in {adj_file.name}")
             n_upper = len(x_surf) // 2
             if n_upper >= 4:
                 upper_sens = sens_mag[:n_upper]
@@ -286,9 +308,13 @@ class SU2Runner:
             if gn > 10.0:
                 grad_cd *= 10.0 / gn
             grad_cl = grad_cd * 0.5
+        except SU2ExecutionError:
+            raise
         except Exception as e:
-            logger.error(f"Adjoint extraction failed: {e}")
-        return grad_cd, grad_cl
+            logger.error(f"Adjoint extraction failed: {e}", exc_info=True)
+            raise SU2ExecutionError("ADJOINT_EXTRACTION",
+                                    f"{type(e).__name__}: {e}") from e
+        return grad_cd, grad_cl, None
 
 
 class SU2Evaluator:
@@ -379,13 +405,21 @@ class SU2Evaluator:
 
             cp_history = traces.get("CP", [])
             lsb_report = self._detect_lsb(case_dir, coords, cl, cd, cp_history)
-            grad_cd, grad_cl = self.runner._extract_adjoint_gradients(case_dir, n_vars=len(design_vector))
+            grad_cd, grad_cl, grad_diagnostic = self.runner._extract_adjoint_gradients(
+                case_dir, n_vars=len(design_vector))
             grad_norm = np.linalg.norm(grad_cd)
-            status = SU2Status.GRADIENT_ZERO if grad_norm < 1e-12 else SU2Status.OK
+            gradient_zero = grad_norm < 1e-12
+            status = SU2Status.GRADIENT_ZERO if gradient_zero else SU2Status.OK
+            if gradient_zero:
+                logger.error(f"[su2] Zero adjoint gradient for case {case_dir.name}: "
+                             f"{grad_diagnostic or 'gradient norm below 1e-12'}")
 
             return DesignEvaluation(
                 cl=cl, cd=cd, thickness=thickness, status=status,
                 design_id=design_id,
+                failure_stage="ADJOINT_EXTRACTION" if gradient_zero else None,
+                failure_reason=(grad_diagnostic or "Adjoint gradient norm below 1e-12")
+                if gradient_zero else None,
                 adjoint=type('obj', (object,), {'grad_cd': grad_cd, 'grad_cl': grad_cl,
                                                 'residual': convergence_report.get('residual', 1e-6),
                                                 'n_adjoint_iterations': 0, 'converged': status == SU2Status.OK})(),
@@ -394,7 +428,8 @@ class SU2Evaluator:
 
         except SU2ExecutionError as e:
             sm = {"PREFLIGHT_CHECK": SU2Status.SETUP_ERROR, "MESH_GENERATION": SU2Status.CONFIG_ERROR,
-                  "PRIMAL_SOLVE": SU2Status.DIVERGED, "RESULT_EXTRACTION": SU2Status.CRASHED}
+                  "PRIMAL_SOLVE": SU2Status.DIVERGED, "RESULT_EXTRACTION": SU2Status.CRASHED,
+                  "ADJOINT_EXTRACTION": SU2Status.ADJOINT_INVALID}
             return DesignEvaluation(cl=0.0, cd=0.0, thickness=0.0, status=sm.get(e.stage, SU2Status.CRASHED),
                                     failure_stage=e.stage, failure_reason=e.reason[:2000],
                                     design_id=design_id)

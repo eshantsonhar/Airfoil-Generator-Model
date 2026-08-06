@@ -15,6 +15,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import shutil
 import time
 import logging
 from dataclasses import dataclass, field
@@ -301,7 +302,7 @@ class ASOPipeline:
     def _design_id(self, x: np.ndarray) -> str:
         return hashlib.sha256(x.tobytes()).hexdigest()[:16]
 
-    def run(self, iterations: int | None = None, batch_size: int | None = None):
+    def run(self, iterations: int | None = None, batch_size: int | None = None) -> str:
         """
         Run the optimization loop.
         
@@ -317,7 +318,27 @@ class ASOPipeline:
         3. Stop when converged or max iterations reached
         
         If any step fails, the optimization STOPS with diagnostics archived.
+
+        Returns the terminal status recorded on the tracker ("completed",
+        "failed" or "stagnated"). Unexpected exceptions are recorded on the
+        tracker and re-raised.
         """
+        try:
+            return self._run(iterations=iterations, batch_size=batch_size)
+        except (Exception, KeyboardInterrupt) as exc:
+            reason = f"{type(exc).__name__}: {exc}"
+            if isinstance(exc, KeyboardInterrupt):
+                logger.warning("Optimization interrupted by user")
+            else:
+                logger.exception("Optimization aborted by unexpected error")
+            self.tracker.status = "failed"
+            self.tracker.log_event("optimization_aborted", reason=reason)
+            self.tracker.flush()
+            self.telemetry.failure("pipeline_exception", reason,
+                                   iteration=self.tracker.current_iteration)
+            raise
+
+    def _run(self, iterations: int | None = None, batch_size: int | None = None) -> str:
         max_iters = iterations or self.settings.optimization.iterations
         batch = batch_size or self.settings.optimization.batch_size
         self.tracker.initialize(max_iters, batch, max_parallel_workers=1)
@@ -347,7 +368,7 @@ class ASOPipeline:
                 self.telemetry.failure("watchdog_stale", reason, iteration=iter_count)
                 self.tracker.status = "failed"
                 self.tracker.flush()
-                return
+                return self.tracker.status
 
             self.tracker.current_iteration = iter_count
             self.tracker.mesh_level = self.orchestrator.current_level
@@ -468,7 +489,7 @@ class ASOPipeline:
                         failure_reason=evaluation.failure_reason,
                     )
                     self.tracker.flush()
-                    return  # STOP - no fake fallback
+                    return self.tracker.status  # STOP - no fake fallback
 
                 polar.append(PolarPoint(
                     aoa_deg=aoa,
@@ -532,7 +553,7 @@ class ASOPipeline:
                 self.tracker.status = "failed"
                 self.tracker.log_event("zero_gradient", iteration=iter_count)
                 self.tracker.flush()
-                return  # STOP - cannot optimize with zero gradient
+                return self.tracker.status  # STOP - cannot optimize with zero gradient
 
             # INSTRUMENTATION ASSERTION B: verify f corresponds to x_current
             x_current_mma = self.mma.state.x.copy() if self.mma.state is not None else self._current_design
@@ -664,7 +685,7 @@ class ASOPipeline:
                                        final_objective=f)
                 self.tracker.status = "completed"
                 self.tracker.flush()
-                return  # Converged!
+                return self.tracker.status  # Converged!
 
             # Check stagnation
             if not step_accepted and mma_state.stagnated_counter >= 10:
@@ -674,13 +695,14 @@ class ASOPipeline:
                                        stagnated_counter=mma_state.stagnated_counter)
                 self.tracker.status = "stagnated"
                 self.tracker.flush()
-                return
+                return self.tracker.status
 
         self.tracker.status = "completed"
         self.tracker.log_event("optimization_completed",
                                completed_cases=self.tracker.completed_cases,
                                iterations=iter_count)
         self.tracker.flush()
+        return self.tracker.status
 
     def _archive_diagnostics(self, case_dir: Path, iteration: int) -> None:
         """Archive diagnostics when optimization fails."""
@@ -690,31 +712,36 @@ class ASOPipeline:
                 dest = archive_dir / f.name
                 archive_dir.mkdir(parents=True, exist_ok=True)
                 try:
-                    import shutil
                     shutil.copy2(f, dest)
-                except Exception:
-                    pass
+                except OSError as e:
+                    logger.warning(f"Failed to archive diagnostic file {f} to {dest}: {e}")
 
     def _persist_failure(self, case_id: str, diagnostic: dict, case_dir: Path) -> None:
         """Persist failure diagnostics to the failures directory the UI reads from."""
         from airfoil_discovery.ui.platform_routes import FAILURES_ROOT
         failures_dir = FAILURES_ROOT
-        failures_dir.mkdir(parents=True, exist_ok=True)
-        
-        # Write structured failure JSON
         fail_path = failures_dir / f"{case_id}_failure.json"
-        import json as _json
-        _json.dump(diagnostic, open(fail_path, 'w', encoding='utf-8'), indent=2, default=str)
-        
+
+        # Write structured failure JSON. Persisting diagnostics must never mask
+        # the CFD failure that triggered it, so I/O errors are logged instead.
+        try:
+            failures_dir.mkdir(parents=True, exist_ok=True)
+            fail_path.write_text(
+                json.dumps(diagnostic, indent=2, default=str), encoding="utf-8"
+            )
+        except (OSError, TypeError, ValueError) as e:
+            logger.error(f"Failed to persist failure diagnostic for {case_id} "
+                         f"to {fail_path}: {e}")
+            return
+
         # Copy case directory if it has content
         if case_dir and case_dir.exists():
-            import shutil
             case_archive = failures_dir / case_id
             try:
                 shutil.copytree(case_dir, case_archive, dirs_exist_ok=True)
-            except Exception as e:
+            except OSError as e:
                 logger.warning(f"Failed to copy case dir to failures archive: {e}")
-        
+
         logger.info(f"[failure] Persisted {case_id} diagnostic to {fail_path}")
 
     def _simulation_plan(self, aoa: float) -> dict[str, Any]:

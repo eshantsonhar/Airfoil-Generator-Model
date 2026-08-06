@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 import os
 from pathlib import Path
 from typing import Any
@@ -15,6 +16,8 @@ from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel, Field
 
 from airfoil_discovery.ui.telemetry_hub import DEFAULT_EVENT_PATH, get_telemetry_hub
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["platform"])
 
@@ -149,7 +152,8 @@ def watchdog_status() -> dict[str, Any]:
     if runtime_path.exists():
         try:
             runtime = json.loads(runtime_path.read_text(encoding="utf-8"))
-        except Exception:
+        except (OSError, json.JSONDecodeError) as e:
+            logger.warning("Cannot read runtime file %s: %s", runtime_path, e)
             runtime = {}
     return {
         "watchdog_status": runtime.get("watchdog_status", "UNKNOWN"),

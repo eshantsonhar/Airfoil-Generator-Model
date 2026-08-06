@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 import signal
 import subprocess
@@ -25,6 +26,8 @@ from airfoil_discovery.ui.platform_routes import router as platform_router
 from airfoil_discovery.ui.cfd_routes import router as cfd_router
 from airfoil_discovery.ui.monitor_routes import router as monitor_router
 from airfoil_discovery.ui.telemetry_hub import DEFAULT_EVENT_PATH, get_telemetry_hub
+
+logger = logging.getLogger(__name__)
 
 
 def _resolve_project_root() -> Path:
@@ -113,11 +116,12 @@ def _cleanup_all_jobs() -> None:
                 else:
                     proc.terminate()
                 proc.wait(timeout=10)
-            except Exception:
+            except Exception as e:
+                logger.warning("Graceful shutdown of job %s failed (%s); killing", pid, e)
                 try:
                     proc.kill()
-                except Exception:
-                    pass
+                except Exception as kill_error:
+                    logger.error("Could not kill job %s: %s", pid, kill_error)
             _running_optimization_jobs.pop(pid, None)
     _close_log_handle()
 
@@ -127,8 +131,8 @@ def _close_log_handle() -> None:
     if current_log_handle is not None:
         try:
             current_log_handle.close()
-        except Exception:
-            pass
+        except OSError as e:
+            logger.warning("Failed to close job log handle: %s", e)
         current_log_handle = None
 
 
@@ -410,8 +414,10 @@ def job_runtime() -> dict[str, Any]:
         return {"status": "idle", "stationarity": 0.0, "complementarity": 0.0}
     try:
         return json.loads(JOB_RUNTIME_PATH.read_text(encoding="utf-8"))
-    except Exception:
-        return {"status": "unreadable", "stationarity": 0.0, "complementarity": 0.0}
+    except (OSError, json.JSONDecodeError) as e:
+        logger.warning("Cannot read job runtime file %s: %s", JOB_RUNTIME_PATH, e)
+        return {"status": "unreadable", "stationarity": 0.0, "complementarity": 0.0,
+                "error": f"{type(e).__name__}: {e}"}
 
 
 @app.get("/api/job/log")

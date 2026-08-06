@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 import threading
 import time
 from collections import deque
@@ -18,6 +19,8 @@ from typing import Any, Deque, Set
 
 from fastapi import WebSocket
 
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_EVENT_PATH = Path("data/logs/telemetry_events.jsonl")
 DEFAULT_BUFFER_SIZE = 5000
@@ -94,7 +97,9 @@ class TelemetryHub:
         for event in list(self.buffer):
             try:
                 await websocket.send_json(event)
-            except Exception:
+            except Exception as e:
+                logger.warning("Telemetry replay to client aborted: %s", e)
+                await self.disconnect(websocket)
                 break
 
     async def disconnect(self, websocket: WebSocket) -> None:
@@ -108,7 +113,8 @@ class TelemetryHub:
             for client in self._clients:
                 try:
                     await client.send_json(event)
-                except Exception:
+                except Exception as e:
+                    logger.debug("Dropping telemetry client after send failure: %s", e)
                     dead.append(client)
             for client in dead:
                 self._clients.discard(client)
@@ -123,7 +129,13 @@ class TelemetryHub:
 
         async def _loop() -> None:
             while True:
-                await self._tail_file()
+                try:
+                    await self._tail_file()
+                except asyncio.CancelledError:
+                    raise
+                except Exception:
+                    # A dead watcher task would silently stop all telemetry.
+                    logger.exception("Telemetry watcher failed to tail %s", self.event_path)
                 await asyncio.sleep(poll_interval)
 
         self._watcher_task = asyncio.create_task(_loop())
@@ -155,7 +167,9 @@ class TelemetryHub:
                 continue
             try:
                 event = json.loads(line)
-            except json.JSONDecodeError:
+            except json.JSONDecodeError as e:
+                logger.warning("Skipping malformed telemetry line in %s: %s",
+                               self.event_path, e)
                 continue
             await self.broadcast(event)
 

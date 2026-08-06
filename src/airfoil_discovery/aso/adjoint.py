@@ -58,9 +58,16 @@ def parse_surface_sensitivity_file(
 
     try:
         data = np.loadtxt(filepath, delimiter=",", skiprows=1)
-    except Exception:
+    except ValueError as csv_error:
         # Try space-delimited format
-        data = np.loadtxt(filepath, skiprows=1)
+        logger.debug(f"Comma-delimited parse of {filepath} failed ({csv_error}); "
+                     f"retrying as whitespace-delimited")
+        try:
+            data = np.loadtxt(filepath, skiprows=1)
+        except ValueError as e:
+            raise ValueError(
+                f"Cannot parse surface sensitivity file {filepath} as comma- or "
+                f"whitespace-delimited: {e}") from e
 
     if data.ndim == 1:
         data = data.reshape(1, -1)
@@ -106,7 +113,7 @@ def parse_surface_sensitivity_file(
             dJ_dx = data[:, 3]
             dJ_dy = data[:, 4]
             
-    except Exception as e:
+    except (OSError, KeyError, IndexError, ValueError) as e:
         # Fallback to old format if header parsing fails
         logger.warning(f"Header parsing failed, using fallback format: {e}")
         x_surf = data[:, 0]
@@ -246,8 +253,9 @@ def extract_adjoint_gradient(
             flow_data = np.loadtxt(flow_surf_files[0], delimiter=",", skiprows=1)
             if flow_data.ndim >= 2 and flow_data.shape[1] >= 2:
                 y_surf = flow_data[:, 1]
-        except Exception:
-            pass
+        except (OSError, ValueError) as e:
+            logger.warning(f"Could not read surface y-coordinates from "
+                           f"{flow_surf_files[0]}: {e}; falling back to sign heuristic")
 
     # If we still don't have y, estimate from x and the sign of dJ_dy
     if np.all(np.abs(y_surf) < 1e-12):
