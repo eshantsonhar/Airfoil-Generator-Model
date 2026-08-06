@@ -278,12 +278,17 @@ def platform_spa(spa_path: str) -> FileResponse:
     3. Asset subpaths that bypass the StaticFiles mount (shouldn't happen but defensive)
     """
     # Sanitize: prevent path traversal
-    clean_path = spa_path.replace("..", "").lstrip("/")
+    clean_path = spa_path.lstrip("/")
     if not clean_path:
         return _platform_index_response()
-    
-    # Try to serve actual file from dist
-    candidate = REACT_DIST / clean_path
+
+    # Try to serve actual file from dist, confined to REACT_DIST
+    dist_root = REACT_DIST.resolve()
+    candidate = (dist_root / clean_path).resolve()
+    try:
+        candidate.relative_to(dist_root)
+    except ValueError:
+        return _platform_index_response()
     if candidate.is_file():
         return FileResponse(candidate)
     

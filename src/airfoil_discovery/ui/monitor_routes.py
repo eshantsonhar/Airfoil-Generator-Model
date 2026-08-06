@@ -51,8 +51,15 @@ def _parse_history_csv(history_path: Path) -> dict[str, list]:
     return result
 
 
+def _is_safe_case_id(case_id: str) -> bool:
+    """case_id is used as a single path segment; reject traversal/separators."""
+    return bool(re.fullmatch(r"[A-Za-z0-9._+-]+", case_id)) and case_id not in {".", ".."}
+
+
 def _find_case_dirs(case_id: str) -> list[Path]:
     """Return all stage directories belonging to a case_id, sorted."""
+    if not _is_safe_case_id(case_id):
+        return []
     # case_id may be like "iter_001_aoa_+04p0"
     # structure: data/cache/run_XXX/<case_id>/  or data/cache/<case_id>/
     matches: list[Path] = []

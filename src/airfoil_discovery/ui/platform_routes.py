@@ -7,6 +7,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 from typing import Any
 
@@ -24,6 +25,20 @@ SAVED_CONFIG_DIR = PROJECT_ROOT / "data" / "configs"
 DIAGNOSTICS_ROOT = PROJECT_ROOT / "data" / "cache" / "diagnostics"
 FAILURES_ROOT = PROJECT_ROOT / "data" / "failures"
 TELEMETRY_DB = PROJECT_ROOT / "data" / "telemetry" / "metrics.db"
+
+# Roots whose files may be read back through the failures API.
+_READABLE_ROOTS = (FAILURES_ROOT, DIAGNOSTICS_ROOT)
+# Config names are used verbatim as filenames; restrict to a safe charset.
+_SAFE_NAME_RE = re.compile(r"^[A-Za-z0-9._-]+$")
+
+
+def _is_within(child: Path, parent: Path) -> bool:
+    """True if `child` is inside `parent` (both already resolved)."""
+    try:
+        child.relative_to(parent)
+        return True
+    except ValueError:
+        return False
 
 
 class RunConfigPatch(BaseModel):
@@ -81,7 +96,9 @@ def list_failures() -> dict[str, Any]:
 @router.get("/api/failures/content")
 def failure_content(path: str, tail: int = 200) -> dict[str, Any]:
     target = (PROJECT_ROOT / path).resolve()
-    if not str(target).startswith(str(PROJECT_ROOT.resolve())):
+    if not any(_is_within(target, root.resolve()) for root in _READABLE_ROOTS):
+        raise HTTPException(status_code=400, detail="Invalid path")
+    if target.suffix not in {".log", ".json", ".txt", ".md"}:
         raise HTTPException(status_code=400, detail="Invalid path")
     if not target.exists() or not target.is_file():
         raise HTTPException(status_code=404, detail="File not found")
@@ -102,6 +119,8 @@ def current_config() -> dict[str, Any]:
 
 @router.post("/api/config/save")
 def save_config(patch: RunConfigPatch, name: str = "custom") -> dict[str, Any]:
+    if not _SAFE_NAME_RE.match(name) or name in {".", ".."}:
+        raise HTTPException(status_code=400, detail="Invalid config name")
     if not CONFIG_PATH.exists():
         raise HTTPException(status_code=404, detail="Config not found")
     data = yaml.safe_load(CONFIG_PATH.read_text(encoding="utf-8"))
