@@ -13,6 +13,7 @@ import enum
 import os
 import subprocess
 
+from airfoil_discovery.cfd.su2_csv import column_traces, last_row_mapping, read_csv_table
 from airfoil_discovery.runtime import run_with_timeout
 import json
 import re
@@ -192,27 +193,16 @@ class SU2Runner:
         if not history_path.exists():
             raise SU2ExecutionError("RESULT_EXTRACTION", f"History file not found: {history_path}")
         try:
-            text = history_path.read_text(encoding="utf-8", errors="replace")
+            headers, rows = read_csv_table(history_path)
         except Exception as e:
             raise SU2ExecutionError("RESULT_EXTRACTION", f"Cannot read history: {e}")
-        lines = text.splitlines()
-        if len(lines) < 2:
+        if not headers:
             raise SU2ExecutionError("RESULT_EXTRACTION", "History file too short")
-        headers = [item.strip().strip('"') for item in lines[0].split(",")]
-        last_data = None
-        for line in reversed(lines[1:]):
-            s = line.strip()
-            if s and s != ',':
-                last_data = s
-                break
-        if last_data is None:
+        mapping = last_row_mapping(headers, rows, pad=True)
+        if mapping is None:
             raise SU2ExecutionError("RESULT_EXTRACTION", "No data lines in history")
-        values = [item.strip() for item in last_data.split(",")]
-        if len(values) < len(headers):
-            values.extend(['0.0'] * (len(headers) - len(values)))
-        mapping = dict(zip(headers, values))
-        cl_val = mapping.get("CL") or mapping.get('"CL"') or mapping.get("LIFT") or '0.0'
-        cd_val = mapping.get("CD") or mapping.get('"CD"') or mapping.get("DRAG") or '0.0'
+        cl_val = mapping.get("CL") or mapping.get("LIFT") or '0.0'
+        cd_val = mapping.get("CD") or mapping.get("DRAG") or '0.0'
         for name, val in [("CL", cl_val), ("CD", cd_val)]:
             if val in ('', 'nan', 'NaN', 'inf', 'Inf', '-inf', '-Inf'):
                 raise SU2ExecutionError("RESULT_EXTRACTION", f"{name} invalid: {val}")
@@ -228,23 +218,8 @@ class SU2Runner:
     def _read_history_traces(self, history_path: Path) -> Dict[str, List[float]]:
         if not history_path.exists():
             return {}
-        text = history_path.read_text(encoding="utf-8", errors="replace")
-        lines = text.splitlines()
-        if len(lines) < 2:
-            return {}
-        headers = [item.strip().strip('"') for item in lines[0].split(",")]
-        traces: Dict[str, List[float]] = {h: [] for h in headers}
-        for line in lines[1:]:
-            if not line.strip() or line.strip() == ',':
-                continue
-            vals = [item.strip() for item in line.split(",")]
-            for i, h in enumerate(headers):
-                if i < len(vals):
-                    try:
-                        traces[h].append(float(vals[i]))
-                    except (ValueError, TypeError):
-                        pass
-        return traces
+        headers, rows = read_csv_table(history_path)
+        return column_traces(headers, rows)
 
     def _extract_adjoint_gradients(self, case_dir: Path, n_vars: int = 10) -> Tuple[np.ndarray, np.ndarray]:
         grad_cd = np.zeros(n_vars)

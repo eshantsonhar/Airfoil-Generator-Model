@@ -51,6 +51,7 @@ from .mesh_deform import (
     STRUCTURAL_INTERIOR_X_MAX,
 )
 from .subprocess_utils import run_solver_safe
+from airfoil_discovery.cfd.su2_csv import read_csv_table
 
 logger = logging.getLogger(__name__)
 
@@ -599,34 +600,22 @@ def _parse_history(history_path: Path) -> Tuple[float, float, bool]:
         return 0.0, 0.0, False
 
     try:
-        text = history_path.read_text(encoding="utf-8", errors="replace")
+        header, rows = read_csv_table(history_path)
     except Exception as e:
         logger.warning(f"Cannot read history: {e}")
         return 0.0, 0.0, False
 
-    lines = text.splitlines()
-    if len(lines) < 2:
+    if not header:
         return 0.0, 0.0, False
 
-    # Parse header - strip quotes and whitespace
-    header = [h.strip().strip('"').strip("'") for h in lines[0].split(",")]
-    
     # Log detected headers for debugging
     logger.info(f"SU2 history headers detected: {header}")
 
-    # Find last data line
-    last_data = None
-    for line in reversed(lines[1:]):
-        s = line.strip()
-        if s and s != ',' and not s.startswith("#"):
-            last_data = s
-            break
-
-    if last_data is None:
+    if not rows:
         logger.warning("No valid data rows found in history file")
         return 0.0, 0.0, False
 
-    values = [v.strip() for v in last_data.split(",")]
+    values = rows[-1]
     
     # Ensure we have matching header/value counts
     if len(values) != len(header):
@@ -714,13 +703,7 @@ def _parse_history(history_path: Path) -> Tuple[float, float, bool]:
         logger.warning(f"Out-of-range force coefficients detected: CL={cl}, CD={cd}")
         return cl, cd, False
 
-    data_rows = []
-    for line in lines[1:]:
-        s = line.strip()
-        if s and s != ',':
-            vals = [v.strip() for v in s.split(",")]
-            if len(vals) == len(header):
-                data_rows.append(dict(zip(header, vals)))
+    data_rows = [dict(zip(header, row)) for row in rows if len(row) == len(header)]
 
     if len(data_rows) < 2:
         return cl, cd, False
@@ -861,6 +844,28 @@ class ASOObjectiveFunction:
         # Previous design vector for mesh deformation tracking
         self._previous_dv_stored = previous_dv
 
+    def _run_cfd(self, dv: np.ndarray) -> "CFDResult":
+        """Run primal (and optionally adjoint) SU2 solves for ``dv`` in a fresh case dir."""
+        return run_primal_and_adjoint(
+            su2_cfd_bin=self.su2_cfd_bin,
+            su2_adj_bin=self.su2_cfd_bin,
+            mesh_path=self.current_mesh_path,
+            dv=dv,
+            case_dir=_new_case_dir(self.case_root, "eval"),
+            aoa_deg=self.aoa_deg,
+            reynolds=self.reynolds,
+            mach=self.mach,
+            n_iter_primal=self.n_iter_primal,
+            n_iter_adjoint=self.n_iter_adjoint,
+            cfl_primal=self.cfl_primal,
+            cfl_adjoint=self.cfl_adjoint,
+            transition_model=self.transition_model,
+            turbulence_intensity=self.turbulence_intensity,
+            turb_viscosity_ratio=self.turb_viscosity_ratio,
+            objective=self.objective,
+            use_adjoint=self.use_adjoint,
+        )
+
     def __call__(self, dv: np.ndarray) -> float:
         """
         Evaluate the objective (Cd at current design point).
@@ -888,26 +893,7 @@ class ASOObjectiveFunction:
         self._last_dv = dv.copy()
 
         # Run CFD evaluation
-        case_dir = _new_case_dir(self.case_root, "eval")
-        result = run_primal_and_adjoint(
-            su2_cfd_bin=self.su2_cfd_bin,
-            su2_adj_bin=self.su2_cfd_bin,
-            mesh_path=self.current_mesh_path,
-            dv=dv,
-            case_dir=case_dir,
-            aoa_deg=self.aoa_deg,
-            reynolds=self.reynolds,
-            mach=self.mach,
-            n_iter_primal=self.n_iter_primal,
-            n_iter_adjoint=self.n_iter_adjoint,
-            cfl_primal=self.cfl_primal,
-            cfl_adjoint=self.cfl_adjoint,
-            transition_model=self.transition_model,
-            turbulence_intensity=self.turbulence_intensity,
-            turb_viscosity_ratio=self.turb_viscosity_ratio,
-            objective=self.objective,
-            use_adjoint=self.use_adjoint,
-        )
+        result = self._run_cfd(dv)
 
         self._last_result = result
         self._last_gradient = result.adjoint_gradient.copy() if result.gradient_valid else None
@@ -1126,26 +1112,7 @@ class ASOObjectiveFunction:
             logger.warning(f"Invalid geometry: {reason}")
             return 1e10
 
-        case_dir = _new_case_dir(self.case_root, "eval")
-        result = run_primal_and_adjoint(
-            su2_cfd_bin=self.su2_cfd_bin,
-            su2_adj_bin=self.su2_cfd_bin,
-            mesh_path=self.current_mesh_path,
-            dv=dv,
-            case_dir=case_dir,
-            aoa_deg=self.aoa_deg,
-            reynolds=self.reynolds,
-            mach=self.mach,
-            n_iter_primal=self.n_iter_primal,
-            n_iter_adjoint=self.n_iter_adjoint,
-            cfl_primal=self.cfl_primal,
-            cfl_adjoint=self.cfl_adjoint,
-            transition_model=self.transition_model,
-            turbulence_intensity=self.turbulence_intensity,
-            turb_viscosity_ratio=self.turb_viscosity_ratio,
-            objective=self.objective,
-            use_adjoint=self.use_adjoint,
-        )
+        result = self._run_cfd(dv)
 
         if not result.converged:
             logger.warning(f"CFD not converged: {result.failure_reason}")
@@ -1435,30 +1402,9 @@ class PDEOptimizer:
         
         return new_limit
 
-    def run_slsqp(self) -> ConvergenceHistory:
-        """
-        Run optimization using scipy.optimize.minimize with SLSQP.
-
-        SLSQP handles the gradient-based constrained optimization:
-          minimize  Cd(dv)
-          subject to: dv_min <= dv <= dv_max
-                      t_min <= thickness(dv) <= t_max
-
-        Returns
-        -------
-        ConvergenceHistory
-        """
-        from scipy.optimize import minimize
-
-        # Build bounds for SLSQP (12 design variables)
-        scipy_bounds = []
-        for i in range(6):
-            scipy_bounds.append((float(self.bounds.upper_min[i]), float(self.bounds.upper_max[i])))
-        for i in range(6):
-            scipy_bounds.append((float(self.bounds.lower_min[i]), float(self.bounds.lower_max[i])))
-
-        # Objective function wrapper for scipy
-        self.obj_function = ASOObjectiveFunction(
+    def _build_objective_function(self) -> ASOObjectiveFunction:
+        """Create the CFD objective wrapper configured from this optimizer's settings."""
+        return ASOObjectiveFunction(
             su2_cfd_bin=self.su2_cfd_bin,
             mesh_path=self.mesh_path,
             case_root=self.case_root,
@@ -1482,6 +1428,31 @@ class PDEOptimizer:
             min_cl=self.min_cl,
             cl_penalty_weight=self.cl_penalty_weight,
         )
+
+    def run_slsqp(self) -> ConvergenceHistory:
+        """
+        Run optimization using scipy.optimize.minimize with SLSQP.
+
+        SLSQP handles the gradient-based constrained optimization:
+          minimize  Cd(dv)
+          subject to: dv_min <= dv <= dv_max
+                      t_min <= thickness(dv) <= t_max
+
+        Returns
+        -------
+        ConvergenceHistory
+        """
+        from scipy.optimize import minimize
+
+        # Build bounds for SLSQP (12 design variables)
+        scipy_bounds = []
+        for i in range(6):
+            scipy_bounds.append((float(self.bounds.upper_min[i]), float(self.bounds.upper_max[i])))
+        for i in range(6):
+            scipy_bounds.append((float(self.bounds.lower_min[i]), float(self.bounds.lower_max[i])))
+
+        # Objective function wrapper for scipy
+        self.obj_function = self._build_objective_function()
 
         def callback(xk: np.ndarray) -> None:
             """Callback at each iteration to record progress."""
@@ -1573,30 +1544,7 @@ class PDEOptimizer:
         )
 
         # Objective function
-        self.obj_function = ASOObjectiveFunction(
-            su2_cfd_bin=self.su2_cfd_bin,
-            mesh_path=self.mesh_path,
-            case_root=self.case_root,
-            aoa_deg=self.aoa_deg,
-            reynolds=self.reynolds,
-            mach=self.mach,
-            n_iter_primal=self.n_iter_primal,
-            n_iter_adjoint=self.n_iter_adjoint,
-            cfl_primal=self.cfl_primal,
-            cfl_adjoint=self.cfl_adjoint,
-            transition_model=self.transition_model,
-            turbulence_intensity=self.turbulence_intensity,
-            turb_viscosity_ratio=self.turb_viscosity_ratio,
-            objective="DRAG",
-            bounds=self.bounds,
-            use_mesh_deformation=self.use_mesh_deformation,
-            su2_def_bin=self.su2_def_bin,
-            previous_mesh_path=self.mesh_path,
-            previous_dv=self.dv_initial,
-            use_adjoint=self.use_adjoint,
-            min_cl=self.min_cl,
-            cl_penalty_weight=self.cl_penalty_weight,
-        )
+        self.obj_function = self._build_objective_function()
 
         dv = self.dv_initial.copy()
 

@@ -19,6 +19,8 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException
 
+from airfoil_discovery.cfd.su2_csv import column_traces, read_csv_table
+
 router = APIRouter(prefix="/api/monitor", tags=["monitor"])
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
@@ -32,23 +34,10 @@ def _parse_history_csv(history_path: Path) -> dict[str, list]:
     if not history_path.exists():
         return {}
     try:
-        text = history_path.read_text(encoding="utf-8", errors="replace")
+        headers, rows = read_csv_table(history_path)
     except OSError:
         return {}
-    lines = [l for l in text.splitlines() if l.strip()]
-    if len(lines) < 2:
-        return {}
-    headers = [h.strip().strip('"') for h in lines[0].split(",")]
-    result: dict[str, list] = {h: [] for h in headers}
-    for line in lines[1:]:
-        parts = [p.strip() for p in line.split(",")]
-        for i, h in enumerate(headers):
-            if i < len(parts):
-                try:
-                    result[h].append(float(parts[i]))
-                except (ValueError, TypeError):
-                    pass
-    return result
+    return column_traces(headers, rows)
 
 
 def _find_case_dirs(case_id: str) -> list[Path]:
@@ -198,13 +187,11 @@ def _parse_surface_csv(surface_path: Path) -> dict[str, Any]:
     if not surface_path.exists():
         return {}
     try:
-        text = surface_path.read_text(encoding="utf-8", errors="replace")
+        headers, data_rows = read_csv_table(surface_path)
     except OSError:
         return {}
-    lines = [l for l in text.splitlines() if l.strip()]
-    if len(lines) < 2:
+    if not headers:
         return {}
-    headers = [h.strip().strip('"') for h in lines[0].split(",")]
 
     # Map common SU2 column names
     _col_map = {
@@ -241,8 +228,7 @@ def _parse_surface_csv(surface_path: Path) -> dict[str, Any]:
         return {}
 
     rows_x, rows_y, rows_cp, rows_cf, rows_gamma = [], [], [], [], []
-    for line in lines[1:]:
-        parts = [p.strip() for p in line.split(",")]
+    for parts in data_rows:
         try:
             x = float(parts[col_x]) if col_x < len(parts) else None
             y = float(parts[col_y]) if col_y is not None and col_y < len(parts) else 0.0

@@ -23,6 +23,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional, Dict, Any, Tuple, List
 
+from airfoil_discovery.cfd.su2_csv import last_row_mapping, lookup_float, read_csv_table
+
 logger = logging.getLogger(__name__)
 
 
@@ -382,26 +384,15 @@ def compute_aerodynamic_metrics(
 def _parse_aero_from_history(history_path: Path) -> Tuple[float, float, float]:
     """Parse final CL, CD, CMz from SU2 history.csv."""
     try:
-        text = history_path.read_text(encoding="utf-8", errors="replace")
+        headers, rows = read_csv_table(history_path)
     except Exception:
         return 0.0, 0.0, 0.0
-    lines = text.splitlines()
-    if len(lines) < 2:
+    mapping = last_row_mapping(headers, rows)
+    if mapping is None:
         return 0.0, 0.0, 0.0
-    header = [h.strip().strip('"') for h in lines[0].split(",")]
-    last_data = None
-    for line in reversed(lines[1:]):
-        s = line.strip()
-        if s and s != ',':
-            last_data = s
-            break
-    if last_data is None:
-        return 0.0, 0.0, 0.0
-    values = [v.strip() for v in last_data.split(",")]
-    mapping = dict(zip(header, values))
-    cl = float(mapping.get("CL", mapping.get("LIFT", "0.0")))
-    cd = float(mapping.get("CD", mapping.get("DRAG", "0.0")))
-    cm = float(mapping.get("CMz", mapping.get("CM", mapping.get("MOMENT", "0.0"))))
+    cl = lookup_float(mapping, ["CL", "LIFT"], 0.0)
+    cd = lookup_float(mapping, ["CD", "DRAG"], 0.0)
+    cm = lookup_float(mapping, ["CMz", "CM", "MOMENT"], 0.0)
     return cl, cd, cm
 
 

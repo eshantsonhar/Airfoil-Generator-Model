@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field
 from airfoil_discovery.config import load_settings
 from airfoil_discovery.cfd.su2 import SU2Evaluator
 from airfoil_discovery.cfd.mesh import MeshFidelityManager, FidelityParams
+from airfoil_discovery.cfd.su2_csv import last_row_mapping, lookup_float, read_csv_table
 from airfoil_discovery.optimization.mma_engine import SvanbergMMA, TrustRegionGovernor
 from airfoil_discovery.geometry.validation import AirfoilGeometryValidator, GeometryValidationConfig
 from airfoil_discovery.geometry.cst import CSTAirfoil
@@ -37,14 +38,10 @@ def extract_metrics(case_dir):
     cl, cd, lsb = 0.0, 0.0, None
     hist = case_dir / "history.csv"
     if hist.exists() and hist.stat().st_size > 0:
-        with open(hist) as f:
-            lines = f.readlines()
-        if len(lines) > 1:
-            hdr = [h.strip().strip('"') for h in lines[0].split(',')]
-            rows = [l.split(',') for l in lines[1:] if l.strip() and l.strip() != ',']
-            if rows:
-                if "CL" in hdr: cl = float(rows[-1][hdr.index("CL")])
-                if "CD" in hdr: cd = float(rows[-1][hdr.index("CD")])
+        mapping = last_row_mapping(*read_csv_table(hist))
+        if mapping is not None:
+            cl = lookup_float(mapping, ["CL"], cl)
+            cd = lookup_float(mapping, ["CD"], cd)
     # LSB via Cf zero-crossing
     surf = list(case_dir.glob("*surface*.csv"))
     if surf and surf[0].stat().st_size > 100:
