@@ -284,6 +284,7 @@ class IterativeConvergenceMonitor:
         force_oscillation_threshold: float = 0.005,
         force_drift_threshold: float = 0.001,
         stabilization_window: int = 50,
+        min_iterations: int = 100,
     ):
         """
         Initialize iterative convergence monitor.
@@ -293,11 +294,13 @@ class IterativeConvergenceMonitor:
             force_oscillation_threshold: Relative oscillation amplitude threshold
             force_drift_threshold: Linear drift rate threshold
             stabilization_window: Window size for stabilization check
+            min_iterations: Minimum iterations required for a valid converged run
         """
         self.force_stabilization_threshold = force_stabilization_threshold
         self.force_oscillation_threshold = force_oscillation_threshold
         self.force_drift_threshold = force_drift_threshold
         self.stabilization_window = stabilization_window
+        self.min_iterations = min_iterations
     
     def analyze_forces(
         self,

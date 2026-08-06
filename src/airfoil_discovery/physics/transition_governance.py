@@ -63,11 +63,11 @@ class TransitionDiagnostics:
     gamma_re_theta_limit_exceeded: bool
     correlation_valid: bool
     
-    # Warnings
-    warnings: List[TransitionWarning] = field(default_factory=list)
-    
     # Overall assessment
     model_confidence: float  # 0-1 scale
+    
+    # Warnings
+    warnings: List[TransitionWarning] = field(default_factory=list)
 
 
 @dataclass

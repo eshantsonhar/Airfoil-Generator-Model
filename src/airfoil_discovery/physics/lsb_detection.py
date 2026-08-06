@@ -118,11 +118,12 @@ class LSBDetectionReport:
     
     # Diagnostics
     detection_method: str
-    warnings: List[str] = field(default_factory=list)
     
     # Surface data used
     x_coordinates: np.ndarray
     cp_upper: np.ndarray
+    
+    warnings: List[str] = field(default_factory=list)
     cf_upper: Optional[np.ndarray] = None
     intermittency_upper: Optional[np.ndarray] = None
     
