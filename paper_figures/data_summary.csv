@@ -1,0 +1,12 @@
+Parameter,Baseline,Optimized,Improvement
+Lift Coefficient (Cl),1.0000,1.0209,2.09%
+Drag Coefficient (Cd),0.030000,0.197234,557.45%
+L/D Ratio,33.33,5.18,N/A
+Max Thickness (t/c),0.1420,0.1314,-7.50%
+Max Thickness Location (x/c),0.3335,0.3114,N/A
+Separation Point (x_sep),N/A,N/A,N/A
+Reattachment Point (x_reat),N/A,N/A,N/A
+LSB Length,N/A,N/A,N/A
+Gradient Norm,N/A,2.3005e-01,N/A
+Upper CST Coefficients,"[0.2, 0.3, 0.35, 0.25, 0.15, 0.08]","[0.17712528534308344, 0.22665618390110384, 0.25464708960864085, 0.16864550630146838, 0.09041368552071034, 0.044857773595194834]",N/A
+Lower CST Coefficients,"[-0.12, -0.08, -0.05, -0.03, -0.02, -0.01]","[-0.245971253040978, -0.06725368272588511, -0.032020453315190794, -0.003992621604200759, 0.01109683885768261, 0.005960217615707552]",N/A

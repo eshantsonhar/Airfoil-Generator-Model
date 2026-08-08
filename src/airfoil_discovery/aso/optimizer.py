@@ -125,6 +125,83 @@ def _compute_thickness_constraint_gradient(
     return grad
 
 
+def _project_step_to_linearized_feasible(
+    dx_target: np.ndarray,
+    g: np.ndarray,
+    dg: np.ndarray,
+    safety_margin: float = 0.0,
+) -> np.ndarray:
+    """
+    Project a trial step onto the joint linearized feasible half-spaces.
+
+    Constraints are represented in the MMA convention ``g(x) <= 0`` and
+    linearized as ``g + dg @ dx <= -safety_margin``.  With only a few ASO
+    constraints, enumerating active sets is robust and avoids single-constraint
+    repair directions that can damage another active boundary.
+    """
+    if g.size == 0 or dg.size == 0:
+        return dx_target.copy()
+
+    active_rows = []
+    active_rhs = []
+    for gi, dgi in zip(np.asarray(g, dtype=float), np.asarray(dg, dtype=float)):
+        row_norm = float(np.linalg.norm(dgi))
+        if not np.isfinite(gi) or row_norm < 1e-14:
+            continue
+        rhs = -float(gi) - safety_margin
+        # Keep inactive constraints out unless the target step is predicted
+        # to cross them; this preserves MMA's useful motion in the interior.
+        if gi >= -safety_margin or float(np.dot(dgi, dx_target)) > rhs:
+            active_rows.append(np.asarray(dgi, dtype=float))
+            active_rhs.append(rhs)
+
+    if not active_rows:
+        return dx_target.copy()
+
+    A = np.vstack(active_rows)
+    b = np.asarray(active_rhs, dtype=float)
+    if np.all(A @ dx_target <= b + 1e-12):
+        return dx_target.copy()
+
+    best_dx = None
+    best_dist = float("inf")
+    n_halfspaces = A.shape[0]
+
+    # Projection onto every possible active-face intersection; m is tiny
+    # here (min thickness, max thickness, optional CL), so this is cheap.
+    for mask in range(1, 1 << n_halfspaces):
+        idx = [i for i in range(n_halfspaces) if mask & (1 << i)]
+        Aeq = A[idx, :]
+        beq = b[idx]
+        gram = Aeq @ Aeq.T
+        try:
+            correction = Aeq.T @ np.linalg.solve(gram, Aeq @ dx_target - beq)
+        except np.linalg.LinAlgError:
+            correction = Aeq.T @ np.linalg.pinv(gram) @ (Aeq @ dx_target - beq)
+        dx = dx_target - correction
+        if np.all(A @ dx <= b + 1e-10):
+            dist = float(np.linalg.norm(dx - dx_target))
+            if dist < best_dist:
+                best_dist = dist
+                best_dx = dx
+
+    if best_dx is not None:
+        return best_dx
+
+    # Dykstra-style fallback for numerically degenerate half-spaces.
+    dx = dx_target.copy()
+    for _ in range(30):
+        changed = False
+        for row, rhs in zip(A, b):
+            violation = float(np.dot(row, dx) - rhs)
+            if violation > 0.0:
+                dx = dx - (violation / (float(np.dot(row, row)) + 1e-14)) * row
+                changed = True
+        if not changed:
+            break
+    return dx
+
+
 def _remove_stale_solver_outputs(case_dir: Path) -> None:
     """Remove SU2 outputs that could otherwise be mistaken for fresh results."""
     for name in _STALE_SU2_OUTPUTS:
@@ -940,21 +1017,23 @@ class ASOObjectiveFunction:
 
         if self.use_mesh_deformation and self.su2_def_bin and self._previous_dv_stored is not None:
             self._deform_mesh_for_next(dv)
+            self._last_result = result
+            self._last_gradient = result.adjoint_gradient.copy() if result.gradient_valid else None
 
         self._previous_dv_stored = dv.copy()
         
-        # Apply lift constraint penalty if specified.
-        # Keep it moderate so a mildly under-lifted design is still accepted
-        # instead of being pushed into an infinite rejection loop.
+        # Apply lift constraint penalty if specified.  Use a linear exact-style
+        # merit term and grow the weight as the violation deepens so lift
+        # recovery dominates drag reduction outside the feasible set.
         cd_with_penalty = result.cd
         if self.min_cl is not None and result.cl < self.min_cl:
             cl_violation = self.min_cl - result.cl
             penalty_weight = max(0.1, self.cl_penalty_weight)
             if cl_violation > 0.05:
-                penalty_weight *= 2.0
+                penalty_weight *= 3.0
             if cl_violation > 0.1:
-                penalty_weight *= 2.0
-            penalty = penalty_weight * (cl_violation ** 2)
+                penalty_weight *= 3.0
+            penalty = penalty_weight * cl_violation
             cd_with_penalty += penalty
             logger.info(
                 f"CL constraint violated: CL={result.cl:.6f} < min={self.min_cl:.6f}, "
@@ -1165,16 +1244,15 @@ class ASOObjectiveFunction:
             return CFD_FAILURE_CD
 
         # Apply lift constraint penalty to match __call__ method for consistent FD gradients.
-        # Keep the penalty moderate so the optimizer can still make progress.
         cd_with_penalty = result.cd
         if self.min_cl is not None and result.cl < self.min_cl:
             cl_violation = self.min_cl - result.cl
             penalty_weight = max(0.1, self.cl_penalty_weight)
             if cl_violation > 0.05:
-                penalty_weight *= 2.0
+                penalty_weight *= 3.0
             if cl_violation > 0.1:
-                penalty_weight *= 2.0
-            penalty = penalty_weight * (cl_violation ** 2)
+                penalty_weight *= 3.0
+            penalty = penalty_weight * cl_violation
             cd_with_penalty += penalty
             logger.debug(
                 f"CL constraint violated in FD eval: CL={result.cl:.6f} < min={self.min_cl:.6f}, "
@@ -1341,6 +1419,8 @@ class PDEOptimizer:
         self,
         dv_invalid: np.ndarray,
         dv_feasible: np.ndarray,
+        g: Optional[np.ndarray] = None,
+        dg: Optional[np.ndarray] = None,
         max_iter: int = 20,
         step_size: float = 0.01,
     ) -> np.ndarray:
@@ -1377,6 +1457,13 @@ class PDEOptimizer:
             
             if is_valid:
                 # Found feasible point - return it
+                if g is not None and dg is not None:
+                    dv_current = dv_feasible + _project_step_to_linearized_feasible(
+                        dv_current - dv_feasible,
+                        g,
+                        dg,
+                        safety_margin=1e-4 if self.min_cl is not None else 0.0,
+                    )
                 return dv_current
             
             # Move towards feasible point
@@ -1389,7 +1476,8 @@ class PDEOptimizer:
             dv_current = np.clip(dv_current, dv_min_full, dv_max_full)
 
         
-        # If projection failed, return the known feasible point
+        # If projection failed, return the known feasible point.  This is the
+        # only point known to satisfy all already-evaluated constraints.
         return dv_feasible.copy()
 
     def _apply_mma_recovery(
@@ -2074,6 +2162,17 @@ class PDEOptimizer:
                 if cfd_result is not None:
                     g_cl = self.min_cl - cfd_result.cl  # CL >= min_cl
                     g = np.append(g, g_cl)
+                    if g_cl > 0.0:
+                        growth = 1.0 + min(4.0, 10.0 * g_cl)
+                        new_weight = max(self.cl_penalty_weight, self.cl_penalty_weight * growth)
+                        new_weight = min(new_weight, 250.0)
+                        if new_weight > self.cl_penalty_weight:
+                            self.cl_penalty_weight = new_weight
+                            self.obj_function.cl_penalty_weight = new_weight
+                            logger.info(
+                                f"Adaptive CL merit weight increased to {new_weight:.2f} "
+                                f"for lift violation {g_cl:.4f}"
+                            )
                 else:
                     # If no CFD result available, use conservative constraint
                     g = np.append(g, 0.0)  # g_cl = 0 (neutral)
@@ -2135,6 +2234,27 @@ class PDEOptimizer:
                 f=cd_with_penalty, df=grad, g=g, dg=dg
             )
 
+            dx_mma = x_candidate - dv
+            dx_projected = _project_step_to_linearized_feasible(
+                dx_mma,
+                g,
+                dg,
+                safety_margin=1e-4 if self.min_cl is not None else 0.0,
+            )
+            if np.linalg.norm(dx_projected - dx_mma) > 1e-10:
+                x_candidate = dv + dx_projected
+                bounds_upper = np.concatenate([self.bounds.upper_max, self.bounds.lower_max])
+                bounds_lower = np.concatenate([self.bounds.upper_min, self.bounds.lower_min])
+                move = self.move_limit * (bounds_upper - bounds_lower)
+                x_candidate = np.minimum(np.maximum(x_candidate, dv - move), dv + move)
+                x_candidate = np.clip(x_candidate, bounds_lower, bounds_upper)
+                logger.info(
+                    "Coupled feasibility projection adjusted MMA step: "
+                    f"||dx_mma||={np.linalg.norm(dx_mma):.4e}, "
+                    f"||dx_proj||={np.linalg.norm(x_candidate - dv):.4e}, "
+                    f"g_pred={g + dg @ (x_candidate - dv)}"
+                )
+
             # Project candidate to feasible thickness region if needed
             # This prevents MMA from proposing invalid designs that would be rejected
             cand_valid, cand_reason = validate_geometric_integrity(
@@ -2147,7 +2267,7 @@ class PDEOptimizer:
                     "Projecting to feasible region."
                 )
                 x_candidate = self._project_to_feasible_thickness(
-                    x_candidate, dv, max_iter=20, step_size=0.02
+                    x_candidate, dv, g=g, dg=dg, max_iter=20, step_size=0.02
                 )
                 # Re-validate after projection
                 cand_valid, cand_reason = validate_geometric_integrity(
@@ -2161,25 +2281,26 @@ class PDEOptimizer:
             displacement = np.linalg.norm(x_candidate - dv)
             if displacement < 1e-7:
                 logger.warning(
-                    f"Projected candidate causes zero displacement (||Δx||={displacement:.2e}). "
-                    "Using thickness-increasing direction to move away from constraint boundary."
+                    f"Projected candidate causes zero displacement (||dx||={displacement:.2e}). "
+                    "Trying coupled merit recovery direction."
                 )
-                # Use a direction that increases thickness: modify upper surface to be more convex
-                # and lower surface to be less concave
-                thickness_direction = np.zeros_like(dv)
-                # Upper surface coefficients (0-5): increase to make upper surface more convex
-                thickness_direction[0:6] = 0.1  # Positive for upper surface
-                # Lower surface coefficients (6-11): decrease to make lower surface less concave
-                thickness_direction[6:12] = -0.1  # Negative for lower surface
-                # Normalize and scale by move limit
-                thickness_direction = thickness_direction / (np.linalg.norm(thickness_direction) + 1e-12)
+                recovery_direction = -grad.copy()
+                if np.linalg.norm(recovery_direction) < 1e-12:
+                    recovery_direction = -np.sum(dg[np.asarray(g) >= -1e-4, :], axis=0)
+                recovery_direction = _project_step_to_linearized_feasible(
+                    recovery_direction,
+                    g,
+                    dg,
+                    safety_margin=1e-4 if self.min_cl is not None else 0.0,
+                )
+                recovery_direction = recovery_direction / (np.linalg.norm(recovery_direction) + 1e-12)
                 step_size = self.move_limit * 0.5
-                x_candidate = dv + step_size * thickness_direction
+                x_candidate = dv + step_size * recovery_direction
                 # Clip to bounds
                 bounds_upper = np.concatenate([self.bounds.upper_max, self.bounds.lower_max])
                 bounds_lower = np.concatenate([self.bounds.upper_min, self.bounds.lower_min])
                 x_candidate = np.clip(x_candidate, bounds_lower, bounds_upper)
-                # Re-validate after thickness-increasing step
+                # Re-validate after coupled recovery step
                 cand_valid, cand_reason = validate_geometric_integrity(
                     x_candidate,
                     te_thickness=self.bounds.te_thickness,
@@ -2187,15 +2308,15 @@ class PDEOptimizer:
                 if not cand_valid:
                     # If still invalid, project again
                     x_candidate = self._project_to_feasible_thickness(
-                        x_candidate, dv, max_iter=20, step_size=0.02
+                        x_candidate, dv, g=g, dg=dg, max_iter=20, step_size=0.02
                     )
                     cand_valid, cand_reason = validate_geometric_integrity(
                         x_candidate,
                         te_thickness=self.bounds.te_thickness,
                     )
                 logger.info(
-                    f"Thickness-increasing fallback: ||Δx||={np.linalg.norm(x_candidate - dv):.4f}, "
-                    f"feasible={cand_valid}"
+                    f"Coupled merit fallback: ||dx||={np.linalg.norm(x_candidate - dv):.4f}, "
+                    f"feasible={cand_valid}, g_pred={g + dg @ (x_candidate - dv)}"
                 )
 
             # Candidate geometry gate — reject infeasible shapes BEFORE mesh deformation
@@ -2255,7 +2376,7 @@ class PDEOptimizer:
             if self.min_cl is not None and n_constraints > 2:
                 dx_cand = x_candidate - dv
                 g_cl_pred = float(g[-1] + np.dot(dg[2], dx_cand))
-                if g_cl_pred > 0.02:
+                if g_cl_pred > 1e-4:
                     logger.warning(
                         f"[LIFT FILTER] Iter {iteration}: Candidate predicted infeasible "
                         f"(g_cl_pred={g_cl_pred:.4f}). Rejecting MMA move."
@@ -2302,10 +2423,11 @@ class PDEOptimizer:
 
             step_accepted = False
             mma_stagnated = False
+            candidate_already_evaluated = False
             dv_change = np.linalg.norm(x_candidate - dv)
             if dv_change < 1e-7:
                 logger.warning(
-                    f"[ZERO-DISP] Iter {iteration}: ||Δx||={dv_change:.3e} < 1e-7. "
+                    f"[ZERO-DISP] Iter {iteration}: ||dx||={dv_change:.3e} < 1e-7. "
                     f"Expanding move_limit and resetting MMA asymptotes."
                 )
                 self.move_limit = min(0.3, self.move_limit * 2.0)
@@ -2354,10 +2476,131 @@ class PDEOptimizer:
                 )
                 continue
 
-            # Accept geometry-valid MMA subproblem solution
+            # Evaluate the proposed design before committing it.  A step is
+            # accepted only if the actual CFD merit is feasible and no worse
+            # than the best accepted feasible merit.
+            saved_mesh_path = self.obj_function.current_mesh_path
+            saved_previous_dv = (
+                self.obj_function._previous_dv_stored.copy()
+                if self.obj_function._previous_dv_stored is not None else None
+            )
+            try:
+                if self.use_mesh_deformation and self.su2_def_bin:
+                    merit_def_dir = _new_case_dir(self.case_root, f"merit_def_iter_{iteration}")
+                    merit_mesh = deform_mesh(
+                        su2_def_bin=self.su2_def_bin,
+                        original_mesh_path=saved_mesh_path,
+                        dv_old=dv,
+                        dv_new=x_candidate,
+                        work_dir=merit_def_dir,
+                    )
+                    if merit_mesh is None:
+                        raise RuntimeError("candidate mesh deformation failed")
+                    self.obj_function.current_mesh_path = merit_mesh
+                    self.obj_function._previous_dv_stored = None
+                candidate_objective = self.obj_function(x_candidate)
+                candidate_result = self.obj_function.get_last_result()
+            except Exception as eval_err:
+                logger.warning(f"[MERIT FILTER] Candidate CFD evaluation failed: {eval_err}")
+                candidate_objective = CFD_FAILURE_CD
+                candidate_result = None
+
+            cand_upper, cand_lower = compute_surface_coordinates(
+                x_candidate, te_thickness=self.bounds.te_thickness
+            )
+            cand_thickness = cand_upper[:, 1] - cand_lower[:, 1]
+            cand_x = cand_upper[:, 0]
+            cand_interior_mask = (
+                (cand_x >= STRUCTURAL_INTERIOR_X_MIN) &
+                (cand_x <= STRUCTURAL_INTERIOR_X_MAX)
+            )
+            cand_interior_t = cand_thickness[cand_interior_mask] if np.any(cand_interior_mask) else cand_thickness
+            cand_max_t = float(np.max(cand_thickness))
+            cand_min_t = float(np.min(cand_interior_t))
+            cand_actual_cd = candidate_result.cd if candidate_result is not None else candidate_objective
+            cand_actual_cl = candidate_result.cl if candidate_result is not None else 0.0
+            cand_g_min_t = min_required - cand_min_t
+            cand_g_max_t = cand_max_t - self.bounds.max_thickness
+            cand_g_cl = (self.min_cl - cand_actual_cl) if self.min_cl is not None else 0.0
+            candidate_merit = (
+                cand_actual_cd
+                + self.cl_penalty_weight * max(0.0, cand_g_cl)
+                + thickness_penalty_weight * max(0.0, cand_g_min_t)
+                + thickness_penalty_weight * max(0.0, cand_g_max_t)
+            )
+            reference_merit = best_merit_f if np.isfinite(best_merit_f) else cd_with_penalty
+
+            if (
+                candidate_result is None or
+                not np.isfinite(candidate_objective) or
+                candidate_objective >= CFD_FAILURE_CD or
+                cand_g_min_t > 1e-8 or
+                cand_g_max_t > 1e-8 or
+                cand_g_cl > 1e-8 or
+                candidate_merit > reference_merit + 1e-5
+            ):
+                logger.warning(
+                    "[MERIT FILTER] Candidate rejected: "
+                    f"Cd={cand_actual_cd:.6f}, Cl={cand_actual_cl:.6f}, "
+                    f"merit={candidate_merit:.6f}, ref={reference_merit:.6f}, "
+                    f"g=[{cand_g_min_t:.3e}, {cand_g_max_t:.3e}, {cand_g_cl:.3e}]"
+                )
+                _, mma_stagnated = mma.reject_step()
+                self.move_limit = self._apply_mma_recovery(
+                    mma, best_dv, best_merit_f, best_g, mesh_safe, self.move_limit, backtrack_factor, x_candidate
+                )
+                self.obj_function.current_mesh_path = saved_mesh_path
+                self.obj_function._previous_dv_stored = saved_previous_dv
+                dv = best_dv.copy()
+                last_cached_grad = None
+                last_dv_with_gradient = best_dv.copy() - 1.0
+                force_fd_gradient = True
+                if mma_stagnated:
+                    self.move_limit = min(0.2, self.move_limit * 4.0)
+                    mma.move_limit = self.move_limit
+
+                cand_constraint_violations = [float(cand_g_min_t), float(cand_g_max_t)]
+                if self.min_cl is not None:
+                    cand_constraint_violations.append(float(cand_g_cl))
+                record = IterationRecord(
+                    iteration=iteration,
+                    cd=cand_actual_cd,
+                    cl=cand_actual_cl,
+                    objective=candidate_merit,
+                    grad_norm=grad_norm,
+                    step_accepted=False,
+                    trust_radius=self.move_limit,
+                    max_thickness=cand_max_t,
+                    design_vector=dv.tolist(),
+                    gradient=grad.tolist(),
+                    constraint_violations=cand_constraint_violations,
+                )
+                self.history.add(record)
+                logger.info(
+                    f"Iter {iteration}: Cd={cand_actual_cd:.6f}, Cl={cand_actual_cl:.6f}, "
+                    f"|grad|={grad_norm:.6f}, t/c={cand_max_t:.4f}, "
+                    "step_accepted=False (MERIT FILTER REJECTION)"
+                )
+                continue
+
+            candidate_already_evaluated = True
+
+            # Accept CFD-validated MMA subproblem solution
             step_accepted = True
             dv_prev = dv.copy()
             mma.advance_iterate(x_candidate)
+
+            cfd_result = candidate_result if candidate_already_evaluated else cfd_result
+            if candidate_already_evaluated and candidate_merit <= best_merit_f + 1e-12:
+                best_cd = cand_actual_cd
+                best_merit_f = candidate_merit
+                best_g = np.array([cand_g_min_t, cand_g_max_t] + ([cand_g_cl] if self.min_cl is not None else []))
+                best_dv = x_candidate.copy()
+                dv_safe = x_candidate.copy()
+                mesh_safe = self.obj_function.current_mesh_path
+                self._last_feasible_dv = x_candidate.copy()
+                self._last_feasible_cd = cand_actual_cd
+                update_emergency_state(best_dv=best_dv, best_cd=best_cd)
 
             # Reset zero-displacement counter on successful design change
             if hasattr(self, '_zero_displacement_count'):
@@ -2389,32 +2632,41 @@ class PDEOptimizer:
                         logger.info("No feasible design history, backtracking to initial design")
                         dv = self.dv_initial.copy()
                 elif cl_violation < 0.05:  # Mild or no violation - update feasible design
-                    self._last_feasible_dv = dv.copy()
-                    self._last_feasible_cd = cd
+                    self._last_feasible_dv = x_candidate.copy()
+                    self._last_feasible_cd = cand_actual_cd if candidate_already_evaluated else cd
 
             # Update trust region
             trust_update = governor.update(state.rho)
             trust_radius = trust_update["radius"]
 
             # Record iteration
-            cfd_result = self.obj_function.get_last_result()
-            actual_cd = cfd_result.cd if cfd_result else cd
-            actual_cl = cfd_result.cl if cfd_result else 0.0
+            cfd_result = candidate_result if candidate_already_evaluated else self.obj_function.get_last_result()
+            actual_cd = cand_actual_cd if candidate_already_evaluated else (cfd_result.cd if cfd_result else cd)
+            actual_cl = cand_actual_cl if candidate_already_evaluated else (cfd_result.cl if cfd_result else 0.0)
             
             # Build constraint violations list
-            constraint_violations = [float(g_min_t), float(g_max_t)]
-            if self.min_cl is not None and cfd_result is not None:
-                constraint_violations.append(float(self.min_cl - cfd_result.cl))
+            if candidate_already_evaluated:
+                max_t_record = cand_max_t
+                objective_record = candidate_merit
+                constraint_violations = [float(cand_g_min_t), float(cand_g_max_t)]
+                if self.min_cl is not None:
+                    constraint_violations.append(float(cand_g_cl))
+            else:
+                max_t_record = max_t
+                objective_record = cd
+                constraint_violations = [float(g_min_t), float(g_max_t)]
+                if self.min_cl is not None and cfd_result is not None:
+                    constraint_violations.append(float(self.min_cl - cfd_result.cl))
             
             record = IterationRecord(
                 iteration=iteration,
                 cd=actual_cd,  # Use actual physical CD from CFD, not objective value
                 cl=actual_cl,
-                objective=cd,  # Objective value (may include penalties)
+                objective=objective_record,  # Objective value (may include penalties)
                 grad_norm=grad_norm,
                 step_accepted=step_accepted,
                 trust_radius=trust_radius,
-                max_thickness=max_t,
+                max_thickness=max_t_record,
                 design_vector=x_candidate.tolist() if step_accepted else dv.tolist(),
                 gradient=grad.tolist(),
                 constraint_violations=constraint_violations,
@@ -2422,13 +2674,13 @@ class PDEOptimizer:
             self.history.add(record)
 
             logger.info(
-                f"Cd={cd:.6f}, |grad Cd|={grad_norm:.6f}, t/c={max_t:.4f}, "
+                f"Cd={actual_cd:.6f}, |grad Cd|={grad_norm:.6f}, t/c={max_t_record:.4f}, "
                 f"accepted={step_accepted}, rho={trust_radius:.4f}"
             )
 
             if step_accepted:
                 dv = x_candidate.copy()
-                if self.use_mesh_deformation and self.su2_def_bin:
+                if self.use_mesh_deformation and self.su2_def_bin and not candidate_already_evaluated:
                     def_dir = _new_case_dir(self.case_root, f"def_iter_{iteration}")
                     deformed = deform_mesh(
                         su2_def_bin=self.su2_def_bin,

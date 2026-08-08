@@ -1,9 +1,26 @@
 import numpy as np
 from airfoil_discovery.core.mma_solver import TrustRegionMMA
 from airfoil_discovery.core.fidelity import FidelityController, CFDResult, CFDState
-from airfoil_discovery.cfd.su2 import SU2Evaluator, SU2Status, DesignEvaluation, AdjointResult
-from airfoil_discovery.aso_orchestrator import ASOFramework
+from airfoil_discovery.cfd.su2 import SU2Status, DesignEvaluation, AdjointResult
 from pathlib import Path
+
+
+class FakeSU2Evaluator:
+    def run_evaluation(self, x, case_dir, level):
+        grad = 2.0 * np.asarray(x, dtype=float)
+        cd = float(np.sum(np.asarray(x, dtype=float) ** 2))
+        return DesignEvaluation(
+            cl=1.0,
+            cd=cd,
+            thickness=0.12,
+            status=SU2Status.OK,
+            adjoint=AdjointResult(
+                grad_cd=grad,
+                grad_cl=0.5 * grad,
+                residual=1e-6,
+                converged=True,
+            ),
+        )
 
 def test_sensitivity_branin():
     print("--- Running Sensitivity Check (Branin) ---")
@@ -21,7 +38,7 @@ def test_sensitivity_branin():
 
 def test_gradient_verification():
     print("--- Running Gradient Verification ---")
-    evaluator = SU2Evaluator(None)
+    evaluator = FakeSU2Evaluator()
     x = np.array([0.5] * 10)
     
     # Get adjoint gradient
@@ -47,13 +64,13 @@ def test_gradient_verification():
 def test_failure_recovery():
     print("--- Running Failure State Recovery ---")
     # Force failure in evaluator
-    class FailingEvaluator(SU2Evaluator):
+    class FailingEvaluator(FakeSU2Evaluator):
         def run_evaluation(self, x, case_dir, level):
             res = super().run_evaluation(x, case_dir, level)
             res.status = SU2Status.ADJOINT_INVALID
             return res
             
-    evaluator = FailingEvaluator(None)
+    evaluator = FailingEvaluator()
     res = evaluator.run_evaluation(np.array([0.5]*10), Path("test_fail"), "L1")
     
     # Verify state machine catches it

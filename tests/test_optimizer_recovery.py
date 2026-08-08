@@ -9,7 +9,11 @@ import numpy as np
 import pytest
 
 from airfoil_discovery.aso.cst import N_DESIGN_VARS, CSTBounds
-from airfoil_discovery.aso.optimizer import PDEOptimizer, CFDResult
+from airfoil_discovery.aso.optimizer import (
+    PDEOptimizer,
+    CFDResult,
+    _project_step_to_linearized_feasible,
+)
 
 
 @pytest.fixture
@@ -218,3 +222,22 @@ def test_boundary_projection_with_mma_recovery(mock_optimizer: PDEOptimizer, tmp
     
     assert new_limit == pytest.approx(0.025)
     assert mma.state.f_val == pytest.approx(0.21)
+
+
+def test_coupled_projection_preserves_lift_while_recovering_thickness() -> None:
+    """Linearized repair must satisfy active thickness and lift constraints together."""
+    dx_mma = np.array([0.03, -0.04])
+    # g[0] is min-thickness violation, g[1] is lift violation.  The MMA step
+    # satisfies thickness but makes lift worse unless both rows are enforced.
+    g = np.array([0.01, 0.02])
+    dg = np.array([
+        [-1.0, 0.0],
+        [0.0, -1.0],
+    ])
+
+    dx = _project_step_to_linearized_feasible(dx_mma, g, dg)
+
+    assert np.all(g + dg @ dx <= 1e-10)
+    assert dx[0] >= 0.01 - 1e-10
+    assert dx[1] >= 0.02 - 1e-10
+    assert np.linalg.norm(dx - dx_mma) < np.linalg.norm(np.array([0.01, 0.02]) - dx_mma) + 1e-12

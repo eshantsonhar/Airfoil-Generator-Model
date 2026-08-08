@@ -1,0 +1,35 @@
+# Python & Environment
+.venv/
+__pycache__/
+*.pyc
+
+# Heavy CFD Data Files (volumetric and flow dumps)
+*.vtk
+*.vtu
+*.su2
+**/surface_flow*.csv
+
+# Legacy Completed Runs (Prevents agent from re-reading historical context)
+aso_verification_v1/
+aso_verification_v2/
+aso_verification_v3/
+aso_verification_v4/
+aso_verification_v5/
+aso_verification_v6/
+aso_verification_v7/
+aso_verification_v8/
+aso_verification_v9/
+aso_verification_v10/
+aso_verification_v11/
+aso_verification_v12/
+aso_verification_v13/
+aso_verification_v14/
+aso_verification_v15/
+aso_verification_v16/
+aso_verification_v17/
+aso_verification_v18/
+aso_verification_v19/
+aso_verification_v20/
+aso_verification_v21/
+
+# KEEP future runs like v22_research_grade and production runs UNIGNORED so the agent can inspect them!

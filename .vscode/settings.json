@@ -1,2 +1,44 @@
 {
+  "python.analysis.exclude": [
+    "**/.venv",
+    "**/aso_verification_v*",
+    "**/aso_production_*",
+    "**/bin",
+    "**/data"
+  ],
+  "python.analysis.ignore": [
+    "**/.venv",
+    "**/aso_verification_v*",
+    "**/aso_production_*"
+  ],
+  "files.exclude": {
+    "**/.git": true,
+    "**/.venv": true,
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/*.vtk": true,
+    "**/*.vtu": true,
+    "**/*.su2": true,
+    "**/surface_flow*.csv": true,
+    "**/aso_verification_v[1-9]": true,
+    "**/aso_verification_v1[0-9]": true,
+    "**/aso_verification_v2[0-1]": true
+  },
+  "search.exclude": {
+    "**/.venv": true,
+    "**/__pycache__": true,
+    "**/*.su2": true,
+    "**/*.vtk": true,
+    "**/*.vtu": true,
+    "**/surface_flow*.csv": true,
+    "**/aso_verification_v[1-9]/**": true,
+    "**/aso_verification_v1[0-9]/**": true,
+    "**/aso_verification_v2[0-1]/**": true
+  },
+  "files.watcherExclude": {
+    "**/.venv/**": true,
+    "**/__pycache__/**": true,
+    "**/aso_verification_v*/**": true,
+    "**/aso_production_*/**": true
+  }
 }
