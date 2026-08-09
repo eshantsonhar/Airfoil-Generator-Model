@@ -1,0 +1,16 @@
+{
+  "test_conditions": {
+    "airfoil": "CST-generated baseline",
+    "reynolds": 100000,
+    "aoa": 4.0,
+    "mach": 0.1,
+    "transition_model": "gamma-Re_theta (LM)",
+    "turbulence_intensity": 0.001,
+    "viscosity_ratio": 5.0
+  },
+  "computed_values": {
+    "cl": 1.496873817,
+    "cd": 0.5857128521,
+    "ld_ratio": 2.555644479429035
+  }
+}
